@@ -86,14 +86,14 @@ brick:Collection_Basin_Water_Level_Alarm,,,brick:Collection_Basin_Water,,quantit
 brick:Collection_Basin_Water_Level_Sensor,,,brick:Collection_Basin_Water,,,brick:Sensor,Level,"Measures the level of the water in the collection basin, e.g. within a Cooling_Tower"
 brick:Collection_Basin_Water_Temperature_Sensor,,,brick:Collection_Basin_Water,,quantitykind:Temperature,brick:Sensor,,"Measures the temperature of the water in the collection basin, e.g. within a Cooling_Tower"
 brick:Command,,,,,,brick:Command,,A Command is an output point that directly determines the behavior of equipment and/or affects relevant operational points.
-brick:Communication_Loss_Alarm,,,,,,brick:Loss_Alarm,Communication,An alarm that indicates a loss of communication e.g. with a device or controller
-brick:Condensate_Leak_Alarm,,,,,,brick:Leak_Alarm,Condensate,An alarm that indicates a leak of condensate from a cooling system
+brick:Communication_Loss_Alarm,,,,,enumerationkind-communicationloss = True/False,brick:Loss_Alarm,Communication,An alarm that indicates a loss of communication e.g. with a device or controller
+brick:Condensate_Leak_Alarm,,,brick:Condensate,,enumerationkind-leak = true/false,brick:Leak_Alarm,Condensate,An alarm that indicates a leak of condensate from a cooling system
 brick:Condenser_Water_Flow_Sensor,,,brick:Condenser_Water,,quantitykind:VolumeFlowRate,brick:Sensor,,Measures the flow of the condenser water
 brick:Condenser_Water_Flow_Setpoint,,,brick:Condenser_Water,,quantitykind:VolumeFlowRate,brick:Setpoint,,
 brick:Condenser_Water_Temperature_Sensor,,,brick:Condenser_Water,,quantitykind:Temperature,brick:Sensor,,Measures the temperature of condenser water
 brick:Conductivity_Sensor,,,,,quantitykind:Conductivity,brick:Sensor,,Measures electrical conductance
-brick:Contact_Sensor,,,,,,brick:Sensor,Contact,"Senses or detects contact, such as for determining if a door is closed."
-brick:Cooling_Command,,,,,,brick:Command,Cooling,Controls the amount of cooling to be delivered (typically as a proportion of total cooling output)
+brick:Contact_Sensor,,,,,,brick:Sensor,Deprecate: instead model open/close status on door or window or equipment?,"Senses or detects contact, such as for determining if a door is closed."
+brick:Cooling_Command,,,,,quantitykind:Percentage,brick:Command,ofProcess: cooling,Controls the amount of cooling to be delivered (typically as a proportion of total cooling output)
 brick:Cooling_Demand_Sensor,,,,,,brick:Sensor,Cooling Demand,Measures the amount of power consumed by a cooling process; typically found by multiplying the tonnage of a unit (e.g. RTU) by the efficiency rating in kW/ton
 brick:Cooling_Demand_Setpoint,,,,,,brick:Setpoint,Cooling Demand,Sets the rate required for cooling
 brick:Cooling_Discharge_Air_Flow_Setpoint,,,brick:Discharge_Air,,quantitykind:VolumeFlowRate,brick:Setpoint,Cooling,Sets discharge air flow for cooling

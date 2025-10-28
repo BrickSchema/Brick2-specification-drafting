@@ -26,6 +26,11 @@ Quantity Kind:
 Equipment (ofEquipment):
 - Battery
 
+Process:
+- Cooling
+- Heating
+- Ventilation?
+
 Power/Energy "direction"? (could help with normalizing some other point names)
 - production
 - consumption
@@ -42,6 +47,7 @@ Substance:
 - CO
 - chilled water
 - Condenser water
+- Condensate (for leaks) -- same as condenser water?
 - Light
 	- for "Lighting (Light) Correlated Color TEmperature sensor"
 (revise this list in brick 2.0; )
@@ -87,6 +93,20 @@ Aliases:
 
 Alarm:
 - need to change the semantics of how hasQuantity is used. Alarm units wil lbe different (probably binary/boolean, or 3-valued bool), but we still want the annotations of what quantitykind the alarm is about.
+
+Alarm Units:
+- alarms have normal/abnormal "states"
+    - **Question: are alarms always binary?**
+    - *probably* helpful in the alarm enumerations to distinguish which states are normal vs abnormal
+    - we might be able to combine this with enumeratiosn for brick *Status* points, which don't care about
+      normal/abnormal, but will enumerate the same states
+- `Communication_Loss_Alarm`:
+    - hasEnumeration: `Communication_Status` = {`Communication_Status-Lost`, `Communication_Status-Established`}
+
+Commands:
+- `Cooling_Command`: Cooling is a "process" that is being affected 
+    - want to capture that it is affecting a cooling system or process
+    - do we have a "ofProcess" to complement "ofEquipment?"
 
 ---
 

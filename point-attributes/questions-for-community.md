@@ -6,19 +6,17 @@ Questions to Brick community + consortium:
 	- ask Brick OR 231P folks
 	- acceleration time setpoint
 - introducing "abstract classes" whic hgroup, but cannot be instantiated
-	- brick:Air_Quality_Sensor 
-	- brick:Boiler_Command
+	- `brick:Air_Quality_Sensor`
+	- `brick:Boiler_Command`
 		- these don't have any meaning on their own. Could be an enable_cmd, run_cmd, etc
 		- if abstract, then add boiler_enable_cmd, boiler_run_cmd
 	- *if there are no other examples, then maybe we either deprecate air quality sensor, or we find another way to define it. It is a useful umbrella term for many sensor classes*
 - Alarm parameters; how to model?
-	- brick:Alarm_Delay_Parameter
-	- brick:Alarm_Sensitivity_Parameter
+    - `brick:Alarm_Delay_Parameter`
+    - `brick:Alarm_Sensitivity_Parameter`
 - EnumerationKinds for commands to capture specific annotations:
-	- ```
-	  brick:Automatic_Mode_Command
-	  brick:hasEnum? s223:EnumerationKind-Binary -> brick:EnumerationKind-AutomaticMode = {brick:Automatic-Mode-True, brick:Automatic-Mode-False}
-	  ```
+    - `brick:Automatic_Mode_Command`
+    - `brick:hasEnum? s223:EnumerationKind-Binary -> brick:EnumerationKind-AutomaticMode = {brick:Automatic-Mode-True, brick:Automatic-Mode-False}`
 - how to break "cooling" and "heating" out into annotations on classes:
 	- are they a process? system? equipment? what's the relationship between "brick:Average_Cooling_Demand_Sensor" and Cooling?
 - do we need a "thermal demand" to capture cooling/heating demand as a subtype of power?
@@ -27,4 +25,5 @@ Questions to Brick community + consortium:
 	- heating demand (subtype of energy)
 - CO2 Alarm and related Alarms:
 	- do we need more specific subclasses? Or is it always clear what a CO2 Alarm is?
-
+- Alarms:
+    - always boolean/3-valued? Need to model the different "statuses" of alarms? how do these relate to enum kinds for statuses

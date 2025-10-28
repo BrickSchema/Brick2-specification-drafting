@@ -10,4 +10,5 @@ Possible deprecations, due to unclear definitions/quantity kinds/and use cases:
 	- too much variation in the definition (is it a ratio of face/bypass damper positions? position of just the bypass damper?)
 	- need guidance on how modeling face/bypass damper system points can be improved
 - brick:Close_Limit (says it limits the values of a close setpoint, but there is no close setpoint)
-
+- for the "level" sensors (e.g. `CO_Level_Sensor`) we decided to deprecate the "generic" versions (i.e. `CO_Sensor`) since we aren't using them as parents of any other classes. We can always re-add
+- `Contact_Sensor`: Deprecate: instead model open/close status on door or window or equipment?
