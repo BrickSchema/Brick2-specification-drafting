@@ -27,3 +27,17 @@ Questions to Brick community + consortium:
 	- do we need more specific subclasses? Or is it always clear what a CO2 Alarm is?
 - Alarms:
     - always boolean/3-valued? Need to model the different "statuses" of alarms? how do these relate to enum kinds for statuses
+
+- Grains:
+    - https://www.energyvanguard.com/blog/building-science-term-of-the-week-grains-of-water/
+    - *grains* are just mass (this is for qudt GRAIN unit), but actually what we care about is the grains of water vapor per pound of dry air.
+    - we might need to change QUDT unit and Brick both to model this accurately
+
+- Radiant panels:
+    - how do you want to model the positions of different sensors?
+        - core
+        - embedded
+        - inside face surface
+        - outside face surface
+        - others?
+    - are core/embedded the same? what's the range of values? is this a "location" or something else?

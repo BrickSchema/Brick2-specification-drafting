@@ -12,3 +12,5 @@ Possible deprecations, due to unclear definitions/quantity kinds/and use cases:
 - brick:Close_Limit (says it limits the values of a close setpoint, but there is no close setpoint)
 - for the "level" sensors (e.g. `CO_Level_Sensor`) we decided to deprecate the "generic" versions (i.e. `CO_Sensor`) since we aren't using them as parents of any other classes. We can always re-add
 - `Contact_Sensor`: Deprecate: instead model open/close status on door or window or equipment?
+- `air_grains_sensor`: deprecate until we fix the definition of GRAIN
+- `brick:Coldest_Zone_Air_Temperature_Sensor`: deprecate; replace with "lowest"

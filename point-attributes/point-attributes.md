@@ -22,6 +22,8 @@ Quantity Kind:
 	- ask Steve Ray about Grains (for air grains of moisure)
 	- use the brick quantities.py to update the Points table with the right quantity kinds
 		- use quantitykind:AmountOfSubstanceFraction instead of the older QK:DimensionlessRatio for our air quality quantity kinds
+- Imbalance for current/voltage
+    - put into QUDT? percentage deviation from average current/voltage
 
 Equipment (ofEquipment):
 - Battery
