@@ -41,3 +41,19 @@ Questions to Brick community + consortium:
         - outside face surface
         - others?
     - are core/embedded the same? what's the range of values? is this a "location" or something else?
+
+- electrical points:
+    - current imbalance:
+        - ask steve ray how to model in QUDT
+        - michael poplawski might know too
+    - current and voltage ratio (for transformers)
+    - `brick:DC_Bus_Voltage_Sensor`: 
+        - should DC Bus be a new equipment? or is it a connection?
+        - ask Michael Poplawski
+
+
+- enthalpy controls (for economizers?):
+    - `brick:Enable/Disable_Differential/Fixed_Enthalpy_Command`
+    - what's the right way to break this down? is "differential/fixed enthalpy" a process?
+- similar: fixed/differential temperature (pretty sure we meant "dry bulb temperature" here)
+- https://alpineintel.com/resource/economizer-basics-who-uses-them-where-theyre-required-and-why-they-wind-up-in-claims/
