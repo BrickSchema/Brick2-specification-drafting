@@ -50,6 +50,15 @@ Questions to Brick community + consortium:
     - `brick:DC_Bus_Voltage_Sensor`: 
         - should DC Bus be a new equipment? or is it a connection?
         - ask Michael Poplawski
+    - add ElectricEnergy to QUDT as a quantity kind? (steve ray)
+        - similar to ElectricPower, which *does* exist in QUDT
+        - also: Thermal Power? We have thermal energy but not thermal power
+- related: generation/load
+    - for generation/load points do we want to capture generation/load as properties (like a "process") or are these captured by connection points, or something else?
+    - how to handle `brick:Natural_Gas_Usage_Sensor`; we will probably model with Volume, but how to handle points that monitor *production* of gas, e.g. hydrogen
+- related: `brick:Generation_Sensor` which is not electricity-specific
+- related: load shedding process and related points:
+    - max load setpoint, min load setpoint
 
 
 - enthalpy controls (for economizers?):
@@ -57,3 +66,16 @@ Questions to Brick community + consortium:
     - what's the right way to break this down? is "differential/fixed enthalpy" a process?
 - similar: fixed/differential temperature (pretty sure we meant "dry bulb temperature" here)
 - https://alpineintel.com/resource/economizer-basics-who-uses-them-where-theyre-required-and-why-they-wind-up-in-claims/
+
+- lead lag controls:
+    - command/status. ARe there standard/common enumerations that we should model?
+    - `brick:Lead_Lag_Command`
+    - `brick:Lead_Lag_Status`
+    - `brick:Lead_On_Off_Command`
+
+- compressor points:
+    - high head pressure alarm
+    - low suction pressure alarm
+    - *how to model these? is head pressure a type of pressure? is suction pressure a type of pressure?*
+    - can we get away with just high/low pressure alarms on the compressor?
+
