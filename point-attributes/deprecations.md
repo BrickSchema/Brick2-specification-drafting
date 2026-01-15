@@ -17,6 +17,9 @@ Possible deprecations, due to unclear definitions/quantity kinds/and use cases:
 - `brick:Coldest_Zone_Air_Temperature_Sensor`: deprecate; replace with "lowest"
 - `brick:Dehumidify_Command` -> rename to `Dehumidification_Command`
 - `brick:Differential_Entering_Leaving_Water_Temperature_Sensor`; easier to model in 223
+- `brick:Outside_Illuminance_Sensor` -> can we just have an `illumiunance_sensor` with location `Outdoor space`?
+    - `outdoorspace_illuminance_sensor` (outdoorspace from REC)
+    - also see: questions for community
 
 - these seem like they are related to "location"; deprecating for now
     - `current_output_sensor`

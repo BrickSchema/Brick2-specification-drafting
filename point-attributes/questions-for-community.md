@@ -79,3 +79,13 @@ Questions to Brick community + consortium:
     - *how to model these? is head pressure a type of pressure? is suction pressure a type of pressure?*
     - can we get away with just high/low pressure alarms on the compressor?
 
+- runtime / uptime / "on" timer
+    - is it worth differentiating between these? A pump could be "on" but not "Running", or likewise "enabled" but not actively pumping
+    - or do we just have a "runtime" sensor?
+    - deprecating for now
+
+- brick:Outside_Illuminance_Sensor
+    - ask michael poplawski if there's a better name we can use
+    - do we need to model the archtiectural spaces? would this be used for daylighting?
+    - or is to too niche and we just deprecate?
+    - see also: deprecations.md
