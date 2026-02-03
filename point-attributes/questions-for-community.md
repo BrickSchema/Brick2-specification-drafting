@@ -53,12 +53,16 @@ Questions to Brick community + consortium:
     - add ElectricEnergy to QUDT as a quantity kind? (steve ray)
         - similar to ElectricPower, which *does* exist in QUDT
         - also: Thermal Power? We have thermal energy but not thermal power
+- reactive energy -- is this real? kvarh would be the unit we see
+    - ask steve ray
 - related: generation/load
     - for generation/load points do we want to capture generation/load as properties (like a "process") or are these captured by connection points, or something else?
     - how to handle `brick:Natural_Gas_Usage_Sensor`; we will probably model with Volume, but how to handle points that monitor *production* of gas, e.g. hydrogen
 - related: `brick:Generation_Sensor` which is not electricity-specific
 - related: load shedding process and related points:
     - max load setpoint, min load setpoint
+- `brick:Photovoltaic_Current_Output_Sensor` deprecated:
+    - alternative `Current_Generation_Sensor` on a PV panel or system?
 
 
 - enthalpy controls (for economizers?):
@@ -89,3 +93,11 @@ Questions to Brick community + consortium:
     - do we need to model the archtiectural spaces? would this be used for daylighting?
     - or is to too niche and we just deprecate?
     - see also: deprecations.md
+
+- brick:Run_Request_Status: what are the enumeration, possible values here? Other variations of "request" other than requested/unrequested
+
+- HVAC stages (`brick:EnumerationKind-Stage (need community values)`)
+    - 1/2 stage heat/cool? others?
+
+- How should we add "standby" as a concept? is it orthogonal to on/off, enabled/disabled, running/not running?
+    - is standby a mode? or a status? or something else?
