@@ -43,11 +43,11 @@ Questions to Brick community + consortium:
     - are core/embedded the same? what's the range of values? is this a "location" or something else?
 
 - electrical points:
-    - current imbalance:
+    - current imbalance, voltage imbalance
         - ask steve ray how to model in QUDT
         - michael poplawski might know too
     - current and voltage ratio (for transformers)
-    - `brick:DC_Bus_Voltage_Sensor`: 
+    - `brick:DC_Bus_Voltage_Sensor`:
         - should DC Bus be a new equipment? or is it a connection?
         - ask Michael Poplawski
     - add ElectricEnergy to QUDT as a quantity kind? (steve ray)
@@ -60,7 +60,7 @@ Questions to Brick community + consortium:
     - how to handle `brick:Natural_Gas_Usage_Sensor`; we will probably model with Volume, but how to handle points that monitor *production* of gas, e.g. hydrogen
 - related: `brick:Generation_Sensor` which is not electricity-specific
 - related: load shedding process and related points:
-    - max load setpoint, min load setpoint
+    - max load setpoint, min load setpoint, occupied/unoccupied load shed command
 - `brick:Photovoltaic_Current_Output_Sensor` deprecated:
     - alternative `Current_Generation_Sensor` on a PV panel or system?
 
@@ -101,3 +101,26 @@ Questions to Brick community + consortium:
 
 - How should we add "standby" as a concept? is it orthogonal to on/off, enabled/disabled, running/not running?
     - is standby a mode? or a status? or something else?
+
+- Occupancy:
+    - we are deprecating `temporary_occupancy_status`; want to replace it with an `occupancy_status`.
+    - we are considering using an enum kind for the possible occupancy values. SHould we differentiate between temporary/override occupancy vs scheduled occupancy?
+    - likewise for being unoccupied
+
+- Window Tint command and status:
+    - is there an established unit / quantitykind for these points? Or is it just a percentage?
+
+- `brick:Underfloor_Air_Temperature_Sensor` and related points to `Underfloor`:
+    - we have `brick:Underfloor_Air_Plenum_Static_Pressure_Sensor`/`Setpoint` too. Our above temp sensor doesn't refer to the air plenum though
+    - how do we make this more uniform with the rest of the model? Is it supplying to the underfloor plenum? or is this more accurately an `underfloor_air_plenum_air_temperature_sensor`?
+    - Or is it just an `underfloor_air_plenum_air_temperature_sensor`?
+    - the `Underfloor Air Plenum` is an equipment in Brick today. So we could just have a model like
+
+    ```ttl
+    :room1 a brick:Room ;
+        brick:isLocationOf :underfloor_air_plenum1 .
+    :underfloor_air_plenum1 a brick:Underfloor_Air_Plenum ;
+        brick:hasPoint :temp_sensor1, :static_pressure_sensor1 .
+    :temp_sensor1 a brick:Air_Temperature_Sensor .
+    :static_pressure_sensor1 a brick:Air_Static_Pressure_Sensor .
+    ```
