@@ -124,3 +124,7 @@ Questions to Brick community + consortium:
     :temp_sensor1 a brick:Air_Temperature_Sensor .
     :static_pressure_sensor1 a brick:Air_Static_Pressure_Sensor .
     ```
+
+- what is a Reset Setpoint: is this the threshold at which we "reset" the setpoint to an original pre-configured value? Is it that pre-configured value? OR is it the current setpoint used by the system?
+    - it's the "active" setpoint
+    - high/low reset setpoints are the min/max limits of the reset setpoint

@@ -28,3 +28,7 @@ Possible deprecations, due to unclear definitions/quantity kinds/and use cases:
 
 
 - `brick:Curtailment_Override_Command`
+
+
+- min/max temperature setpoint:
+    - deprecate due ot connor's recommendation in the setpoint discussion
