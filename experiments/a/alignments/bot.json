@@ -1,0 +1,7 @@
+{
+  "Zone": "Architecture",
+  "Site": "Site",
+  "Building": "Building",
+  "Storey": "Floor",
+  "Space": "Space"
+}

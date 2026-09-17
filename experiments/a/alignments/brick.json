@@ -1,0 +1,19 @@
+{
+  "Automation_Collection": "",
+  "Class": "Entity",
+  "Electric_Vehicle_Charging_Hub": "ElectricVehicleChargingHub",
+  "Entity": "Entity",
+  "EntityProperty": null,
+  "Equipment": "Equipment",
+  "EV_Charging_Hub": "ElectricVehicleChargingHub",
+  "Loop": "Loop",
+  "Measurable": null,
+  "Point": "Point",
+  "Point_Collection": "PointCollection",
+  "PV_Array": "PhotovoltaicArray",
+  "Quantity": "",
+  "Relationship": null,
+  "Substance": "",
+  "System": "System",
+  "Tag": null
+}
