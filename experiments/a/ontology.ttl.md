@@ -258,7 +258,7 @@
 
 #.  &mdash; Dynamic quantity with a last known value: `:x a brick:Motor ; brick:hasPoint [ a brick:Temperature_Sensor ; brick:lastKnownValue [ brick:timestamp "2026-09-17T12:00:00Z"^^xsd:dateTime ; brick:value 50 ] ] .`
 
-#.  &mdash; Dynamic quantity with an external reference: `:x a brick:Motor ; brick:hasPoint [ a brick:Temperature_Sensor ; rdf:hasExternalReference [ ..... ] ] .`
+#.  &mdash; Dynamic quantity with an external reference: `:x a brick:Motor ; brick:hasPoint [ a brick:Temperature_Sensor ; ref:hasExternalReference [ ..... ] ] .`
 
 #### RealEstateCore
 
@@ -270,7 +270,7 @@
 
 #### 223
 
-#.  &mdash; Static quantity with a unit: `:x a s223:Motor ; s223:hasProperty [ a s223:QuantifiableObservableProperty ; qudt:hasQuantityKind qk:Temperature ; qudt:hasUnit unit:DEG_C ; qudt:quantityValue [ qudt:value 50 ] ] .`
+#.  &mdash; Static quantity with a unit: `:x a s223:Motor ; s223:hasProperty [ a s223:QuantifiableProperty ; s223:hasAspect s223:Aspect-Rated ; qudt:hasQuantityKind qk:Voltage ; qudt:hasUnit unit:V ; qudt:quantityValue [ qudt:value 240 ] ] .`
 
 #.  &mdash; Dynamic quantity with an external reference: `:x a s223:Motor ; s223:hasProperty [ a s223:QuantifiableObservableProperty ; qudt:hasQuantityKind qk:Temperature ; qudt:hasUnit unit:DEG_C ; s223:hasExternalReference [ ..... ] ] .`
 
