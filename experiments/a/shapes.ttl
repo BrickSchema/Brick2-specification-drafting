@@ -1,0 +1,48 @@
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sh:   <http://www.w3.org/ns/shacl#> .
+@prefix bro:  <https://ontology.brickschema.org/2.0/#bro:> .
+
+bro:AliasClassOfShape
+    a sh:NodeShape ;
+    sh:targetSubjectsOf bro:aliasClassOf ;
+
+    # x aliasClassOf y => x must be a class
+    sh:class rdfs:Class ;
+
+    # x aliasClassOf y => y must be a class
+    sh:property [
+        sh:path bro:aliasClassOf ;
+        sh:class rdfs:Class ;
+        sh:maxCount 1 ;
+        sh:message "bro:aliasClassOf must point to a class." ;
+    ] ;
+
+    # x aliasClassOf y => x subClassOf y
+    sh:rule [
+        a sh:TripleRule ;
+        sh:subject sh:this ;
+        sh:predicate rdfs:subClassOf ;
+        sh:object [
+            sh:path bro:aliasClassOf
+        ]
+    ] ;
+
+    # x aliasClassOf y => y subClassOf x
+    sh:rule [
+        a sh:TripleRule ;
+        sh:subject [
+            sh:path bro:aliasClassOf
+        ] ;
+        sh:predicate rdfs:subClassOf ;
+        sh:object sh:this
+    ] ;
+
+    # x aliasClassOf y => y must not be an alias
+    sh:property [
+        sh:path (
+            bro:aliasClassOf
+            bro:aliasClassOf
+        ) ;
+        sh:maxCount 0 ;
+        sh:message "The canonical class of an aliasClassOf relation must not itself be an alias." ;
+    ] .

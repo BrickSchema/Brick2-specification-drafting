@@ -1,0 +1,19 @@
+name: Validate Experiment A
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install shifty-cli
+        run: cargo install shifty-cli
+
+      - name: Validate
+        working-directory: experiments/a/
+        run: shifty validate --shapes shapes.ttl --data ontology.ttl.md
