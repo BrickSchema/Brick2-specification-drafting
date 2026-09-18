@@ -8,11 +8,21 @@ jobs:
   validate:
     runs-on: ubuntu-latest
 
+    env:
+      SHIFTY_VERSION: "0.4.4"
+
     steps:
       - uses: actions/checkout@v4
 
+      - uses: actions/cache@v6
+        id: shifty-cache
+        with:
+          path: ~/.cargo/bin
+          key: shifty-${{ runner.os }}-${{ env.SHIFTY_VERSION }}
+
       - name: Install shifty-cli
-        run: cargo install shifty-cli
+        if: steps.shifty-cache.outputs.cache-hit != 'true'
+        run: cargo install shifty-cli --version "$SHIFTY_VERSION"
 
       - name: Validate
         working-directory: experiments/a/
