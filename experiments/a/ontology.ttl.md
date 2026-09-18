@@ -175,15 +175,23 @@
 
 #.  This can be used in conjunction with deprecations: mark a class as deprecated, define a replacement class, and make the two classes subclasses of each other, i.e., equivalent. Instances of the old class automatically become instances of the new class, and vice versa.
 
-#.  This is also useful without deprecations and can be used to define multiple alternative IRIs for the same class or property. However, then it is no longer obvious which is the recommended "main class" in the group of equivalent classes.
+#.  This is also useful without deprecations and can be used to define multiple alternative IRIs for the same class or property. However, then it is no longer obvious which is the canonical "main class" in the group of equivalent classes.
 
-#.  We use `bro:aliasOf` as a directed form of `owl:equivalentClass`: If `:x bro:aliasOf :y` then  `:x owl:equivalentClass :y .`, `:x rdfs:subClassOf :y .`, `:y rdfs:subClassOf :x .`, and `:y` is the recommended "main class" in the group.
+#.  We use `bro:aliasClassOf` as a directed form of `owl:equivalentClass`: If `:x bro:aliasClassOf :y` then `:x owl:equivalentClass :y .` `:x rdfs:subClassOf :y .` `:y rdfs:subClassOf :x .`, and `:y` is the canonical class.
+
+    bro:aliasClassOf
+        a owl:ObjectProperty ;
+        rdfs:subPropertyOf owl:equivalentClass ;
+        rdfs:label "alias of"@en ;
+        rdfs:comment "Relates an alias class to its canonical class."@en ;
+        rdfs:domain rdfs:Class ;
+        rdfs:range rdfs:Class .
 
 #.  The change of aliasing statements is a non-breaking change as long as the new main class is already in the group. The addition of aliasing statements is a non-breaking change as long as the added group member is added to the ontology in the same version. Any other addition, change, or removal of aliasing statements is a breaking change.
 
-#.  When a node is an alias, any other statements about that node are removed from the ontology. This is considered a non-breaking change. As a consequence, users must be prepared to always  follow aliasing statements to the main class first (e.g., `?x bro:aliasOf?/rdfs:label ?y` instead of `?x rdfs:label ?y`).
+#.  When a node is an alias, any other statements about that node are removed from the ontology. This is considered a non-breaking change. As a consequence, users must be prepared to always  follow aliasing statements to the main class first (e.g., `?x bro:aliasClassOf?/rdfs:label ?y` instead of `?x rdfs:label ?y`).
 
-#.  In principle, aliasing statements could be defined as reflexive and transitive (e.g., if `:x bro:aliasOf :y` and `:y bro:aliasOf :z`, then it can be inferred that `:x bro:aliasOf :z`). However, to simplify things, if `?x bro:aliasOf ?y`, then there shall not be any `?y bro:aliasOf ?z`.
+#.  In principle, aliasing statements could be defined as reflexive and transitive (e.g., if `:x bro:aliasClassOf :y` and `:y bro:aliasClassOf :z`, then it can be inferred that `:x bro:aliasClassOf :z`). However, to simplify things, if `?x bro:aliasClassOf ?y`, then there shall not be any `?y bro:aliasClassOf ?z`.
 
 ##  7. Modeling Conventions
 
@@ -250,7 +258,7 @@
 
 #.  &mdash; Dynamic quantity with a last known value: `:x a brick:Motor ; brick:hasPoint [ a brick:Temperature_Sensor ; brick:lastKnownValue [ brick:timestamp "2026-09-17T12:00:00Z"^^xsd:dateTime ; brick:value 50 ] ] .`
 
-#.  &mdash; Dynamic quantity with an external reference: `:x a brick:Motor ; brick:hasPoint [ a brick:Temperature_Sensor ; rdf:hasExternalReference [ ..... ] ] .`
+#.  &mdash; Dynamic quantity with an external reference: `:x a brick:Motor ; brick:hasPoint [ a brick:Temperature_Sensor ; ref:hasExternalReference [ ..... ] ] .`
 
 #### RealEstateCore
 
@@ -262,7 +270,7 @@
 
 #### 223
 
-#.  &mdash; Static quantity with a unit: `:x a s223:Motor ; s223:hasProperty [ a s223:QuantifiableObservableProperty ; qudt:hasQuantityKind qk:Temperature ; qudt:hasUnit unit:DEG_C ; qudt:quantityValue [ qudt:value 50 ] ] .`
+#.  &mdash; Static quantity with a unit: `:x a s223:Motor ; s223:hasProperty [ a s223:QuantifiableProperty ; s223:hasAspect s223:Aspect-Rated ; qudt:hasQuantityKind qk:Voltage ; qudt:hasUnit unit:V ; qudt:quantityValue [ qudt:value 240 ] ] .`
 
 #.  &mdash; Dynamic quantity with an external reference: `:x a s223:Motor ; s223:hasProperty [ a s223:QuantifiableObservableProperty ; qudt:hasQuantityKind qk:Temperature ; qudt:hasUnit unit:DEG_C ; s223:hasExternalReference [ ..... ] ] .`
 
