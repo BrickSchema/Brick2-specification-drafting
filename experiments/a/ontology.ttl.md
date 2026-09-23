@@ -266,6 +266,8 @@
 
 #.  &mdash; Dynamic quantity in a simple statement: `:x a rec:SensorEquipment ; rec:wifiSignalStrength 100 .`
 
+#.  &mdash; Static quantity with an extra step: `:x a rec:Stadium ; rec:capacity [ rec:seatingCapacity 42100 ] .`
+
 #.  &mdash; Dynamic quantity with an observation timestamp: `[ a rec:TemperatureObservation ; rec:value 50 ; rec:timestamp "2026-09-17T12:00:00Z"^^xsd:dateTime ] .`
 
 #### 223
