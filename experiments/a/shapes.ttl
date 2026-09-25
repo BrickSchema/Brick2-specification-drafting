@@ -1,6 +1,71 @@
-@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix sh:   <http://www.w3.org/ns/shacl#> .
 @prefix bro:  <https://ontology.brickschema.org/2.0/#bro:> .
+@prefix sh:   <http://www.w3.org/ns/shacl#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix qudt: <http://qudt.org/schema/qudt/> .
+@prefix qk:   <http://qudt.org/vocab/quantitykind/> .
+@prefix unit: <http://qudt.org/vocab/unit/> .
+@prefix geo:  <http://www.opengis.net/ont/geosparql#> .
+@prefix sf:   <http://www.opengis.net/ont/sf#> .
+
+bro:prefixes sh:declare [ sh:prefix "bro"  ; sh:namespace "https://ontology.brickschema.org/2.0/#bro:"   ^^xsd:anyURI ] .
+bro:prefixes sh:declare [ sh:prefix "sh"   ; sh:namespace "http://www.w3.org/ns/shacl#"                  ^^xsd:anyURI ] .
+bro:prefixes sh:declare [ sh:prefix "owl"  ; sh:namespace "http://www.w3.org/2002/07/owl#"               ^^xsd:anyURI ] .
+bro:prefixes sh:declare [ sh:prefix "rdf"  ; sh:namespace "http://www.w3.org/1999/02/22-rdf-syntax-ns#"  ^^xsd:anyURI ] .
+bro:prefixes sh:declare [ sh:prefix "rdfs" ; sh:namespace "http://www.w3.org/2000/01/rdf-schema#"        ^^xsd:anyURI ] .
+bro:prefixes sh:declare [ sh:prefix "xsd"  ; sh:namespace "http://www.w3.org/2001/XMLSchema#"            ^^xsd:anyURI ] .
+bro:prefixes sh:declare [ sh:prefix "qudt" ; sh:namespace "http://qudt.org/schema/qudt/"                 ^^xsd:anyURI ] .
+bro:prefixes sh:declare [ sh:prefix "qk"   ; sh:namespace "http://qudt.org/vocab/quantitykind/"          ^^xsd:anyURI ] .
+bro:prefixes sh:declare [ sh:prefix "unit" ; sh:namespace "http://qudt.org/vocab/unit/"                  ^^xsd:anyURI ] .
+bro:prefixes sh:declare [ sh:prefix "geo"  ; sh:namespace "http://www.opengis.net/ont/geosparql#"        ^^xsd:anyURI ] .
+bro:prefixes sh:declare [ sh:prefix "sf"   ; sh:namespace "http://www.opengis.net/ont/sf#"               ^^xsd:anyURI ] .
+
+# ------------------------------------------------------------------------------
+#
+# 6.4 Deprecations
+#
+# ------------------------------------------------------------------------------
+
+bro:DeprecatedShape
+    a sh:NodeShape ;
+    sh:targetSubjectsOf bro:deprecatedMessage ;
+    sh:targetSubjectsOf bro:deprecatedSince ;
+
+    # x deprecatedMessage y => y must be a langString or dirLangString
+    sh:property [
+        sh:path bro:deprecatedMessage ;
+        sh:maxCount 1 ;
+        sh:or (
+            [ sh:datatype rdf:langString ]
+            [ sh:datatype rdf:dirLangString ]
+        ) ;
+        sh:message "The message must be a language-tagged or directional language-tagged string." ;
+    ] ;
+
+    # x deprecatedSince y => y must be a string
+    sh:property [
+        sh:path bro:deprecatedSince ;
+        sh:datatype xsd:string ;
+        sh:maxCount 1 ;
+        sh:message "The version must be a string." ;
+    ] ;
+
+    # x deprecatedMessage y => x deprecated true
+    # x deprecatedSince y => x deprecated true
+    sh:rule [
+        a sh:TripleRule ;
+        sh:subject sh:this ;
+        sh:predicate owl:deprecated ;
+        sh:object true ;
+    ] .
+
+# ------------------------------------------------------------------------------
+#
+# 6.5 Aliasing
+#
+# ------------------------------------------------------------------------------
 
 bro:AliasClassOfShape
     a sh:NodeShape ;
@@ -14,7 +79,7 @@ bro:AliasClassOfShape
         sh:path bro:aliasClassOf ;
         sh:class rdfs:Class ;
         sh:maxCount 1 ;
-        sh:message "bro:aliasClassOf must point to a class." ;
+        sh:message "aliasClassOf must point to a class." ;
     ] ;
 
     # x aliasClassOf y => x subClassOf y
@@ -46,3 +111,5 @@ bro:AliasClassOfShape
         sh:maxCount 0 ;
         sh:message "The canonical class of an aliasClassOf relation must not itself be an alias." ;
     ] .
+
+# ------------------------------------------------------------------------------

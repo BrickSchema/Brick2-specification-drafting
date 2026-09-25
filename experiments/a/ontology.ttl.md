@@ -20,7 +20,9 @@
 
 #.  *Main concepts:* `s223:Connectable` (includes `s223:Equipment`), `s223:Connection`, `s223:ConnectionPoint`, `s223:PhysicalSpace`, `s223:Property`.
 
-##  2. Goals for Brick 2.0
+##  2. Goals and Options for Brick 2.0
+
+### 2.1 Goals
 
 #.  &check; Have a story for compatibility with ASHRAE Standard 223
 
@@ -28,7 +30,7 @@
 
 #.  &check; Dealing with 10 years of decisions without hindsight
 
-### 2.1 Option 1 &ndash; EXTEND
+### 2.2 Option 1 &ndash; EXTEND
 
 #.  &mdash; Extend s223
 
@@ -42,7 +44,7 @@
 
 #.  &mdash; Add new `s223:Concept` subclasses (&larr; `rec:Agent`, `rec:Furniture`, `rec:Information`)
 
-### 2.2 Option 2 &ndash; ALIGN
+### 2.3 Option 2 &ndash; ALIGN
 
 #.  &mdash; Move all `brick:` and `rec:` concepts into a single namespace
 
@@ -86,15 +88,15 @@
 
 ### 4.2 OWL
 
-#.  Ancillarily, the ontology shall be a (minimal) OWL ontology: Every class is declared as an `owl:Class`, and every property is declared as `owl:DatatypeProperty`, `owl:ObjectProperty` (+ reflexive, symmetric, transitive where applicable), or `owl:AnnotationProperty`. Properties with an inverse declare it via `owl:inverseOf`.
-
-#.  This helps with loading the ontology into tools like Protégé and the interworking with other ontologies.
+#.  Ancillarily, the ontology shall be a (minimal) OWL ontology. This helps with loading the ontology into tools like Protégé and the interworking with other ontologies.
 
     @prefix owl: <http://www.w3.org/2002/07/owl#> .
 
+#.	Specifically, every class is declared as an `owl:Class`, and every property is declared as `owl:DatatypeProperty`, `owl:ObjectProperty` (+ reflexive, symmetric, transitive where applicable), or `owl:AnnotationProperty`. Properties with an inverse declare it via `owl:inverseOf`. `owl:Restriction` shall be used sparingly or not at all. 
+
 ### 4.3 RDF Schema
 
-#.  The ontology uses `rdfs:Class` and `rdf:Property` for classes and properties. `rdfs:domain` and `rdfs:range` shall be used sparingly or not at all.
+#.  The ontology uses `rdfs:Class` and `rdf:Property` for classes and properties. `rdfs:domain`, `rdfs:range`, and `rdfs:subPropertyOf` shall be used sparingly or not at all.
 
     @prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
     @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
@@ -108,7 +110,7 @@
 
 ### 5.2 ASHRAE Standard 223
 
-#.  In Option 2, as explored by this document, the ontology **does not** import ASHRAE Standard 223; instead, it defines its own classes that mirror its structure of 223 with the aim of keeping conversion to and from 223 trivial. This gives us more flexibility to try new things.
+#.  In Option 2, as explored by this document, the ontology **does not** import ASHRAE Standard 223; instead, it defines its own classes that mirror the structure of 223 with the aim of keeping conversion to and from 223 trivial. This gives us more flexibility to try new things.
 
 ### 5.3 QUDT
 
@@ -133,33 +135,31 @@
 
 ##  6. Evolvability
 
-#.  Evolvability represents the degree to which an ontology can be changed without negatively impacting ontology users.
+#.  Brick 2.0 needs a strategy for evolving the ontology without negatively impacting its users. This requires the concept of versions, a versioning strategy, and rules that formalize compatibility between versions.
 
-### 6.1 Backward Compatibility
+#.  *Background:* Backward compatibility refers to the ability of a *data producer* to use a newer version while still allowing a *data consumer* to successfully interpret the data using an older version.
 
-#.  **Backward compatibility** refers to the ability of a *data producer* to use a newer version while still allowing a *data consumer* to successfully interpret the data using an older version.
+#.  *Background:* Forward compatibility is the inverse of backward compatibility. It refers to the ability of a *data consumer* to use a newer version while still allowing *data producers* to successfully produce data using an older version.
 
-#.  *Definition:* An ontology is backward compatible iif the set of facts inferred for any instance data from the newer version is exactly the same set of facts inferred from the older version plus any additional (non-contradicting) facts.
-
-#.  This definition may be too strict in practice, because it prevents fixing real bugs in the ontology (e.g., if the bug causes the wrong facts to be inferred). Also, nobody else does this. So, we will have to find a way.
-
-### 6.2 Forward Compatibility
-
-#.  **Forward compatibility** is the inverse of backward compatibility. It refers to the ability of a *data consumer* to use a newer version while still allowing *data producers* to successfully produce data using an older version.
-
-### 6.3 Versioning
+### 6.1 Versioning
 
 #.  We use [Semantic Versioning](https://semver.org/) (semver).
 
 #.  The versioning format consists of three numbers (&lt;major&gt;.&lt;minor&gt;.&lt;patch&gt;) and an optional pre-release identifier (e.g., `2.0.0-alpha.1`).
 
-#.  &mdash; A patch release occurs if the newer version is backward compatible and only contains trivial changes (e.g., typo fixes).
+#.  &mdash; A patch release occurs if the newer version is compatible with the older version and only contains trivial changes (e.g., typo fixes).
 
-#.  &mdash; A minor release occurs if the newer version is backward compatible and only contains larger changes (e.g., new subclasses).
+#.  &mdash; A minor release occurs if the newer version is compatible with the older version and contains non-trivial changes (e.g., new subclasses).
 
-#.  &mdash; A major release occurs if the newer version is not backward compatible.
+#.  &mdash; A major release occurs if the newer version is not compatible with the older version.
 
-### 6.4 Deprecations
+### 6.2 Compatibility
+
+#.  *Rule:* Two versions of the ontology are compatible if, for all graphs, the set of facts inferred using the newer version is exactly the same set of facts inferred using the older version plus any additional (non-contradicting) facts.
+
+#.  This rule may be too strict in practice, because it prevents fixing bugs without making a major release (e.g., bugs causing the wrong facts to be inferred). Also, nobody else does this, so we may have to revise this.
+
+### 6.3 Deprecations
 
 #.  Deprecations allow for changes without breaking backward compatibility.
 
@@ -169,7 +169,19 @@
 
 #.  We do not consider the addition, change, and removal of deprecation statements to break backward compatibility.
 
-### 6.5 Aliasing
+    bro:deprecatedMessage
+        a owl:DatatypeProperty ;
+        rdfs:label "deprecated message"@en ;
+        rdfs:comment "Indicates the subject is deprecated and provides a human-readable explanation or mitigation."@en .
+
+    bro:deprecatedSince
+        a owl:DatatypeProperty ;
+        rdfs:label "deprecated since"@en ;
+        rdfs:comment "Indicates the subject is deprecated and provides the version in which it was deprecated."@en .
+
+#.  The replacement is indicated via aliasing.
+
+### 6.4 Aliasing
 
 #.  OWL already has the concepts of classes and properties defined to being equivalent using `owl:equivalentClass` and `owl:equivalentProperty`, respectivly. (In terms of RDF Schema, the statement `:x owl:equivalentClass :y .` is equivalent to making the two statements `:x rdfs:subClassOf :y .` and `:y rdfs:subClassOf :x .`.)
 
@@ -242,7 +254,7 @@
 
 #.  A single piece of equipment may realize one or several functions (such as a multifunction device that both prints and scans), and a single function may in turn be realized jointly by several pieces of equipment.
 
-#.  *Open Issue:* Should this distinction be made? Or do we say that a `MultifunctionDevice` is physically composed of both a `Printer` and a `Scanner`, even if these are not actually distinct physical parts of it?
+#.  *Open Issue:* Should this distinction be made? For example, we could say that a `MultifunctionDevice` has the functions `Print`, `Copy`, and `Scan`. Or do we say that a `MultifunctionDevice` is physically composed of a `Printer`, `Copier`, and `Scanner`, even though these are not actually distinct physical parts of it?
 
 ### 8.3 Properties and Points
 
@@ -550,7 +562,7 @@
 
     <https://ontology.brickschema.org/2.0/>
         a owl:Ontology ;
-        owl:versionInfo "2.0.0-alpha.1" .
+        owl:versionInfo "2.0.0-alpha.2" .
 
 ## 18. References
 
