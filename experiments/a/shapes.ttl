@@ -23,9 +23,7 @@ bro:prefixes sh:declare [ sh:prefix "geo"  ; sh:namespace "http://www.opengis.ne
 bro:prefixes sh:declare [ sh:prefix "sf"   ; sh:namespace "http://www.opengis.net/ont/sf#"               ^^xsd:anyURI ] .
 
 # ------------------------------------------------------------------------------
-#
-# 6.4 Deprecations
-#
+# Deprecations
 # ------------------------------------------------------------------------------
 
 bro:DeprecatedShape
@@ -62,9 +60,7 @@ bro:DeprecatedShape
     ] .
 
 # ------------------------------------------------------------------------------
-#
-# 6.5 Aliasing
-#
+# Aliasing
 # ------------------------------------------------------------------------------
 
 bro:AliasClassOfShape

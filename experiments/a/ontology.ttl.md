@@ -219,10 +219,25 @@
 
 #.  We cleanly distinguish composition from aggregation. Composition is expressed with `hasPart`/`partOf`, while aggregation is expressed with `hasMember`/`memberOf`.
 
-    bro:hasPart   a owl:ObjectProperty, owl:InverseFunctionalProperty ; owl:inverseOf bro:partOf    ; rdfs:comment "Relates a whole to an entity that is a part of it."@en          .
-    bro:partOf    a owl:ObjectProperty, owl:FunctionalProperty        ; owl:inverseOf bro:hasPart   ; rdfs:comment "Relates an entity to the whole of which it is a part."@en       .
-    bro:hasMember a owl:ObjectProperty                                ; owl:inverseOf bro:memberOf  ; rdfs:comment "Relates a collection to an entity that is a member of it."@en   .
-    bro:memberOf  a owl:ObjectProperty                                ; owl:inverseOf bro:hasMember ; rdfs:comment "Relates an entity to a collection of which it is a member."@en  .
+    bro:hasPart  
+        a owl:ObjectProperty, owl:InverseFunctionalProperty ;
+        owl:inverseOf bro:partOf    ;
+        rdfs:comment "Relates a whole to an entity that is a part of it."@en .
+
+    bro:partOf   
+        a owl:ObjectProperty, owl:FunctionalProperty ;
+        owl:inverseOf bro:hasPart ;
+        rdfs:comment "Relates an entity to the whole of which it is a part."@en .
+
+    bro:hasMember
+        a owl:ObjectProperty ;
+        owl:inverseOf bro:memberOf ;
+        rdfs:comment "Relates a collection to an entity that is a member of it."@en .
+
+    bro:memberOf 
+        a owl:ObjectProperty ;
+        owl:inverseOf bro:hasMember ;
+        rdfs:comment "Relates an entity to a collection of which it is a member."@en .
 
 ### 7.4 Typed Collection Variance
 
@@ -293,7 +308,7 @@
 #.  Here is an initial draft of a class hierarchy combining Brick, REC, and 223:
 
     bro:Entity                                      a owl:Class, sh:ShapeClass .
-        bro:PhysicalObject                          a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:Entity                     ; rdfs:comment "An `Entity` that occupies space and has mass."@en .
+        bro:PhysicalObject                          a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:Entity                     .
             bro:Architecture                        a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:PhysicalObject             .
                 bro:Building                        a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:Architecture               .
                 bro:ExternalSpace                   a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:Architecture               .
@@ -308,43 +323,43 @@
             bro:Equipment                           a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:PhysicalObject             .
             bro:Furniture                           a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:PhysicalObject             .
             bro:Person                              a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:PhysicalObject             .
-        bro:PhysicalObjectCollection                a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:Entity                     ; rdfs:comment "A grouping of `PhysicalObject`s and/or other `PhysicalObjectCollection`s.\n\nWhere applicable, use a more specific subclass to indicate the purpose of the grouping; create a new subclass when an appropriate one does not exist."@en .
-            bro:ArchitectureCollection              a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:PhysicalObjectCollection   ; rdfs:comment "A grouping of `Architecture` and/or other `ArchitectureCollection`s.\n\nWhere applicable, use a more specific subclass to indicate the purpose of the grouping; create a new subclass when an appropriate one does not exist."@en .
+        bro:PhysicalObjectCollection                a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:Entity                     .
+            bro:ArchitectureCollection              a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:PhysicalObjectCollection   .
                 bro:Apartment                       a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:ArchitectureCollection     .
                 bro:Campus                          a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:ArchitectureCollection     .
                 bro:Portfolio                       a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:ArchitectureCollection     .
                 bro:Premises                        a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:ArchitectureCollection     .
                 bro:RealEstate                      a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:ArchitectureCollection     .
                 bro:Zone                            a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:ArchitectureCollection     .
-            bro:ConnectionCollection                a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:PhysicalObjectCollection   ; rdfs:comment "A grouping of `Connection`s and/or other `ConnectionCollection`s.\n\nWhere applicable, use a more specific subclass to indicate the purpose of the grouping; create a new subclass when an appropriate one does not exist."@en .
+            bro:ConnectionCollection                a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:PhysicalObjectCollection   .
                 bro:Loop                            a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:ConnectionCollection       .
-            bro:ConnectionPointCollection           a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:PhysicalObjectCollection   ; rdfs:comment "A grouping of `ConnectionPoint`s and/or other `ConnectionPointCollection`s.\n\nWhere applicable, use a more specific subclass to indicate the purpose of the grouping; create a new subclass when an appropriate one does not exist."@en .
-            bro:EquipmentCollection                 a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:PhysicalObjectCollection   ; rdfs:comment "A grouping of `Equipment` and/or other `EquipmentCollection`s.\n\nWhere applicable, use a more specific subclass to indicate the purpose of the grouping; create a new subclass when an appropriate one does not exist."@en .
+            bro:ConnectionPointCollection           a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:PhysicalObjectCollection   .
+            bro:EquipmentCollection                 a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:PhysicalObjectCollection   .
                 bro:ElectricVehicleChargingHub      a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:EquipmentCollection        .
                 bro:PhotovoltaicArray               a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:EquipmentCollection        .
                 bro:System                          a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:EquipmentCollection        .
-            bro:FurnitureCollection                 a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:PhysicalObjectCollection   ; rdfs:comment "A grouping of `Furniture` and/or other `FurnitureCollection`s.\n\nWhere applicable, use a more specific subclass to indicate the purpose of the grouping; create a new subclass when an appropriate one does not exist."@en .
-            bro:PersonCollection                    a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:PhysicalObjectCollection   ; rdfs:comment "A grouping of `Person`s and/or other `PersonCollection`s.\n\nWhere applicable, use a more specific subclass to indicate the purpose of the grouping; create a new subclass when an appropriate one does not exist."@en .
+            bro:FurnitureCollection                 a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:PhysicalObjectCollection   .
+            bro:PersonCollection                    a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:PhysicalObjectCollection   .
                 bro:Organization                    a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:PersonCollection           .
                     bro:Company                     a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:Organization               .
                 bro:OrganizationalUnit              a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:PersonCollection           .
                     bro:Department                  a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:OrganizationalUnit         .
-        bro:InformationObject                       a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:Entity                     ; rdfs:comment "An `Entity` that captures information about something."@en .
+        bro:InformationObject                       a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:Entity                     .
             bro:Document                            a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:InformationObject          .
                 bro:LeaseContract                   a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:Document                   .
             bro:ExternalReference                   a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:InformationObject          .
                 bro:BACnetExternalReference         a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:ExternalReference          .
             bro:PostalAddress                       a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:InformationObject          .
         bro:Point                                   a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:Entity                     .
-        bro:PointCollection                         a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:Entity                     ; rdfs:comment "A grouping of `Point`s and/or other `PointCollection`s.\n\nWhere applicable, use a more specific subclass to indicate the purpose of the grouping; create a new subclass when an appropriate one does not exist."@en .
+        bro:PointCollection                         a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:Entity                     .
         bro:Other                                   a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:Entity                     .
-            bro:Agent                               a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:Other                      ; rdfs:comment "An `Entity` that can act on behalf of itself or others, such as a person, organization, or software agent." .
+            bro:Agent                               a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:Other                      .
                 bro:Person                          a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:Agent                      .
                 bro:PersonCollection                a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:Agent                      .
-            bro:Asset                               a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:Other                      ; rdfs:comment "An `Entity` that is of value to a person, organization, or other entity, whether tangible or intangible."@en .
+            bro:Asset                               a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:Other                      .
                 bro:Equipment                       a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:Asset                      .
                 bro:Furniture                       a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:Asset                      .
-            bro:Connectable                         a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:Other                      ; rdfs:comment "An `Entity` that can be physically connected to another entity."@en .
+            bro:Connectable                         a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:Other                      .
                 bro:Equipment                       a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:Connectable                .
                 bro:Junction                        a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:Connectable                .
                 bro:Space                           a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:Connectable                .
@@ -356,6 +371,11 @@
     bro:Entity                          sh:property [ sh:path bro:name                  ; sh:datatype  xsd:string                       ;               ] .
 
 ### 10.2 PhysicalObject
+
+    bro:PhysicalObject
+        rdfs:comment "An `Entity` that occupies space and has mass."@en .
+
+#### Properties
 
     bro:PhysicalObject                  sh:property [ sh:path bro:geometry              ; sh:class     geo:Geometry                     ;               ] .
 
@@ -369,7 +389,8 @@
 
 ### 10.3 InformationObject
 
-#. This section intentionally left blank.
+    bro:InformationObject
+        rdfs:comment "An `Entity` that captures information about something."@en .
 
 ##  11. The 6 Core Concepts
 
@@ -421,7 +442,7 @@
 
     bro:Person                          sh:property [ sh:path bro:name                  ; sh:datatype  xsd:string                       ;               ] .
 
-##  12. Composition Types
+##  12. Composition
 
 ### 12.1 hasPart
 
@@ -463,9 +484,22 @@
 
     bro:Junction                        sh:property [ sh:path bro:partOf                ;                                               ; sh:maxCount 0 ] .
 
-##  13. Aggregation Types
+##  13. Collections
 
-### 13.1 hasMember
+### 13.1 Classes
+
+    bro:PhysicalObjectCollection        rdfs:comment "A grouping of `PhysicalObject`s and/or other `PhysicalObjectCollection`s.\n\nWhere applicable, use a more specific subclass to indicate the purpose of the grouping; create a new subclass when an appropriate one does not exist."@en .
+
+    bro:ArchitectureCollection          rdfs:comment "A grouping of `Architecture` and/or other `ArchitectureCollection`s.\n\nWhere applicable, use a more specific subclass to indicate the purpose of the grouping; create a new subclass when an appropriate one does not exist."@en .
+    bro:ConnectionCollection            rdfs:comment "A grouping of `Connection`s and/or other `ConnectionCollection`s.\n\nWhere applicable, use a more specific subclass to indicate the purpose of the grouping; create a new subclass when an appropriate one does not exist."@en .
+    bro:ConnectionPointCollection       rdfs:comment "A grouping of `ConnectionPoint`s and/or other `ConnectionPointCollection`s.\n\nWhere applicable, use a more specific subclass to indicate the purpose of the grouping; create a new subclass when an appropriate one does not exist."@en .
+    bro:EquipmentCollection             rdfs:comment "A grouping of `Equipment` and/or other `EquipmentCollection`s.\n\nWhere applicable, use a more specific subclass to indicate the purpose of the grouping; create a new subclass when an appropriate one does not exist."@en .
+    bro:FurnitureCollection             rdfs:comment "A grouping of `Furniture` and/or other `FurnitureCollection`s.\n\nWhere applicable, use a more specific subclass to indicate the purpose of the grouping; create a new subclass when an appropriate one does not exist."@en .
+    bro:PersonCollection                rdfs:comment "A grouping of `Person`s and/or other `PersonCollection`s.\n\nWhere applicable, use a more specific subclass to indicate the purpose of the grouping; create a new subclass when an appropriate one does not exist."@en .
+
+    bro:PointCollection                 rdfs:comment "A grouping of `Point`s and/or other `PointCollection`s.\n\nWhere applicable, use a more specific subclass to indicate the purpose of the grouping; create a new subclass when an appropriate one does not exist."@en .
+
+### 13.2 hasMember
 
     bro:PhysicalObjectCollection        sh:property [ sh:path bro:hasMember             ; sh:or ( [ sh:class bro:PhysicalObject  ] [ sh:class bro:PhysicalObjectCollection  ] ) ] .
 
@@ -487,7 +521,7 @@
 
     bro:PointCollection                 sh:property [ sh:path bro:hasMember             ; sh:or ( [ sh:class bro:Point           ] [ sh:class bro:PointCollection           ] ) ] .
 
-### 13.2 memberOf
+### 13.3 memberOf
 
     bro:PhysicalObjectCollection        sh:property [ sh:path bro:memberOf              ;                                               ;               ] .
 
@@ -507,30 +541,47 @@
     bro:Furniture                       sh:property [ sh:path bro:memberOf              ;                                               ;               ] .
     bro:Person                          sh:property [ sh:path bro:memberOf              ;                                               ;               ] .
 
-##  14. Union Types
+##  14. Unions
 
 ### 14.1 Agent
+
+    bro:Agent
+        rdfs:comment "An `Entity` that can act on behalf of itself or others, such as a person, organization, or software agent." .
+
+#### Properties
 
     bro:Agent                           sh:property [ sh:path bro:owns                  ; sh:class     bro:Asset                        ;               ] .
 
 ### 14.2 Asset
+
+    bro:Asset
+        rdfs:comment "An `Entity` that is of value to a person, organization, or other entity, whether tangible or intangible."@en .
+
+#### Properties
 
     bro:Asset                           sh:property [ sh:path bro:assetTag              ; sh:datatype  xsd:string                       ;               ] .
     bro:Asset                           sh:property [ sh:path bro:modelNumber           ; sh:datatype  xsd:string                       ;               ] .
     bro:Asset                           sh:property [ sh:path bro:serialNumber          ; sh:datatype  xsd:string                       ;               ] .
 
     bro:Asset                           sh:property [ sh:path bro:commissionedBy        ; sh:class     bro:Agent                        ;               ] .
-    bro:Asset                           sh:property [ sh:path bro:commissioningDate     ; sh:datatype  xsd:date                         ; sh:maxCount 1 ] .
-    bro:Asset                           sh:property [ sh:path bro:initialCost           ;                                               ; sh:maxCount 1 ] .
-    bro:Asset                           sh:property [ sh:path bro:installationDate      ; sh:datatype  xsd:date                         ; sh:maxCount 1 ] .
     bro:Asset                           sh:property [ sh:path bro:installedBy           ; sh:class     bro:Agent                        ;               ] .
-    bro:Asset                           sh:property [ sh:path bro:maintenanceInterval   ; sh:datatype  xsd:duration                     ;               ] .
     bro:Asset                           sh:property [ sh:path bro:manufacturedBy        ; sh:class     bro:Agent                        ;               ] .
     bro:Asset                           sh:property [ sh:path bro:ownedBy               ; sh:class     bro:Agent                        ;               ] .
     bro:Asset                           sh:property [ sh:path bro:servicedBy            ; sh:class     bro:Agent                        ;               ] .
+    
+    bro:Asset                           sh:property [ sh:path bro:commissioningDate     ; sh:datatype  xsd:date                         ; sh:maxCount 1 ] .
+    bro:Asset                           sh:property [ sh:path bro:installationDate      ; sh:datatype  xsd:date                         ; sh:maxCount 1 ] .
     bro:Asset                           sh:property [ sh:path bro:turnoverDate          ; sh:datatype  xsd:date                         ; sh:maxCount 1 ] .
 
+    bro:Asset                           sh:property [ sh:path bro:initialCost           ;                                               ; sh:maxCount 1 ] .
+    bro:Asset                           sh:property [ sh:path bro:maintenanceInterval   ; sh:datatype  xsd:duration                     ;               ] .
+
 ### 14.3 Connectable
+
+    bro:Connectable
+        rdfs:comment "An `Entity` that can be physically connected to another entity."@en .
+
+#### Properties
 
     bro:Connectable                     sh:property [ sh:path bro:connected             ; sh:class     bro:Connectable                  ;               ] .
     bro:Connectable                     sh:property [ sh:path bro:connectedFrom         ; sh:class     bro:Connectable                  ;               ] .
