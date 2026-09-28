@@ -165,19 +165,19 @@
 
 #.  There may be exceptions defined to this rule.
 
-### 6.3 Patching
+### 6.3 Patches
 
-#.  Patching allows for changes without breaking compatibility.
+#.  Patching releases allows for changes without breaking compatibility.
 
 #.  *Compatibility Rule:* As an exception to the rule, we do not consider it to break compatibility if a patch release fixes any bugs introduced in a release with the same major and minor version, even if that changes the set of facts.
 
 ### 6.4 Deprecations
 
-#.  Deprecations allow for changes without breaking compatibility.
+#.  Deprecating concepts allows for changes without breaking compatibility.
 
 #.  We will keep using Brick's established deprecation mechanism: Instead of removing a concept (class, property, ...) from the graph, we add a triple stating that is deprecated. There may be additional metadata, such as the version since when it is deprecated, a message helping users to migrate, and a suitable replacement for automatic migration (if available).
 
-#.  Because it's an additive change, deprecating something cannot negatively impact users: The deprecation is more like a hint that the node should not longer be referred to (for whatever reason), but the deprecated node still exits and is fully usable.
+#.  Because it's an additive change, deprecating something cannot negatively impact users: The deprecation is more like a hint that the node should not longer be referred to (for whatever reason), but the deprecated node still exists and is fully usable.
 
 #.  *Compatibility Rule:* We do not consider the addition, change, and removal of deprecation statements to break compatibility.
 
@@ -195,7 +195,7 @@
 
 ### 6.5 Aliasing
 
-#.  Aliasing allows for changes without breaking compatibility.
+#.  Aliasing concepts allows for changes without breaking compatibility.
 
 #.  OWL already has the concepts of classes and properties defined to being equivalent using `owl:equivalentClass` and `owl:equivalentProperty`, respectivly. (In terms of RDF Schema, the statement `:x owl:equivalentClass :y .` is equivalent to making the two statements `:x rdfs:subClassOf :y .` and `:y rdfs:subClassOf :x .`.)
 
@@ -203,7 +203,7 @@
 
 #.  This is also useful without deprecations and can be used to define multiple alternative IRIs for the same class or property. However, then it is no longer obvious which is the canonical "main class" in the group of equivalent classes.
 
-#.  We use `bro:aliasClassOf` as a directed form of `owl:equivalentClass`: If `:x bro:aliasClassOf :y` then `:x owl:equivalentClass :y .` `:x rdfs:subClassOf :y .` `:y rdfs:subClassOf :x .`, and `:y` is the canonical class.
+#.  We use `bro:aliasClassOf` as a directed form of `owl:equivalentClass`: If `:x bro:aliasClassOf :y` then `:x` is an alias class, `:y` is the canonical class, `:x rdfs:subClassOf :y`, `:y rdfs:subClassOf :x`, and `:x owl:equivalentClass :y`.
 
 #.  In principle, aliasing statements could be defined as reflexive and transitive (e.g., if `:x bro:aliasClassOf :y` and `:y bro:aliasClassOf :z`, then it can be inferred that `:x bro:aliasClassOf :z`). However, to simplify things, if `?x bro:aliasClassOf ?y`, then there shall not be any `?y bro:aliasClassOf ?z`.
 
@@ -215,7 +215,7 @@
         rdfs:domain rdfs:Class ;
         rdfs:range rdfs:Class .
 
-#.  *Compatibility Rule:* The addition of aliasing statements is a non-breaking change as long as the added group member is added to the ontology in the same version. The change of aliasing statements is a non-breaking change as long as the new canonical class is already in the group. Any other addition, change, or removal of aliasing statements is a breaking change.
+#.  *Compatibility Rule:* The addition of aliasing statements is a non-breaking change as long as the new group member is added to the ontology in the same release. The change of aliasing statements is a non-breaking change as long as the new canonical class is already a member of the group. Any other addition, change, or removal of aliasing statements is a breaking change.
 
 #.  When a node is an alias, any other statements about that node shall be removed from the ontology. As a consequence, users must be prepared to always follow aliasing statements to the canonical class first (e.g., `?x bro:aliasClassOf?/rdfs:label ?y` instead of `?x rdfs:label ?y`).
 
