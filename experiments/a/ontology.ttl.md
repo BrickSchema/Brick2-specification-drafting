@@ -30,7 +30,7 @@
 
 #.  &check; Dealing with 10 years of decisions without hindsight
 
-### 2.2 Option 1 &ndash; EXTEND
+### 2.2 Option 1 &ndash; "EXTEND"
 
 #.  &mdash; Extend s223
 
@@ -44,7 +44,7 @@
 
 #.  &mdash; Add new `s223:Concept` subclasses (&larr; `rec:Agent`, `rec:Furniture`, `rec:Information`)
 
-### 2.3 Option 2 &ndash; ALIGN
+### 2.3 Option 2 &ndash; "ALIGN"
 
 #.  &mdash; Move all `brick:` and `rec:` concepts into a single namespace
 
@@ -86,13 +86,15 @@
 
     @prefix sh: <http://www.w3.org/ns/shacl#> .
 
+#.  For defining the ontology's structure, we preferentially make concepts both `rdfs:Class` and `sh:NodeShape` (= `sh:ShapeClass`) instances with `sh:property` statements to define the applicable properties. Invariants and other validation rules can be expressed through more complex SHACL shapes.
+
 ### 4.2 OWL
 
 #.  Ancillarily, the ontology shall be a (minimal) OWL ontology. This helps with loading the ontology into tools like Protégé and the interworking with other ontologies.
 
     @prefix owl: <http://www.w3.org/2002/07/owl#> .
 
-#.	Specifically, every class is declared as an `owl:Class`, and every property is declared as `owl:DatatypeProperty`, `owl:ObjectProperty` (+ reflexive, symmetric, transitive where applicable), or `owl:AnnotationProperty`. Properties with an inverse declare it via `owl:inverseOf`. `owl:Restriction` shall be used sparingly or not at all. 
+#.  Specifically, every class is declared as an `owl:Class`, and every property is declared as `owl:DatatypeProperty`, `owl:ObjectProperty` (+ reflexive, symmetric, transitive where applicable), or `owl:AnnotationProperty`. Properties with an inverse declare it via `owl:inverseOf`. `owl:Restriction` shall be used sparingly or not at all. 
 
 ### 4.3 RDF Schema
 
@@ -106,7 +108,7 @@
 
 ### 5.1 Brick and REC
 
-#.  The ontology is the result of merging **Brick Schema** and **RealEstateCore** (REC). Migrations will be provided to convert instance data using the latest releases to the new ontology. For now, the migrations are defined in a set of JSON files (from which, e.g., triples could be generated).
+#.  The ontology is the result of merging **Brick Schema** and **RealEstateCore**. Migrations will be provided to convert instance data using the latest releases to the new ontology. For now, the migrations are defined in a set of JSON files (from which, e.g., triples could be generated).
 
 ### 5.2 ASHRAE Standard 223
 
@@ -129,6 +131,8 @@
     @prefix geo: <http://www.opengis.net/ont/geosparql#> .
     @prefix sf:  <http://www.opengis.net/ont/sf#> .
 
+#.  This replaces all the geometry-related classes in REC.
+
 ### 5.5 Industry Foundation Classes (IFC)
 
 #.  Regarding [IFC](https://standards.buildingsmart.org/IFC/DEV/IFC4_3/HTML/), the conversion from [IfcSpatialElement](https://ifc43-docs.standards.buildingsmart.org/IFC/RELEASE/IFC4x3/HTML/lexical/IfcSpatialElement.htm) and its subtypes to building structure classes should be kept simple. This allows for easy import of data from BIM models.
@@ -137,17 +141,13 @@
 
 #.  Brick 2.0 needs a strategy for evolving the ontology without negatively impacting its users. This requires the concept of versions, a versioning strategy, and rules that formalize compatibility between versions.
 
-#.  *Background:* Backward compatibility refers to the ability of a *data producer* to use a newer version while still allowing a *data consumer* to successfully interpret the data using an older version.
-
-#.  *Background:* Forward compatibility is the inverse of backward compatibility. It refers to the ability of a *data consumer* to use a newer version while still allowing *data producers* to successfully produce data using an older version.
-
 ### 6.1 Versioning
 
 #.  We use [Semantic Versioning](https://semver.org/) (semver).
 
 #.  The versioning format consists of three numbers (&lt;major&gt;.&lt;minor&gt;.&lt;patch&gt;) and an optional pre-release identifier (e.g., `2.0.0-alpha.1`).
 
-#.  &mdash; A patch release occurs if the newer version is compatible with the older version and only contains trivial changes (e.g., typo fixes).
+#.  &mdash; A patch release occurs if the newer version is compatible with the older version and only contains trivial changes (e.g., improved descriptions).
 
 #.  &mdash; A minor release occurs if the newer version is compatible with the older version and contains non-trivial changes (e.g., new subclasses).
 
@@ -155,19 +155,31 @@
 
 ### 6.2 Compatibility
 
-#.  *Rule:* Two versions of the ontology are compatible if, for all graphs, the set of facts inferred using the newer version is exactly the same set of facts inferred using the older version plus any additional (non-contradicting) facts.
+#.  *Background:* Backward compatibility refers to the ability of a **data producer** to use a newer version while still allowing a **data consumer** to successfully interpret the data using an older version.
 
-#.  This rule may be too strict in practice, because it prevents fixing bugs without making a major release (e.g., bugs causing the wrong facts to be inferred). Also, nobody else does this, so we may have to revise this.
+#.  *Background:* Forward compatibility is the inverse of backward compatibility. It refers to the ability of a **data consumer** to use a newer version while still allowing **data producers** to successfully produce data using an older version.
 
-### 6.3 Deprecations
+#.  *Compatibility Rule:* We consider two versions of the ontology to be compatible if and only if, for all graphs, the set of facts from using the newer version is exactly the same set of facts from using the older version plus any additional, non-contradicting facts.
 
-#.  Deprecations allow for changes without breaking backward compatibility.
+#.  "Non-contradicting" means, for example, that the newer version does not fail to validate instances that were valid under the old version (and vice-versa).
+
+#.  There may be exceptions defined to this rule.
+
+### 6.3 Patching
+
+#.  Patching allows for changes without breaking compatibility.
+
+#.  *Compatibility Rule:* As an exception to the rule, we do not consider it to break compatibility if a patch release fixes any bugs introduced in a release with the same major and minor version, even if that changes the set of facts.
+
+### 6.4 Deprecations
+
+#.  Deprecations allow for changes without breaking compatibility.
 
 #.  We will keep using Brick's established deprecation mechanism: Instead of removing a concept (class, property, ...) from the graph, we add a triple stating that is deprecated. There may be additional metadata, such as the version since when it is deprecated, a message helping users to migrate, and a suitable replacement for automatic migration (if available).
 
 #.  Because it's an additive change, deprecating something cannot negatively impact users: The deprecation is more like a hint that the node should not longer be referred to (for whatever reason), but the deprecated node still exits and is fully usable.
 
-#.  We do not consider the addition, change, and removal of deprecation statements to break backward compatibility.
+#.  *Compatibility Rule:* We do not consider the addition, change, and removal of deprecation statements to break compatibility.
 
     bro:deprecatedMessage
         a owl:DatatypeProperty ;
@@ -181,7 +193,9 @@
 
 #.  The replacement is indicated via aliasing.
 
-### 6.4 Aliasing
+### 6.5 Aliasing
+
+#.  Aliasing allows for changes without breaking compatibility.
 
 #.  OWL already has the concepts of classes and properties defined to being equivalent using `owl:equivalentClass` and `owl:equivalentProperty`, respectivly. (In terms of RDF Schema, the statement `:x owl:equivalentClass :y .` is equivalent to making the two statements `:x rdfs:subClassOf :y .` and `:y rdfs:subClassOf :x .`.)
 
@@ -191,6 +205,8 @@
 
 #.  We use `bro:aliasClassOf` as a directed form of `owl:equivalentClass`: If `:x bro:aliasClassOf :y` then `:x owl:equivalentClass :y .` `:x rdfs:subClassOf :y .` `:y rdfs:subClassOf :x .`, and `:y` is the canonical class.
 
+#.  In principle, aliasing statements could be defined as reflexive and transitive (e.g., if `:x bro:aliasClassOf :y` and `:y bro:aliasClassOf :z`, then it can be inferred that `:x bro:aliasClassOf :z`). However, to simplify things, if `?x bro:aliasClassOf ?y`, then there shall not be any `?y bro:aliasClassOf ?z`.
+
     bro:aliasClassOf
         a owl:ObjectProperty ;
         rdfs:subPropertyOf owl:equivalentClass ;
@@ -199,25 +215,27 @@
         rdfs:domain rdfs:Class ;
         rdfs:range rdfs:Class .
 
-#.  The change of aliasing statements is a non-breaking change as long as the new main class is already in the group. The addition of aliasing statements is a non-breaking change as long as the added group member is added to the ontology in the same version. Any other addition, change, or removal of aliasing statements is a breaking change.
+#.  *Compatibility Rule:* The addition of aliasing statements is a non-breaking change as long as the added group member is added to the ontology in the same version. The change of aliasing statements is a non-breaking change as long as the new canonical class is already in the group. Any other addition, change, or removal of aliasing statements is a breaking change.
 
-#.  When a node is an alias, any other statements about that node are removed from the ontology. This is considered a non-breaking change. As a consequence, users must be prepared to always  follow aliasing statements to the main class first (e.g., `?x bro:aliasClassOf?/rdfs:label ?y` instead of `?x rdfs:label ?y`).
+#.  When a node is an alias, any other statements about that node shall be removed from the ontology. As a consequence, users must be prepared to always follow aliasing statements to the canonical class first (e.g., `?x bro:aliasClassOf?/rdfs:label ?y` instead of `?x rdfs:label ?y`).
 
-#.  In principle, aliasing statements could be defined as reflexive and transitive (e.g., if `:x bro:aliasClassOf :y` and `:y bro:aliasClassOf :z`, then it can be inferred that `:x bro:aliasClassOf :z`). However, to simplify things, if `?x bro:aliasClassOf ?y`, then there shall not be any `?y bro:aliasClassOf ?z`.
+#.  *Compatibility Rule:* Removing statements about an alias is a non-breaking change.
 
 ##  7. Modeling Conventions
 
-### 7.1. Naming
+### 7.1 Naming
 
-#.  We consistently use **PascalCase** for classes and **camelCase** for properties.
+#.  We consistently use **PascalCase** for classes and **camelCase** for properties [3].
 
-### 7.2 Internationalization
+### 7.2 Documentation
 
 #.  All human-readable strings are marked with a language tag. All machine-readable strings do not have a language tag.
 
+#.  All concepts include English and Swedish labels [1].
+
 ### 7.3 Composition vs. Aggregation
 
-#.  We cleanly distinguish composition from aggregation. Composition is expressed with `hasPart`/`partOf`, while aggregation is expressed with `hasMember`/`memberOf`.
+#.  We cleanly distinguish composition from aggregation. Composition is expressed with `bro:hasPart`/`bro:partOf`, while aggregation is expressed with `bro:hasMember`/`bro:memberOf`.
 
     bro:hasPart  
         a owl:ObjectProperty, owl:InverseFunctionalProperty ;
@@ -257,7 +275,40 @@
 
 #.  3. `Connectable` &ndash;*hasConnectionPoint*&rarr; `ConnectionPoint` &ndash;*connectsThrough*&rarr; `Connection` &ndash;*connectsAt*&rarr; `ConnectionPoint` &ndash;*isConnectionPointOf*&rarr; `Connectable`
 
-### 8.2 Equipment and its Function
+### 8.2 Locations
+
+#.  Some locations are demarcated by physical boundaries (such as rooms), while others are defined logically (such as lighting zones). Brick and REC previously defined these within the same hierarchy. We are changing this and separating physical spaces from logical locations.
+
+#### Physical Locations
+
+#.  Physical locations are aligned with IFC:
+
+#.  &mdash; [IfcSite](https://standards.buildingsmart.org/IFC/DEV/IFC4_3/HTML/lexical/IfcSite.html)                     COMPLEX (site complex)            &rarr; collection of `bro:Site`     <br>
+#.  &mdash; [IfcSite](https://standards.buildingsmart.org/IFC/DEV/IFC4_3/HTML/lexical/IfcSite.html)                     ELEMENT (site)                    &rarr; `bro:Site`                   <br>
+#.  &mdash; [IfcSite](https://standards.buildingsmart.org/IFC/DEV/IFC4_3/HTML/lexical/IfcSite.html)                     PARTIAL (site section)            &rarr; n/a                          <br>
+#.  &mdash; [IfcBuilding](https://standards.buildingsmart.org/IFC/DEV/IFC4_3/HTML/lexical/IfcBuilding.html)             COMPLEX (building complex)        &rarr; collection of `bro:Building` <br>
+#.  &mdash; [IfcBuilding](https://standards.buildingsmart.org/IFC/DEV/IFC4_3/HTML/lexical/IfcBuilding.html)             ELEMENT (building)                &rarr; `bro:Building`               <br>
+#.  &mdash; [IfcBuilding](https://standards.buildingsmart.org/IFC/DEV/IFC4_3/HTML/lexical/IfcBuilding.html)             PARTIAL (building section)        &rarr; n/a                          <br>
+#.  &mdash; [IfcBuildingStorey](https://standards.buildingsmart.org/IFC/DEV/IFC4_3/HTML/lexical/IfcBuildingStorey.html) COMPLEX (building storey complex) &rarr; collection of `bro:Floor`    <br>
+#.  &mdash; [IfcBuildingStorey](https://standards.buildingsmart.org/IFC/DEV/IFC4_3/HTML/lexical/IfcBuildingStorey.html) ELEMENT (building storey)         &rarr; `bro:Floor`                  <br>
+#.  &mdash; [IfcBuildingStorey](https://standards.buildingsmart.org/IFC/DEV/IFC4_3/HTML/lexical/IfcBuildingStorey.html) PARTIAL (partial building storey) &rarr; n/a                          <br>
+#.  &mdash; [IfcSpace](https://standards.buildingsmart.org/IFC/DEV/IFC4_3/HTML/lexical/IfcSpace.html)                   COMPLEX (space group)             &rarr; collection of `bro:Space`    <br>
+#.  &mdash; [IfcSpace](https://standards.buildingsmart.org/IFC/DEV/IFC4_3/HTML/lexical/IfcSpace.html)                   ELEMENT (space)                   &rarr; `bro:Space`                  <br>
+#.  &mdash; [IfcSpace](https://standards.buildingsmart.org/IFC/DEV/IFC4_3/HTML/lexical/IfcSpace.html)                   PARTIAL (partial space)           &rarr; n/a                          <br>
+
+#.  *Open Issue:* In REC, there is `rec:SubBuilding`/`rec:Wing` for partial buildings, but there is no vocabulary for partial sites, partial floors, or partial spaces. Should those be added?
+
+#### Zones
+
+#.  Zones are defined as collections of physical locations.
+
+#### Domain Spaces
+
+#.  In 223, domain spaces sit conceptually between physical locations (`s223:PhysicalSpace`) and logical locations (`s223:Zone`): they are physically connectable (`s223:Connectable`) but not demarcated by physical boundaries; they are logical regions contained in physical locations.
+
+#.  *Open Issue:* Yea or nay?
+
+### 8.3 Equipment and its Function
 
 #.  *Terminology:* "function (noun) &ndash; the action for which a person or thing is specially fitted or used or for which a thing exists"
 
@@ -271,9 +322,9 @@
 
 #.  *Open Issue:* Should this distinction be made? For example, we could say that a `MultifunctionDevice` has the functions `Print`, `Copy`, and `Scan`. Or do we say that a `MultifunctionDevice` is physically composed of a `Printer`, `Copier`, and `Scanner`, even though these are not actually distinct physical parts of it?
 
-### 8.3 Properties and Points
+### 8.4 Properties and Points
 
-#.  In Brick, REC, and 223, there are many different ways in which entities are linked to quantities &ndash; whether static (such as rated voltage or maximum operating temperature), mostly static (such as a serial number until the device is replaced or the date of the last scheduled maintenance), or dynamic (such as current operating temperature). Here is a selection.
+#.  In Brick, REC, and 223, there are many different ways in which entities are linked to quantities &ndash; whether static (such as rated voltage or maximum operating temperature), mostly static (such as the date of the last scheduled maintenance or a serial number until the device is replaced), or dynamic (such as current operating temperature). Here is a selection.
 
 #.  *Open Issue:* Unify the different ways.
 
@@ -291,9 +342,9 @@
 
 #.  &mdash; Static quantity in a simple statement: `:x a rec:Asset ; rec:weight 5.0 .`
 
-#.  &mdash; Dynamic quantity in a simple statement: `:x a rec:SensorEquipment ; rec:wifiSignalStrength 100 .`
-
 #.  &mdash; Static quantity with an extra step: `:x a rec:Stadium ; rec:capacity [ rec:seatingCapacity 42100 ] .`
+
+#.  &mdash; Dynamic quantity in a simple statement: `:x a rec:SensorEquipment ; rec:wifiSignalStrength 100 .`
 
 #.  &mdash; Dynamic quantity with an observation timestamp: `[ a rec:TemperatureObservation ; rec:value 50 ; rec:timestamp "2026-09-17T12:00:00Z"^^xsd:dateTime ] .`
 
@@ -367,6 +418,8 @@
 ##  10. The 3 Root Concepts
 
 ### 10.1 Entity
+
+*Terminology:* "entity (noun) &ndash; something that has separate and distinct existence and objective or conceptual reality"
 
     bro:Entity                          sh:property [ sh:path bro:name                  ; sh:datatype  xsd:string                       ;               ] .
 
@@ -617,10 +670,10 @@
 
 ## 18. References
 
-#. [REC 5 Ontology Translation Principles and Methodology](https://github.com/RealEstateCore/rec-5/blob/main/docs/ontology-principles.pdf) (@PeteHart)
+#. [1] @PeteHart, [REC 5 Ontology Translation Principles and Methodology](https://github.com/RealEstateCore/rec-5/blob/main/docs/ontology-principles.pdf), 2026-01-30.
 
-#. [REC 5: Breaking Changes and Semantic Incompatibilities](https://github.com/RealEstateCore/rec-5/blob/main/docs/rec5-breaking-changes.pdf) (@PeteHart)
+#. [2] @PeteHart, [REC 5: Breaking Changes and Semantic Incompatibilities](https://github.com/RealEstateCore/rec-5/blob/main/docs/rec5-breaking-changes.pdf), 2026-01-30.
 
-#. [lets use pascal case](https://github.com/BrickSchema/Brick2-specification-drafting/pull/3) (@jbkoh)
+#. [3] @jbkoh, [lets use pascal case](https://github.com/BrickSchema/Brick2-specification-drafting/pull/3), 2026-05-14.
 
-#. [Initial wish list for Brick 2.0](https://github.com/BrickSchema/Brick2-specification-drafting/pull/1) (@ektrah)
+#. [4] @ektrah, [Initial wish list for Brick 2.0](https://github.com/BrickSchema/Brick2-specification-drafting/pull/1), 2025-10-09.
