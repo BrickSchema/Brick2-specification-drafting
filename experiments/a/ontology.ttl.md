@@ -137,13 +137,13 @@
 
 #.  Regarding [IFC](https://standards.buildingsmart.org/IFC/DEV/IFC4_3/HTML/), the conversion from [IfcSpatialElement](https://ifc43-docs.standards.buildingsmart.org/IFC/RELEASE/IFC4x3/HTML/lexical/IfcSpatialElement.htm) and its subtypes to building structure classes should be kept simple. This allows for easy import of data from BIM models.
 
-##  6. Evolvability
+##  6. Ontology Evolution
 
 #.  Brick 2.0 needs a strategy for evolving the ontology without negatively impacting its users. This requires the concept of versions, a versioning strategy, and rules that formalize compatibility between versions.
 
 ### 6.1 Versioning
 
-#.  We use [Semantic Versioning](https://semver.org/) (semver).
+#.  We use [Semantic Versioning](https://semver.org/) (SemVer).
 
 #.  The versioning format consists of three numbers (&lt;major&gt;.&lt;minor&gt;.&lt;patch&gt;) and an optional pre-release identifier (e.g., `2.0.0-alpha.1`).
 
@@ -221,6 +221,16 @@
 
 #.  *Compatibility Rule:* Removing statements about an alias is a non-breaking change.
 
+### 6.6 Trivia
+
+#.  *Compatibility Rule:* Changing and adding to descriptions and other human-readable information is a trivial, non-breaking change, as long as the meaning is not completely distorted. (You can't just say that your grandmother has wheels now and call her a bike.)
+
+### 6.7 Release Process
+
+#.  A stable release shall be preceded by at least one release candidate. A stable release shall be identical to the last release candidate and shall not be published until that release candidate has been available for at least ___ days. Any changes to the ontology during this time requires a new release candidate, which restarts the review period.
+
+#.  Other pre-release types (e.g., alpha, beta, nightly) may also be published. In this case care, must be taken to adhere to SemVer ordering: pre-release identifiers are ordered lexically, so a `nightly` release is considered newer than a `beta` release because `n` follows `b`.
+
 ##  7. Modeling Conventions
 
 ### 7.1 Naming
@@ -277,7 +287,7 @@
 
 ### 8.2 Locations
 
-#.  Some locations are demarcated by physical boundaries (such as rooms), while others are defined logically (such as lighting zones). Brick and REC previously defined these within the same hierarchy. We are changing this and separating physical spaces from logical locations.
+#.  Some locations are demarcated by physical boundaries (such as rooms), while others are defined logically (such as lighting zones). Brick and REC previously defined these within the same hierarchy. We are changing this and cleanly separating physical locations from logical locations.
 
 #### Physical Locations
 
