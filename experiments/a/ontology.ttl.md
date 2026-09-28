@@ -419,7 +419,7 @@
 
 ### 10.1 Entity
 
-*Terminology:* "entity (noun) &ndash; something that has separate and distinct existence and objective or conceptual reality"
+#.  *Terminology:* "entity (noun) &ndash; something that has separate and distinct existence and objective or conceptual reality"
 
     bro:Entity                          sh:property [ sh:path bro:name                  ; sh:datatype  xsd:string                       ;               ] .
 
