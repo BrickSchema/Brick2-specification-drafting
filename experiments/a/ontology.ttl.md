@@ -28,7 +28,7 @@
 
 #.  &check; Bring Brick and RealEstateCore into a single cohesive ontology
 
-#.  &check; Dealing with 10 years of decisions without hindsight
+#.  &check; Deal with 10 years of decisions without hindsight
 
 ### 2.2 Option 1 &ndash; "EXTEND"
 
@@ -86,7 +86,7 @@
 
     @prefix sh: <http://www.w3.org/ns/shacl#> .
 
-#.  For defining the ontology's structure, we preferentially make concepts both `rdfs:Class` and `sh:NodeShape` (= `sh:ShapeClass`) instances with `sh:property` statements to define the applicable properties. Invariants and other validation rules can be expressed through more complex SHACL shapes.
+#.  For defining the ontology's structure, we preferentially make concepts both `rdfs:Class` and `sh:NodeShape` instances (i.e., implicit class targets) with `sh:property` statements to define the applicable properties. Invariants and other validation rules can be expressed through more complex SHACL shapes.
 
 ### 4.2 OWL
 
@@ -94,7 +94,7 @@
 
     @prefix owl: <http://www.w3.org/2002/07/owl#> .
 
-#.  Specifically, every class is declared as an `owl:Class`, and every property is declared as `owl:DatatypeProperty`, `owl:ObjectProperty` (+ reflexive, symmetric, transitive where applicable), or `owl:AnnotationProperty`. Properties with an inverse declare it via `owl:inverseOf`. `owl:Restriction` shall be used sparingly or not at all. 
+#.  Specifically, every class is declared as an `owl:Class`, and every property is declared as `owl:DatatypeProperty`, `owl:ObjectProperty` (+ reflexive, symmetric, transitive where applicable), or `owl:AnnotationProperty`. Properties with an inverse declare it via `owl:inverseOf`. `owl:Restriction` shall be used sparingly or not at all.
 
 ### 4.3 RDF Schema
 
@@ -135,11 +135,15 @@
 
 ### 5.5 Industry Foundation Classes (IFC)
 
-#.  Regarding [IFC](https://standards.buildingsmart.org/IFC/DEV/IFC4_3/HTML/), the conversion from [IfcSpatialElement](https://ifc43-docs.standards.buildingsmart.org/IFC/RELEASE/IFC4x3/HTML/lexical/IfcSpatialElement.htm) and its subtypes to building structure classes should be kept simple. This allows for easy import of data from BIM models.
+#.  Regarding [IFC](https://standards.buildingsmart.org/IFC/DEV/IFC4_3/HTML/), the conversion from [IfcSpatialElement](https://standards.buildingsmart.org/IFC/DEV/IFC4_3/HTML/lexical/IfcSpatialElement.html) and its subtypes to building structure classes should be kept simple. This allows for easy import of data from BIM models.
 
 ##  6. Ontology Evolution
 
 #.  Brick 2.0 needs a strategy for evolving the ontology without negatively impacting its users. This requires the concept of versions, a versioning strategy, and rules that formalize compatibility between versions.
+
+#.  *Background:* Backward compatibility refers to the ability of a **data consumer** using a newer version to successfully interpret data produced by a **data producer** using an older version.
+
+#.  *Background:* Forward compatibility refers to the ability of a **data consumer** using an older version to successfully interpret data produced by a **data producer** using a newer version.
 
 ### 6.1 Versioning
 
@@ -155,29 +159,25 @@
 
 ### 6.2 Compatibility
 
-#.  *Background:* Backward compatibility refers to the ability of a **data producer** to use a newer version while still allowing a **data consumer** to successfully interpret the data using an older version.
+#.  *Compatibility Rule:* We consider two versions of the ontology to be compatible if and only if, for all graphs, the set of facts obtained using the newer version is a superset of the set of facts obtained using the older version. The additional facts must not contradict the older facts (e.g., the newer version must not fail to validate instances that were valid under the older version).
 
-#.  *Background:* Forward compatibility is the inverse of backward compatibility. It refers to the ability of a **data consumer** to use a newer version while still allowing **data producers** to successfully produce data using an older version.
+#.  Under this rule, backward compatibility is guaranteed: The newer version produces all the facts the older version does, so a consumer using the newer version loses nothing from older data. Forward compatibility is only partial: A consumer using the older version can process newer data, but may not recognize concepts introduced in the newer version.
 
-#.  *Compatibility Rule:* We consider two versions of the ontology to be compatible if and only if, for all graphs, the set of facts from using the newer version is exactly the same set of facts from using the older version plus any additional, non-contradicting facts.
-
-#.  "Non-contradicting" means, for example, that the newer version does not fail to validate instances that were valid under the old version (and vice-versa).
-
-#.  There may be exceptions defined to this rule.
+#.  Exceptions to this rule may be defined.
 
 ### 6.3 Patches
 
-#.  Patching releases allows for changes without breaking compatibility.
+#.  Patching releases allow for changes without breaking compatibility.
 
-#.  *Compatibility Rule:* As an exception to the rule, we do not consider it to break compatibility if a patch release fixes any bugs introduced in a release with the same major and minor version, even if that changes the set of facts.
+#.  *Compatibility Rule:* We do not consider it to break compatibility if a patch release fixes any bugs introduced in a release with the same major and minor version, even if that changes the set of facts.
 
 ### 6.4 Deprecations
 
 #.  Deprecating concepts allows for changes without breaking compatibility.
 
-#.  We will keep using Brick's established deprecation mechanism: Instead of removing a concept (class, property, ...) from the graph, we add a triple stating that is deprecated. There may be additional metadata, such as the version since when it is deprecated, a message helping users to migrate, and a suitable replacement for automatic migration (if available).
+#.  We will keep using Brick's established deprecation mechanism: Instead of removing a concept (class, property, ...) from the graph, we add a triple stating that it is deprecated. There may be additional metadata, such as the version since when it is deprecated, a message helping users to migrate, and a suitable replacement for automatic migration (if available).
 
-#.  Because it's an additive change, deprecating something cannot negatively impact users: The deprecation is more like a hint that the node should not longer be referred to (for whatever reason), but the deprecated node still exists and is fully usable.
+#.  Because it's an additive change, deprecating something cannot negatively impact users: The deprecation is more like a hint that the node should no longer be referred to (for whatever reason), but the deprecated node still exists and is fully usable.
 
 #.  *Compatibility Rule:* We do not consider the addition, change, and removal of deprecation statements to break compatibility.
 
@@ -197,7 +197,7 @@
 
 #.  Aliasing concepts allows for changes without breaking compatibility.
 
-#.  OWL already has the concepts of classes and properties defined to being equivalent using `owl:equivalentClass` and `owl:equivalentProperty`, respectivly. (In terms of RDF Schema, the statement `:x owl:equivalentClass :y .` is equivalent to making the two statements `:x rdfs:subClassOf :y .` and `:y rdfs:subClassOf :x .`.)
+#.  OWL already has the concepts of classes and properties defined as equivalent using `owl:equivalentClass` and `owl:equivalentProperty`, respectively. (In terms of RDF Schema, the statement `:x owl:equivalentClass :y .` is equivalent to making the two statements `:x rdfs:subClassOf :y .` and `:y rdfs:subClassOf :x .`.)
 
 #.  This can be used in conjunction with deprecations: mark a class as deprecated, define a replacement class, and make the two classes subclasses of each other, i.e., equivalent. Instances of the old class automatically become instances of the new class, and vice versa.
 
@@ -205,19 +205,19 @@
 
 #.  We use `bro:aliasClassOf` as a directed form of `owl:equivalentClass`: If `:x bro:aliasClassOf :y` then `:x` is an alias class, `:y` is the canonical class, `:x rdfs:subClassOf :y`, `:y rdfs:subClassOf :x`, and `:x owl:equivalentClass :y`.
 
-#.  In principle, aliasing statements could be defined as reflexive and transitive (e.g., if `:x bro:aliasClassOf :y` and `:y bro:aliasClassOf :z`, then it can be inferred that `:x bro:aliasClassOf :z`). However, to simplify things, if `?x bro:aliasClassOf ?y`, then there shall not be any `?y bro:aliasClassOf ?z`.
+#.  In principle, aliasing statements could be defined as transitive (e.g., if `:x bro:aliasClassOf :y` and `:y bro:aliasClassOf :z`, then it can be inferred that `:x bro:aliasClassOf :z`). However, to simplify things, if `?x bro:aliasClassOf ?y`, then there shall not be any `?y bro:aliasClassOf ?z`.
 
     bro:aliasClassOf
         a owl:ObjectProperty ;
         rdfs:subPropertyOf owl:equivalentClass ;
-        rdfs:label "alias of"@en ;
+        rdfs:label "alias class of"@en ;
         rdfs:comment "Relates an alias class to its canonical class."@en ;
         rdfs:domain rdfs:Class ;
         rdfs:range rdfs:Class .
 
 #.  *Compatibility Rule:* The addition of aliasing statements is a non-breaking change as long as the new group member is added to the ontology in the same release. The change of aliasing statements is a non-breaking change as long as the new canonical class is already a member of the group. Any other addition, change, or removal of aliasing statements is a breaking change.
 
-#.  When a node is an alias, any other statements about that node shall be removed from the ontology. As a consequence, users must be prepared to always follow aliasing statements to the canonical class first (e.g., `?x bro:aliasClassOf?/rdfs:label ?y` instead of `?x rdfs:label ?y`).
+#.  When a node is an alias, any other statements about that node shall be removed from the ontology, with the exception of any deprecation statements. As a consequence, users must be prepared to always follow aliasing statements to the canonical class first (e.g., `?x bro:aliasClassOf?/rdfs:label ?y` instead of `?x rdfs:label ?y`).
 
 #.  *Compatibility Rule:* Removing statements about an alias is a non-breaking change.
 
@@ -227,9 +227,9 @@
 
 ### 6.7 Release Process
 
-#.  A stable release shall be preceded by at least one release candidate. A stable release shall be identical to the last release candidate and shall not be published until that release candidate has been available for at least ___ days. Any changes to the ontology during this time requires a new release candidate, which restarts the review period.
+#.  A stable release shall be preceded by at least one release candidate. A stable release shall be identical to the last release candidate and shall not be published until that release candidate has been available for at least ___ days. Any changes to the ontology during this time require a new release candidate, which restarts the review period.
 
-#.  Other pre-release types (e.g., alpha, beta, nightly) may also be published. In this case care, must be taken to adhere to SemVer ordering: pre-release identifiers are ordered lexically, so a `nightly` release is considered newer than a `beta` release because `n` follows `b`.
+#.  Other pre-release types (e.g., alpha, beta, nightly) may also be published. In this case, care must be taken to adhere to SemVer ordering: pre-release identifiers are ordered lexically, so a `nightly` release is considered newer than a `beta` release because `n` follows `b`.
 
 ##  7. Modeling Conventions
 
@@ -247,12 +247,12 @@
 
 #.  We cleanly distinguish composition from aggregation. Composition is expressed with `bro:hasPart`/`bro:partOf`, while aggregation is expressed with `bro:hasMember`/`bro:memberOf`.
 
-    bro:hasPart  
+    bro:hasPart
         a owl:ObjectProperty, owl:InverseFunctionalProperty ;
-        owl:inverseOf bro:partOf    ;
+        owl:inverseOf bro:partOf ;
         rdfs:comment "Relates a whole to an entity that is a part of it."@en .
 
-    bro:partOf   
+    bro:partOf
         a owl:ObjectProperty, owl:FunctionalProperty ;
         owl:inverseOf bro:hasPart ;
         rdfs:comment "Relates an entity to the whole of which it is a part."@en .
@@ -262,7 +262,7 @@
         owl:inverseOf bro:memberOf ;
         rdfs:comment "Relates a collection to an entity that is a member of it."@en .
 
-    bro:memberOf 
+    bro:memberOf
         a owl:ObjectProperty ;
         owl:inverseOf bro:hasMember ;
         rdfs:comment "Relates an entity to a collection of which it is a member."@en .
@@ -273,17 +273,17 @@
 
 #.  *Background:* A typed collection restricts its member type; for example, `FruitBasket` could be defined as a collection that permits only `Fruit` members. If `Apple` is a subclass of `Fruit`, *covariance* means `AppleBasket` is a subclass of `FruitBasket` (taking a `Fruit` from an `AppleBasket` is safe), *contravariance* means `FruitBasket` is a subclass of `AppleBasket` (putting an `Apple` into a `FruitBasket` is safe), and *invariance* means that neither is a subclass of the other.
 
-## 8. Modeling Topics
+##  8. Modeling Topics
 
 ### 8.1 Connections
 
 #.  Connections are modeled after 223:
 
-#.  1. `Connectable` &ndash;*connectedTo*&rarr; `Connectable` ("feeds")
+#.  &mdash; `Connectable` &ndash;*connectedTo*&rarr; `Connectable` (formerly known as `brick:feeds`/`rec:feeds`)
 
-#.  2. `Connectable` &ndash;*connectedThrough*&rarr; `Connection` &ndash;*connectsTo*&rarr; `Connectable`
+#.  &mdash; `Connectable` &ndash;*connectedThrough*&rarr; `Connection` &ndash;*connectsTo*&rarr; `Connectable`
 
-#.  3. `Connectable` &ndash;*hasConnectionPoint*&rarr; `ConnectionPoint` &ndash;*connectsThrough*&rarr; `Connection` &ndash;*connectsAt*&rarr; `ConnectionPoint` &ndash;*isConnectionPointOf*&rarr; `Connectable`
+#.  &mdash; `Connectable` &ndash;*hasConnectionPoint*&rarr; `ConnectionPoint` &ndash;*connectsThrough*&rarr; `Connection` &ndash;*connectsAt*&rarr; `ConnectionPoint` &ndash;*isConnectionPointOf*&rarr; `Connectable`
 
 ### 8.2 Locations
 
@@ -314,9 +314,9 @@
 
 #### Domain Spaces
 
-#.  In 223, domain spaces sit conceptually between physical locations (`s223:PhysicalSpace`) and logical locations (`s223:Zone`): they are physically connectable (`s223:Connectable`) but not demarcated by physical boundaries; they are logical regions contained in physical locations.
+#.  A "domain space" (`s223:DomainSpace`) conceptually sits between physical locations (`s223:PhysicalSpace`) and logical locations (`s223:Zone`): they are physically connectable (`s223:Connectable`) but not demarcated by physical boundaries; they are logically defined regions contained in physical locations.
 
-#.  *Open Issue:* Yea or nay?
+#.  *Open Issue:* Should `DomainSpace` be adopted?
 
 ### 8.3 Equipment and its Function
 
@@ -340,13 +340,13 @@
 
 #### Brick
 
-#.  &mdash; Static quantity in a simple statement: `:x a brick:Motor ; brick:expectedLifetime "1Y"^^xsd:duration .`
+#.  &mdash; Static quantity in a simple statement: `:x a brick:Motor ; brick:expectedLifetime "P1Y"^^xsd:duration .`
 
 #.  &mdash; Static quantity with a unit: `:x a brick:Motor ; brick:conversionEfficiency [ brick:hasUnit unit:PERCENT ; brick:value 1 ] .`
 
 #.  &mdash; Dynamic quantity with a last known value: `:x a brick:Motor ; brick:hasPoint [ a brick:Temperature_Sensor ; brick:lastKnownValue [ brick:timestamp "2026-09-17T12:00:00Z"^^xsd:dateTime ; brick:value 50 ] ] .`
 
-#.  &mdash; Dynamic quantity with an external reference: `:x a brick:Motor ; brick:hasPoint [ a brick:Temperature_Sensor ; ref:hasExternalReference [ ..... ] ] .`
+#.  &mdash; Dynamic quantity with an external reference: `:x a brick:Motor ; brick:hasPoint [ a brick:Temperature_Sensor ; ref:hasExternalReference [ ... ] ] .`
 
 #### RealEstateCore
 
@@ -362,68 +362,68 @@
 
 #.  &mdash; Static quantity with a unit: `:x a s223:Motor ; s223:hasProperty [ a s223:QuantifiableProperty ; s223:hasAspect s223:Aspect-Rated ; qudt:hasQuantityKind qk:Voltage ; qudt:hasUnit unit:V ; qudt:quantityValue [ qudt:value 240 ] ] .`
 
-#.  &mdash; Dynamic quantity with an external reference: `:x a s223:Motor ; s223:hasProperty [ a s223:QuantifiableObservableProperty ; qudt:hasQuantityKind qk:Temperature ; qudt:hasUnit unit:DEG_C ; s223:hasExternalReference [ ..... ] ] .`
+#.  &mdash; Dynamic quantity with an external reference: `:x a s223:Motor ; s223:hasProperty [ a s223:QuantifiableObservableProperty ; qudt:hasQuantityKind qk:Temperature ; qudt:hasUnit unit:DEG_C ; s223:hasExternalReference [ ... ] ] .`
 
 ##  9. Class Hierarchy
 
 #.  Here is an initial draft of a class hierarchy combining Brick, REC, and 223:
 
-    bro:Entity                                      a owl:Class, sh:ShapeClass .
-        bro:PhysicalObject                          a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:Entity                     .
-            bro:Architecture                        a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:PhysicalObject             .
-                bro:Building                        a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:Architecture               .
-                bro:ExternalSpace                   a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:Architecture               .
-                bro:Floor                           a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:Architecture               .
-                bro:Site                            a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:Architecture               .
-                bro:Space                           a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:Architecture               .
-            bro:Connection                          a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:PhysicalObject             .
-            bro:ConnectionPoint                     a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:PhysicalObject             .
-                bro:BidirectionalConnectionPoint    a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:ConnectionPoint            .
-                bro:InletConnectionPoint            a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:ConnectionPoint            .
-                bro:OutletConnectionPoint           a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:ConnectionPoint            .
-            bro:Equipment                           a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:PhysicalObject             .
-            bro:Furniture                           a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:PhysicalObject             .
-            bro:Person                              a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:PhysicalObject             .
-        bro:PhysicalObjectCollection                a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:Entity                     .
-            bro:ArchitectureCollection              a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:PhysicalObjectCollection   .
-                bro:Apartment                       a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:ArchitectureCollection     .
-                bro:Campus                          a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:ArchitectureCollection     .
-                bro:Portfolio                       a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:ArchitectureCollection     .
-                bro:Premises                        a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:ArchitectureCollection     .
-                bro:RealEstate                      a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:ArchitectureCollection     .
-                bro:Zone                            a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:ArchitectureCollection     .
-            bro:ConnectionCollection                a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:PhysicalObjectCollection   .
-                bro:Loop                            a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:ConnectionCollection       .
-            bro:ConnectionPointCollection           a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:PhysicalObjectCollection   .
-            bro:EquipmentCollection                 a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:PhysicalObjectCollection   .
-                bro:ElectricVehicleChargingHub      a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:EquipmentCollection        .
-                bro:PhotovoltaicArray               a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:EquipmentCollection        .
-                bro:System                          a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:EquipmentCollection        .
-            bro:FurnitureCollection                 a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:PhysicalObjectCollection   .
-            bro:PersonCollection                    a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:PhysicalObjectCollection   .
-                bro:Organization                    a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:PersonCollection           .
-                    bro:Company                     a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:Organization               .
-                bro:OrganizationalUnit              a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:PersonCollection           .
-                    bro:Department                  a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:OrganizationalUnit         .
-        bro:InformationObject                       a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:Entity                     .
-            bro:Document                            a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:InformationObject          .
-                bro:LeaseContract                   a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:Document                   .
-            bro:ExternalReference                   a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:InformationObject          .
-                bro:BACnetExternalReference         a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:ExternalReference          .
-            bro:PostalAddress                       a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:InformationObject          .
-        bro:Point                                   a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:Entity                     .
-        bro:PointCollection                         a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:Entity                     .
-        bro:Other                                   a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:Entity                     .
-            bro:Agent                               a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:Other                      .
-                bro:Person                          a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:Agent                      .
-                bro:PersonCollection                a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:Agent                      .
-            bro:Asset                               a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:Other                      .
-                bro:Equipment                       a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:Asset                      .
-                bro:Furniture                       a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:Asset                      .
-            bro:Connectable                         a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:Other                      .
-                bro:Equipment                       a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:Connectable                .
-                bro:Junction                        a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:Connectable                .
-                bro:Space                           a owl:Class, sh:ShapeClass ; rdfs:subClassOf bro:Connectable                .
+    bro:Entity                                      a owl:Class, sh:NodeShape .
+        bro:PhysicalObject                          a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:Entity                     .
+            bro:Architecture                        a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:PhysicalObject             .
+                bro:Building                        a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:Architecture               .
+                bro:ExternalSpace                   a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:Architecture               .
+                bro:Floor                           a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:Architecture               .
+                bro:Site                            a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:Architecture               .
+                bro:Space                           a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:Architecture               .
+            bro:Connection                          a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:PhysicalObject             .
+            bro:ConnectionPoint                     a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:PhysicalObject             .
+                bro:BidirectionalConnectionPoint    a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:ConnectionPoint            .
+                bro:InletConnectionPoint            a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:ConnectionPoint            .
+                bro:OutletConnectionPoint           a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:ConnectionPoint            .
+            bro:Equipment                           a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:PhysicalObject             .
+            bro:Furniture                           a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:PhysicalObject             .
+            bro:Person                              a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:PhysicalObject             .
+        bro:PhysicalObjectCollection                a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:Entity                     .
+            bro:ArchitectureCollection              a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:PhysicalObjectCollection   .
+                bro:Apartment                       a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:ArchitectureCollection     .
+                bro:Campus                          a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:ArchitectureCollection     .
+                bro:Portfolio                       a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:ArchitectureCollection     .
+                bro:Premises                        a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:ArchitectureCollection     .
+                bro:RealEstate                      a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:ArchitectureCollection     .
+                bro:Zone                            a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:ArchitectureCollection     .
+            bro:ConnectionCollection                a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:PhysicalObjectCollection   .
+                bro:Loop                            a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:ConnectionCollection       .
+            bro:ConnectionPointCollection           a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:PhysicalObjectCollection   .
+            bro:EquipmentCollection                 a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:PhysicalObjectCollection   .
+                bro:ElectricVehicleChargingHub      a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:EquipmentCollection        .
+                bro:PhotovoltaicArray               a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:EquipmentCollection        .
+                bro:System                          a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:EquipmentCollection        .
+            bro:FurnitureCollection                 a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:PhysicalObjectCollection   .
+            bro:PersonCollection                    a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:PhysicalObjectCollection   .
+                bro:Organization                    a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:PersonCollection           .
+                    bro:Company                     a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:Organization               .
+                bro:OrganizationalUnit              a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:PersonCollection           .
+                    bro:Department                  a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:OrganizationalUnit         .
+        bro:InformationObject                       a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:Entity                     .
+            bro:Document                            a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:InformationObject          .
+                bro:LeaseContract                   a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:Document                   .
+            bro:ExternalReference                   a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:InformationObject          .
+                bro:BACnetExternalReference         a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:ExternalReference          .
+            bro:PostalAddress                       a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:InformationObject          .
+        bro:Point                                   a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:Entity                     .
+        bro:PointCollection                         a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:Entity                     .
+        bro:Other                                   a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:Entity                     .
+            bro:Agent                               a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:Other                      .
+                bro:Person                          a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:Agent                      .
+                bro:PersonCollection                a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:Agent                      .
+            bro:Asset                               a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:Other                      .
+                bro:Equipment                       a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:Asset                      .
+                bro:Furniture                       a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:Asset                      .
+            bro:Connectable                         a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:Other                      .
+                bro:Equipment                       a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:Connectable                .
+                bro:Junction                        a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:Connectable                .
+                bro:Space                           a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:Connectable                .
 
 ##  10. The 3 Root Concepts
 
@@ -465,7 +465,7 @@
     bro:Architecture                    sh:property [ sh:path bro:constructedBy         ; sh:class     bro:Agent                        ;               ] .
     bro:Architecture                    sh:property [ sh:path bro:operatedBy            ; sh:class     bro:Agent                        ;               ] .
     bro:Architecture                    sh:property [ sh:path bro:ownedBy               ; sh:class     bro:Agent                        ;               ] .
-    
+
     bro:Architecture                    sh:property [ sh:path bro:grossArea             ; sh:datatype  xsd:double                       ; sh:maxCount 1 ] .
     bro:Architecture                    sh:property [ sh:path bro:netArea               ; sh:datatype  xsd:double                       ; sh:maxCount 1 ] .
     bro:Architecture                    sh:property [ sh:path bro:rentableArea          ; sh:datatype  xsd:double                       ; sh:maxCount 1 ] .
@@ -609,7 +609,7 @@
 ### 14.1 Agent
 
     bro:Agent
-        rdfs:comment "An `Entity` that can act on behalf of itself or others, such as a person, organization, or software agent." .
+        rdfs:comment "An `Entity` that can act on behalf of itself or others, such as a person, organization, or software agent."@en .
 
 #### Properties
 
@@ -631,7 +631,7 @@
     bro:Asset                           sh:property [ sh:path bro:manufacturedBy        ; sh:class     bro:Agent                        ;               ] .
     bro:Asset                           sh:property [ sh:path bro:ownedBy               ; sh:class     bro:Agent                        ;               ] .
     bro:Asset                           sh:property [ sh:path bro:servicedBy            ; sh:class     bro:Agent                        ;               ] .
-    
+
     bro:Asset                           sh:property [ sh:path bro:commissioningDate     ; sh:datatype  xsd:date                         ; sh:maxCount 1 ] .
     bro:Asset                           sh:property [ sh:path bro:installationDate      ; sh:datatype  xsd:date                         ; sh:maxCount 1 ] .
     bro:Asset                           sh:property [ sh:path bro:turnoverDate          ; sh:datatype  xsd:date                         ; sh:maxCount 1 ] .
@@ -663,7 +663,7 @@
     bro:PostalAddress                   sh:property [ sh:path bro:region                ; sh:datatype  xsd:string                       ; sh:maxCount 1 ] .
     bro:PostalAddress                   sh:property [ sh:path bro:country               ; sh:datatype  xsd:string                       ; sh:maxCount 1 ] .
 
-## 16. Properties
+##  16. Properties
 
     bro:geometry            a owl:ObjectProperty    ; rdfs:comment "A spatial representation for a given `PhysicalObject`."@en .
 
@@ -678,12 +678,12 @@
         a owl:Ontology ;
         owl:versionInfo "2.0.0-alpha.2" .
 
-## 18. References
+##  18. References
 
-#. [1] @PeteHart, [REC 5 Ontology Translation Principles and Methodology](https://github.com/RealEstateCore/rec-5/blob/main/docs/ontology-principles.pdf), 2026-01-30.
+#.  [1] @PeteHart, [REC 5 Ontology Translation Principles and Methodology](https://github.com/RealEstateCore/rec-5/blob/main/docs/ontology-principles.pdf), 2026-01-30.
 
-#. [2] @PeteHart, [REC 5: Breaking Changes and Semantic Incompatibilities](https://github.com/RealEstateCore/rec-5/blob/main/docs/rec5-breaking-changes.pdf), 2026-01-30.
+#.  [2] @PeteHart, [REC 5: Breaking Changes and Semantic Incompatibilities](https://github.com/RealEstateCore/rec-5/blob/main/docs/rec5-breaking-changes.pdf), 2026-01-30.
 
-#. [3] @jbkoh, [lets use pascal case](https://github.com/BrickSchema/Brick2-specification-drafting/pull/3), 2026-05-14.
+#.  [3] @jbkoh, [lets use pascal case](https://github.com/BrickSchema/Brick2-specification-drafting/pull/3), 2026-05-14.
 
-#. [4] @ektrah, [Initial wish list for Brick 2.0](https://github.com/BrickSchema/Brick2-specification-drafting/pull/1), 2025-10-09.
+#.  [4] @ektrah, [Initial wish list for Brick 2.0](https://github.com/BrickSchema/Brick2-specification-drafting/pull/1), 2025-10-09.
