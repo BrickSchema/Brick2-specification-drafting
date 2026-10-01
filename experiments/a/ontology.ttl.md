@@ -346,22 +346,22 @@
 
     bro:Entity
         sh:property 
-            [ sh:path bro:name                  ; sh:datatype  xsd:string                       ;               ] .
+            [ sh:path bro:name                  ;               ; sh:datatype  xsd:string                       ] .
 
 ### 8.2 PhysicalObject Class
 
     bro:PhysicalObject
         rdfs:comment "An `Entity` that occupies space and has mass."@en ;
         sh:property
-            [ sh:path bro:geometry              ; sh:class     geo:Geometry                     ;               ] ,
+            [ sh:path bro:geometry              ;               ; sh:class     geo:Geometry                     ] ,
 
-            [ sh:path bro:area                  ; sh:datatype  xsd:double                       ; sh:maxCount 1 ] ,
-            [ sh:path bro:length                ; sh:datatype  xsd:double                       ; sh:maxCount 1 ] ,
-            [ sh:path bro:perimeterLength       ; sh:datatype  xsd:double                       ; sh:maxCount 1 ] ,
-            [ sh:path bro:volume                ; sh:datatype  xsd:double                       ; sh:maxCount 1 ] ,
-            [ sh:path bro:weight                ; sh:datatype  xsd:double                       ; sh:maxCount 1 ] ,
+            [ sh:path bro:area                  ; sh:maxCount 1 ; sh:datatype  xsd:double                       ] ,
+            [ sh:path bro:length                ; sh:maxCount 1 ; sh:datatype  xsd:double                       ] ,
+            [ sh:path bro:perimeterLength       ; sh:maxCount 1 ; sh:datatype  xsd:double                       ] ,
+            [ sh:path bro:volume                ; sh:maxCount 1 ; sh:datatype  xsd:double                       ] ,
+            [ sh:path bro:weight                ; sh:maxCount 1 ; sh:datatype  xsd:double                       ] ,
 
-            [ sh:path bro:documentation         ; sh:class     bro:Document                     ;               ] .
+            [ sh:path bro:documentation         ;               ; sh:class     bro:Document                     ] .
 
 ### 8.3 InformationObject Class
 
@@ -408,23 +408,21 @@
 
     bro:Architecture
         sh:property
-            [ sh:path bro:address               ; sh:class     bro:PostalAddress                ;               ] ,
+            [ sh:path bro:address               ;               ; sh:class     bro:PostalAddress                ] ,
 
-            [ sh:path bro:architectedBy         ; sh:class     bro:Agent                        ;               ] ,
-            [ sh:path bro:constructedBy         ; sh:class     bro:Agent                        ;               ] ,
-            [ sh:path bro:operatedBy            ; sh:class     bro:Agent                        ;               ] ,
-            [ sh:path bro:ownedBy               ; sh:class     bro:Agent                        ;               ] ,
+            [ sh:path bro:architectedBy         ;               ; sh:class     bro:Agent                        ] ,
+            [ sh:path bro:constructedBy         ;               ; sh:class     bro:Agent                        ] ,
+            [ sh:path bro:operatedBy            ;               ; sh:class     bro:Agent                        ] ,
+            [ sh:path bro:ownedBy               ;               ; sh:class     bro:Agent                        ] ,
 
-            [ sh:path bro:grossArea             ; sh:datatype  xsd:double                       ; sh:maxCount 1 ] ,
-            [ sh:path bro:netArea               ; sh:datatype  xsd:double                       ; sh:maxCount 1 ] ,
-            [ sh:path bro:rentableArea          ; sh:datatype  xsd:double                       ; sh:maxCount 1 ] ,
+            [ sh:path bro:grossArea             ; sh:maxCount 1 ; sh:datatype  xsd:double                       ] ,
+            [ sh:path bro:netArea               ; sh:maxCount 1 ; sh:datatype  xsd:double                       ] ,
+            [ sh:path bro:rentableArea          ; sh:maxCount 1 ; sh:datatype  xsd:double                       ] ,
 
-            [ sh:path bro:maximumOccupancy      ; sh:datatype  xsd:integer                      ; sh:maxCount 1 ] ,
-            [ sh:path bro:seatingCapacity       ; sh:datatype  xsd:integer                      ; sh:maxCount 1 ] ,
+            [ sh:path bro:maximumOccupancy      ; sh:maxCount 1 ; sh:datatype  xsd:integer                      ] ,
+            [ sh:path bro:seatingCapacity       ; sh:maxCount 1 ; sh:datatype  xsd:integer                      ] ,
 
-            [ sh:path bro:hasPoint              ; sh:class     bro:Point                        ;               ] .
-
-#### Subclasses
+            [ sh:path bro:hasPoint              ;               ; sh:class     bro:Point                        ] .
 
 #.  The subclasses are are aligned with IFC:
 
@@ -474,37 +472,37 @@
     bro:Asset
         rdfs:comment "An `Entity` that is of value to a person, organization, or other entity, whether tangible or intangible."@en ;
         sh:property
-            [ sh:path bro:assetTag              ; sh:datatype  xsd:string                       ;               ] ,
-            [ sh:path bro:modelNumber           ; sh:datatype  xsd:string                       ;               ] ,
-            [ sh:path bro:serialNumber          ; sh:datatype  xsd:string                       ;               ] ,
+            [ sh:path bro:assetTag              ;               ; sh:datatype  xsd:string                       ] ,
+            [ sh:path bro:modelNumber           ;               ; sh:datatype  xsd:string                       ] ,
+            [ sh:path bro:serialNumber          ;               ; sh:datatype  xsd:string                       ] ,
 
-            [ sh:path bro:commissionedBy        ; sh:class     bro:Agent                        ;               ] ,
-            [ sh:path bro:installedBy           ; sh:class     bro:Agent                        ;               ] ,
-            [ sh:path bro:manufacturedBy        ; sh:class     bro:Agent                        ;               ] ,
-            [ sh:path bro:ownedBy               ; sh:class     bro:Agent                        ;               ] ,
-            [ sh:path bro:servicedBy            ; sh:class     bro:Agent                        ;               ] ,
+            [ sh:path bro:commissionedBy        ;               ; sh:class     bro:Agent                        ] ,
+            [ sh:path bro:installedBy           ;               ; sh:class     bro:Agent                        ] ,
+            [ sh:path bro:manufacturedBy        ;               ; sh:class     bro:Agent                        ] ,
+            [ sh:path bro:ownedBy               ;               ; sh:class     bro:Agent                        ] ,
+            [ sh:path bro:servicedBy            ;               ; sh:class     bro:Agent                        ] ,
 
-            [ sh:path bro:commissioningDate     ; sh:datatype  xsd:date                         ; sh:maxCount 1 ] ,
-            [ sh:path bro:installationDate      ; sh:datatype  xsd:date                         ; sh:maxCount 1 ] ,
-            [ sh:path bro:turnoverDate          ; sh:datatype  xsd:date                         ; sh:maxCount 1 ] ,
+            [ sh:path bro:commissioningDate     ; sh:maxCount 1 ; sh:datatype  xsd:date                         ] ,
+            [ sh:path bro:installationDate      ; sh:maxCount 1 ; sh:datatype  xsd:date                         ] ,
+            [ sh:path bro:turnoverDate          ; sh:maxCount 1 ; sh:datatype  xsd:date                         ] ,
 
-            [ sh:path bro:initialCost           ;                                               ; sh:maxCount 1 ] ,
-            [ sh:path bro:maintenanceInterval   ; sh:datatype  xsd:duration                     ;               ] .
+            [ sh:path bro:initialCost           ; sh:maxCount 1 ;                                               ] ,
+            [ sh:path bro:maintenanceInterval   ;               ; sh:datatype  xsd:duration                     ] .
 
 ### 11.3 Equipment Class
 
     bro:Equipment
         sh:property
-            [ sh:path bro:hasPoint              ; sh:class     bro:Point                        ;               ] ,
-            [ sh:path bro:ipAddress             ; sh:datatype  xsd:string                       ;               ] ,
-            [ sh:path bro:locatedIn             ; sh:class     bro:Architecture                 ;               ] ,
-            [ sh:path bro:macAddress            ; sh:datatype  xsd:string                       ;               ] .
+            [ sh:path bro:hasPoint              ;               ; sh:class     bro:Point                        ] ,
+            [ sh:path bro:ipAddress             ;               ; sh:datatype  xsd:string                       ] ,
+            [ sh:path bro:locatedIn             ;               ; sh:class     bro:Architecture                 ] ,
+            [ sh:path bro:macAddress            ;               ; sh:datatype  xsd:string                       ] .
 
 ### 11.4 Furniture Class
 
     bro:Furniture
         sh:property
-            [ sh:path bro:locatedIn             ; sh:class     bro:Architecture                 ;               ] .
+            [ sh:path bro:locatedIn             ;               ; sh:class     bro:Architecture                 ] .
 
 ##  12. Connections
 
@@ -521,38 +519,44 @@
     bro:Connectable
         rdfs:comment "An `Entity` that can be physically connected to another entity."@en ;
         sh:property
-            [ sh:path bro:connected             ; sh:class     bro:Connectable                  ;               ] ,
-            [ sh:path bro:connectedFrom         ; sh:class     bro:Connectable                  ;               ] ,
-            [ sh:path bro:connectedThrough      ; sh:class     bro:Connection                   ;               ] ,
-            [ sh:path bro:connectedTo           ; sh:class     bro:Connectable                  ;               ] ,
-            [ sh:path bro:hasConnectionPoint    ; sh:class     bro:ConnectionPoint              ;               ] .
+            [ sh:path bro:connected             ;               ; sh:class     bro:Connectable                  ] ,
+            [ sh:path bro:connectedFrom         ;               ; sh:class     bro:Connectable                  ] ,
+            [ sh:path bro:connectedThrough      ;               ; sh:class     bro:Connection                   ] ,
+            [ sh:path bro:connectedTo           ;               ; sh:class     bro:Connectable                  ] ,
+            [ sh:path bro:hasConnectionPoint    ;               ; sh:class     bro:ConnectionPoint              ] .
 
 ### 12.2 ConnectionPoint Class
 
     bro:ConnectionPoint
         sh:property
-            [ sh:path bro:isConnectionPointOf   ; sh:class     bro:Connectable                  ;               ] ,
-            [ sh:path bro:mapsTo                ; sh:class     bro:ConnectionPoint              ;               ] .
+            [ sh:path bro:isConnectionPointOf   ;               ; sh:class     bro:Connectable                  ] ,
+            [ sh:path bro:mapsTo                ;               ; sh:class     bro:ConnectionPoint              ] .
+
+#### 12.2.1 BidirectionalConnectionPoint Class
 
     bro:BidirectionalConnectionPoint
         sh:property
-            [ sh:path bro:mapsTo                ; sh:class     bro:BidirectionalConnectionPoint ;               ] .
+            [ sh:path bro:mapsTo                ;               ; sh:class     bro:BidirectionalConnectionPoint ] .
+
+#### 12.2.2 InletConnectionPoint Class
 
     bro:InletConnectionPoint
         sh:property
-            [ sh:path bro:mapsTo                ; sh:class     bro:InletConnectionPoint         ;               ] .
+            [ sh:path bro:mapsTo                ;               ; sh:class     bro:InletConnectionPoint         ] .
+
+#### 12.2.3 OutletConnectionPoint Class
 
     bro:OutletConnectionPoint
         sh:property
-            [ sh:path bro:mapsTo                ; sh:class     bro:OutletConnectionPoint        ;               ] .
+            [ sh:path bro:mapsTo                ;               ; sh:class     bro:OutletConnectionPoint        ] .
 
 ### 12.3 Connection Class
 
     bro:Connection
         sh:property
-            [ sh:path bro:connectsAt            ; sh:class     bro:ConnectionPoint              ;               ] ,
-            [ sh:path bro:connectsFrom          ; sh:class     bro:Connectable                  ;               ] ,
-            [ sh:path bro:connectsTo            ; sh:class     bro:Connectable                  ;               ] .
+            [ sh:path bro:connectsAt            ;               ; sh:class     bro:ConnectionPoint              ] ,
+            [ sh:path bro:connectsFrom          ;               ; sh:class     bro:Connectable                  ] ,
+            [ sh:path bro:connectsTo            ;               ; sh:class     bro:Connectable                  ] .
 
 ##  13. Agents
 
@@ -561,15 +565,13 @@
     bro:Agent
         rdfs:comment "An `Entity` that can act on behalf of itself or others, such as a person, organization, or software agent."@en ;
         sh:property
-            [ sh:path bro:owns                  ; sh:class     bro:Asset                        ;               ] .
+            [ sh:path bro:owns                  ;               ; sh:class     bro:Asset                        ] .
 
 ### 13.2 Person Class
 
-#### Properties
-
     bro:Person
         sh:property
-            [ sh:path bro:name                  ; sh:datatype  xsd:string                       ;               ] .
+            [ sh:path bro:name                  ;               ; sh:datatype  xsd:string                       ] .
 
 ### 13.3 Organizations
 
@@ -579,54 +581,54 @@
 
     bro:PostalAddress
         sh:property
-            [ sh:path bro:addressLine1          ; sh:datatype  xsd:string                       ; sh:maxCount 1 ] ,
-            [ sh:path bro:addressLine2          ; sh:datatype  xsd:string                       ; sh:maxCount 1 ] ,
-            [ sh:path bro:city                  ; sh:datatype  xsd:string                       ; sh:maxCount 1 ] ,
-            [ sh:path bro:postalCode            ; sh:datatype  xsd:string                       ; sh:maxCount 1 ] ,
-            [ sh:path bro:region                ; sh:datatype  xsd:string                       ; sh:maxCount 1 ] ,
-            [ sh:path bro:country               ; sh:datatype  xsd:string                       ; sh:maxCount 1 ] .
+            [ sh:path bro:addressLine1          ; sh:maxCount 1 ; sh:datatype  xsd:string                       ] ,
+            [ sh:path bro:addressLine2          ; sh:maxCount 1 ; sh:datatype  xsd:string                       ] ,
+            [ sh:path bro:city                  ; sh:maxCount 1 ; sh:datatype  xsd:string                       ] ,
+            [ sh:path bro:postalCode            ; sh:maxCount 1 ; sh:datatype  xsd:string                       ] ,
+            [ sh:path bro:region                ; sh:maxCount 1 ; sh:datatype  xsd:string                       ] ,
+            [ sh:path bro:country               ; sh:maxCount 1 ; sh:datatype  xsd:string                       ] .
 
 ##  14. Composition
 
 ### 14.1 hasPart
 
-    bro:PhysicalObject                  sh:property [ sh:path bro:hasPart   ; sh:class     bro:PhysicalObject        ;               ] .
-    bro:InformationObject               sh:property [ sh:path bro:hasPart   ; sh:class     bro:InformationObject     ;               ] .
+    bro:PhysicalObject                  sh:property [ sh:path bro:hasPart   ;               ; sh:class     bro:PhysicalObject        ] .
+    bro:InformationObject               sh:property [ sh:path bro:hasPart   ;               ; sh:class     bro:InformationObject     ] .
 
-    bro:Architecture                    sh:property [ sh:path bro:hasPart   ; sh:class     bro:Architecture          ;               ] .
-    bro:Connection                      sh:property [ sh:path bro:hasPart   ;                                        ; sh:maxCount 0 ] .
-    bro:ConnectionPoint                 sh:property [ sh:path bro:hasPart   ;                                        ; sh:maxCount 0 ] .
-    bro:Equipment                       sh:property [ sh:path bro:hasPart   ; sh:class     bro:Equipment             ;               ] .
-    bro:Furniture                       sh:property [ sh:path bro:hasPart   ; sh:class     bro:Furniture             ;               ] .
-    bro:Person                          sh:property [ sh:path bro:hasPart   ;                                        ; sh:maxCount 0 ] .
+    bro:Architecture                    sh:property [ sh:path bro:hasPart   ;               ; sh:class     bro:Architecture          ] .
+    bro:Connection                      sh:property [ sh:path bro:hasPart   ; sh:maxCount 0 ;                                        ] .
+    bro:ConnectionPoint                 sh:property [ sh:path bro:hasPart   ; sh:maxCount 0 ;                                        ] .
+    bro:Equipment                       sh:property [ sh:path bro:hasPart   ;               ; sh:class     bro:Equipment             ] .
+    bro:Furniture                       sh:property [ sh:path bro:hasPart   ;               ; sh:class     bro:Furniture             ] .
+    bro:Person                          sh:property [ sh:path bro:hasPart   ; sh:maxCount 0 ;                                        ] .
 
-    bro:Site                            sh:property [ sh:path bro:hasPart   ; sh:or ( [ sh:class bro:Building        ] [ sh:class bro:ExternalSpace             ] ) ] .
-    bro:Building                        sh:property [ sh:path bro:hasPart   ; sh:class     bro:Floor                 ;               ] .
-    bro:Floor                           sh:property [ sh:path bro:hasPart   ; sh:class     bro:Space                 ;               ] .
-    bro:Space                           sh:property [ sh:path bro:hasPart   ;                                        ; sh:maxCount 0 ] .
-    bro:ExternalSpace                   sh:property [ sh:path bro:hasPart   ;                                        ; sh:maxCount 0 ] .
+    bro:Site                            sh:property [ sh:path bro:hasPart   ;               ; sh:or ( [ sh:class bro:Building        ] [ sh:class bro:ExternalSpace             ] ) ] .
+    bro:Building                        sh:property [ sh:path bro:hasPart   ;               ; sh:class     bro:Floor                 ] .
+    bro:Floor                           sh:property [ sh:path bro:hasPart   ;               ; sh:class     bro:Space                 ] .
+    bro:Space                           sh:property [ sh:path bro:hasPart   ; sh:maxCount 0 ;                                        ] .
+    bro:ExternalSpace                   sh:property [ sh:path bro:hasPart   ; sh:maxCount 0 ;                                        ] .
 
-    bro:Junction                        sh:property [ sh:path bro:hasPart   ;                                        ; sh:maxCount 0 ] .
+    bro:Junction                        sh:property [ sh:path bro:hasPart   ; sh:maxCount 0 ;                                        ] .
 
 ### 14.2 partOf
 
-    bro:PhysicalObject                  sh:property [ sh:path bro:partOf    ; sh:class     bro:PhysicalObject        ; sh:maxCount 1 ] .
-    bro:InformationObject               sh:property [ sh:path bro:partOf    ; sh:class     bro:InformationObject     ; sh:maxCount 1 ] .
+    bro:PhysicalObject                  sh:property [ sh:path bro:partOf    ; sh:maxCount 1 ; sh:class     bro:PhysicalObject        ] .
+    bro:InformationObject               sh:property [ sh:path bro:partOf    ; sh:maxCount 1 ; sh:class     bro:InformationObject     ] .
 
-    bro:Architecture                    sh:property [ sh:path bro:partOf    ; sh:class     bro:Architecture          ;               ] .
-    bro:Connection                      sh:property [ sh:path bro:partOf    ;                                        ; sh:maxCount 0 ] .
-    bro:ConnectionPoint                 sh:property [ sh:path bro:partOf    ;                                        ; sh:maxCount 0 ] .
-    bro:Equipment                       sh:property [ sh:path bro:partOf    ; sh:class     bro:Equipment             ;               ] .
-    bro:Furniture                       sh:property [ sh:path bro:partOf    ; sh:class     bro:Furniture             ;               ] .
-    bro:Person                          sh:property [ sh:path bro:partOf    ;                                        ; sh:maxCount 0 ] .
+    bro:Architecture                    sh:property [ sh:path bro:partOf    ;               ; sh:class     bro:Architecture          ] .
+    bro:Connection                      sh:property [ sh:path bro:partOf    ; sh:maxCount 0 ;                                        ] .
+    bro:ConnectionPoint                 sh:property [ sh:path bro:partOf    ; sh:maxCount 0 ;                                        ] .
+    bro:Equipment                       sh:property [ sh:path bro:partOf    ;               ; sh:class     bro:Equipment             ] .
+    bro:Furniture                       sh:property [ sh:path bro:partOf    ;               ; sh:class     bro:Furniture             ] .
+    bro:Person                          sh:property [ sh:path bro:partOf    ; sh:maxCount 0 ;                                        ] .
 
-    bro:Site                            sh:property [ sh:path bro:partOf    ;                                        ; sh:maxCount 0 ] .
-    bro:Building                        sh:property [ sh:path bro:partOf    ; sh:class     bro:Site                  ;               ] .
-    bro:Floor                           sh:property [ sh:path bro:partOf    ; sh:class     bro:Building              ;               ] .
-    bro:Space                           sh:property [ sh:path bro:partOf    ; sh:class     bro:Floor                 ;               ] .
-    bro:ExternalSpace                   sh:property [ sh:path bro:partOf    ; sh:class     bro:Site                  ;               ] .
+    bro:Site                            sh:property [ sh:path bro:partOf    ; sh:maxCount 0 ;                                        ] .
+    bro:Building                        sh:property [ sh:path bro:partOf    ;               ; sh:class     bro:Site                  ] .
+    bro:Floor                           sh:property [ sh:path bro:partOf    ;               ; sh:class     bro:Building              ] .
+    bro:Space                           sh:property [ sh:path bro:partOf    ;               ; sh:class     bro:Floor                 ] .
+    bro:ExternalSpace                   sh:property [ sh:path bro:partOf    ;               ; sh:class     bro:Site                  ] .
 
-    bro:Junction                        sh:property [ sh:path bro:partOf    ;                                        ; sh:maxCount 0 ] .
+    bro:Junction                        sh:property [ sh:path bro:partOf    ; sh:maxCount 0 ;                                        ] .
 
 ##  15. Collections
 
@@ -643,25 +645,25 @@
 
 ### 15.1 hasMember
 
-    bro:PhysicalObjectCollection        sh:property [ sh:path bro:hasMember ; sh:or ( [ sh:class bro:PhysicalObject  ] [ sh:class bro:PhysicalObjectCollection  ] ) ] .
+    bro:PhysicalObjectCollection        sh:property [ sh:path bro:hasMember ;               ; sh:or ( [ sh:class bro:PhysicalObject  ] [ sh:class bro:PhysicalObjectCollection  ] ) ] .
 
-    bro:ArchitectureCollection          sh:property [ sh:path bro:hasMember ; sh:or ( [ sh:class bro:Architecture    ] [ sh:class bro:ArchitectureCollection    ] ) ] .
-    bro:ConnectionCollection            sh:property [ sh:path bro:hasMember ; sh:or ( [ sh:class bro:Connection      ] [ sh:class bro:ConnectionCollection      ] ) ] .
-    bro:ConnectionPointCollection       sh:property [ sh:path bro:hasMember ; sh:or ( [ sh:class bro:ConnectionPoint ] [ sh:class bro:ConnectionPointCollection ] ) ] .
-    bro:EquipmentCollection             sh:property [ sh:path bro:hasMember ; sh:or ( [ sh:class bro:Equipment       ] [ sh:class bro:EquipmentCollection       ] ) ] .
-    bro:FurnitureCollection             sh:property [ sh:path bro:hasMember ; sh:or ( [ sh:class bro:Furniture       ] [ sh:class bro:FurnitureCollection       ] ) ] .
-    bro:PersonCollection                sh:property [ sh:path bro:hasMember ; sh:or ( [ sh:class bro:Person          ] [ sh:class bro:PersonCollection          ] ) ] .
+    bro:ArchitectureCollection          sh:property [ sh:path bro:hasMember ;               ; sh:or ( [ sh:class bro:Architecture    ] [ sh:class bro:ArchitectureCollection    ] ) ] .
+    bro:ConnectionCollection            sh:property [ sh:path bro:hasMember ;               ; sh:or ( [ sh:class bro:Connection      ] [ sh:class bro:ConnectionCollection      ] ) ] .
+    bro:ConnectionPointCollection       sh:property [ sh:path bro:hasMember ;               ; sh:or ( [ sh:class bro:ConnectionPoint ] [ sh:class bro:ConnectionPointCollection ] ) ] .
+    bro:EquipmentCollection             sh:property [ sh:path bro:hasMember ;               ; sh:or ( [ sh:class bro:Equipment       ] [ sh:class bro:EquipmentCollection       ] ) ] .
+    bro:FurnitureCollection             sh:property [ sh:path bro:hasMember ;               ; sh:or ( [ sh:class bro:Furniture       ] [ sh:class bro:FurnitureCollection       ] ) ] .
+    bro:PersonCollection                sh:property [ sh:path bro:hasMember ;               ; sh:or ( [ sh:class bro:Person          ] [ sh:class bro:PersonCollection          ] ) ] .
 
-    bro:Apartment                       sh:property [ sh:path bro:hasMember ; sh:or ( [ sh:class bro:Space           ]                                            ) ] .
-    bro:Campus                          sh:property [ sh:path bro:hasMember ; sh:or ( [ sh:class bro:Architecture    ]                                            ) ] .
-    bro:Portfolio                       sh:property [ sh:path bro:hasMember ; sh:or ( [ sh:class bro:Architecture    ] [ sh:class bro:ArchitectureCollection    ] ) ] .
-    bro:Premises                        sh:property [ sh:path bro:hasMember ; sh:or ( [ sh:class bro:Architecture    ]                                            ) ] .
-    bro:RealEstate                      sh:property [ sh:path bro:hasMember ; sh:or ( [ sh:class bro:Architecture    ]                                            ) ] .
-    bro:Zone                            sh:property [ sh:path bro:hasMember ; sh:or ( [ sh:class bro:Architecture    ] [ sh:class bro:Zone                      ] ) ] .
+    bro:Apartment                       sh:property [ sh:path bro:hasMember ;               ; sh:or ( [ sh:class bro:Space           ]                                            ) ] .
+    bro:Campus                          sh:property [ sh:path bro:hasMember ;               ; sh:or ( [ sh:class bro:Architecture    ]                                            ) ] .
+    bro:Portfolio                       sh:property [ sh:path bro:hasMember ;               ; sh:or ( [ sh:class bro:Architecture    ] [ sh:class bro:ArchitectureCollection    ] ) ] .
+    bro:Premises                        sh:property [ sh:path bro:hasMember ;               ; sh:or ( [ sh:class bro:Architecture    ]                                            ) ] .
+    bro:RealEstate                      sh:property [ sh:path bro:hasMember ;               ; sh:or ( [ sh:class bro:Architecture    ]                                            ) ] .
+    bro:Zone                            sh:property [ sh:path bro:hasMember ;               ; sh:or ( [ sh:class bro:Architecture    ] [ sh:class bro:Zone                      ] ) ] .
 
-    bro:Loop                            sh:property [ sh:path bro:hasMember ; sh:or ( [ sh:class bro:Connection      ]                                            ) ] .
+    bro:Loop                            sh:property [ sh:path bro:hasMember ;               ; sh:or ( [ sh:class bro:Connection      ]                                            ) ] .
 
-    bro:PointCollection                 sh:property [ sh:path bro:hasMember ; sh:or ( [ sh:class bro:Point           ] [ sh:class bro:PointCollection           ] ) ] .
+    bro:PointCollection                 sh:property [ sh:path bro:hasMember ;               ; sh:or ( [ sh:class bro:Point           ] [ sh:class bro:PointCollection           ] ) ] .
 
 ### 15.2 memberOf
 
@@ -685,57 +687,57 @@
 
 ##  16. Properties
 
-    bro:address             a owl:ObjectProperty    .
-    bro:addressLine1        a owl:DatatypeProperty  .
-    bro:addressLine2        a owl:DatatypeProperty  .
-    bro:architectedBy       a owl:ObjectProperty    .
+    bro:address             a owl:ObjectProperty    ;                                        .
+    bro:addressLine1        a owl:DatatypeProperty  ;                                        .
+    bro:addressLine2        a owl:DatatypeProperty  ;                                        .
+    bro:architectedBy       a owl:ObjectProperty    ;                                        .
     bro:area                a owl:DatatypeProperty  ;                                        ; rdfs:comment "The area of a `PhysicalObject` in square meters."@en .
-    bro:assetTag            a owl:DatatypeProperty  .
-    bro:city                a owl:DatatypeProperty  .
-    bro:commissionedBy      a owl:ObjectProperty    .
-    bro:commissioningDate   a owl:DatatypeProperty  .
-    bro:connected           a owl:ObjectProperty    .
-    bro:connectedFrom       a owl:ObjectProperty    .
-    bro:connectedThrough    a owl:ObjectProperty    .
-    bro:connectedTo         a owl:ObjectProperty    .
-    bro:connectsAt          a owl:ObjectProperty    .
-    bro:connectsFrom        a owl:ObjectProperty    .
-    bro:connectsTo          a owl:ObjectProperty    .
-    bro:constructedBy       a owl:ObjectProperty    .
-    bro:country             a owl:DatatypeProperty  .
-    bro:documentation       a owl:ObjectProperty    .
+    bro:assetTag            a owl:DatatypeProperty  ;                                        .
+    bro:city                a owl:DatatypeProperty  ;                                        .
+    bro:commissionedBy      a owl:ObjectProperty    ;                                        .
+    bro:commissioningDate   a owl:DatatypeProperty  ;                                        .
+    bro:connected           a owl:ObjectProperty    ;                                        .
+    bro:connectedFrom       a owl:ObjectProperty    ;                                        .
+    bro:connectedThrough    a owl:ObjectProperty    ;                                        .
+    bro:connectedTo         a owl:ObjectProperty    ;                                        .
+    bro:connectsAt          a owl:ObjectProperty    ;                                        .
+    bro:connectsFrom        a owl:ObjectProperty    ;                                        .
+    bro:connectsTo          a owl:ObjectProperty    ;                                        .
+    bro:constructedBy       a owl:ObjectProperty    ;                                        .
+    bro:country             a owl:DatatypeProperty  ;                                        .
+    bro:documentation       a owl:ObjectProperty    ;                                        .
     bro:geometry            a owl:ObjectProperty    ;                                        ; rdfs:comment "A spatial representation for a given `PhysicalObject`."@en .
-    bro:grossArea           a owl:DatatypeProperty  .
+    bro:grossArea           a owl:DatatypeProperty  ;                                        .
     bro:hasConnectionPoint  a owl:ObjectProperty    ; owl:inverseOf bro:isConnectionPointOf  .
-    bro:hasPoint            a owl:ObjectProperty    .
-    bro:initialCost         a owl:DatatypeProperty  .
-    bro:installationDate    a owl:DatatypeProperty  .
-    bro:installedBy         a owl:ObjectProperty    .
-    bro:ipAddress           a owl:DatatypeProperty  .
+    bro:hasPoint            a owl:ObjectProperty    ;                                        .
+    bro:initialCost         a owl:DatatypeProperty  ;                                        .
+    bro:installationDate    a owl:DatatypeProperty  ;                                        .
+    bro:installedBy         a owl:ObjectProperty    ;                                        .
+    bro:ipAddress           a owl:DatatypeProperty  ;                                        .
     bro:isConnectionPointOf a owl:ObjectProperty    ; owl:inverseOf bro:hasConnectionPoint   .
     bro:length              a owl:DatatypeProperty  ;                                        ; rdfs:comment "The length of a `PhysicalObject` in meters."@en .
-    bro:locatedIn           a owl:ObjectProperty    .
-    bro:macAddress          a owl:DatatypeProperty  .
-    bro:maintenanceInterval a owl:DatatypeProperty  .
-    bro:manufacturedBy      a owl:ObjectProperty    .
-    bro:mapsTo              a owl:ObjectProperty    .
-    bro:maximumOccupancy    a owl:DatatypeProperty  .
-    bro:modelNumber         a owl:DatatypeProperty  .
-    bro:name                a owl:DatatypeProperty  .
-    bro:netArea             a owl:DatatypeProperty  .
-    bro:operatedBy          a owl:ObjectProperty    .
+    bro:locatedIn           a owl:ObjectProperty    ;                                        .
+    bro:macAddress          a owl:DatatypeProperty  ;                                        .
+    bro:maintenanceInterval a owl:DatatypeProperty  ;                                        .
+    bro:manufacturedBy      a owl:ObjectProperty    ;                                        .
+    bro:mapsTo              a owl:ObjectProperty    ;                                        .
+    bro:maximumOccupancy    a owl:DatatypeProperty  ;                                        .
+    bro:modelNumber         a owl:DatatypeProperty  ;                                        .
+    bro:name                a owl:DatatypeProperty  ;                                        .
+    bro:netArea             a owl:DatatypeProperty  ;                                        .
+    bro:operatedBy          a owl:ObjectProperty    ;                                        .
     bro:ownedBy             a owl:ObjectProperty    ; owl:inverseOf bro:owns                 .
     bro:owns                a owl:ObjectProperty    ; owl:inverseOf bro:ownedBy              .
     bro:perimeterLength     a owl:DatatypeProperty  ;                                        ; rdfs:comment "The length of the perimeter of a `PhysicalObject` in meters."@en .
-    bro:postalCode          a owl:DatatypeProperty  .
-    bro:region              a owl:DatatypeProperty  .
-    bro:rentableArea        a owl:DatatypeProperty  .
-    bro:seatingCapacity     a owl:DatatypeProperty  .
-    bro:serialNumber        a owl:DatatypeProperty  .
-    bro:servicedBy          a owl:ObjectProperty    .
-    bro:turnoverDate        a owl:DatatypeProperty  .
+    bro:postalCode          a owl:DatatypeProperty  ;                                        .
+    bro:region              a owl:DatatypeProperty  ;                                        .
+    bro:rentableArea        a owl:DatatypeProperty  ;                                        .
+    bro:seatingCapacity     a owl:DatatypeProperty  ;                                        .
+    bro:serialNumber        a owl:DatatypeProperty  ;                                        .
+    bro:servicedBy          a owl:ObjectProperty    ;                                        .
+    bro:turnoverDate        a owl:DatatypeProperty  ;                                        .
     bro:volume              a owl:DatatypeProperty  ;                                        ; rdfs:comment "The volume of a `PhysicalObject` in cubic meters."@en .
-    bro:weight              a owl:DatatypeProperty  .
+    bro:weight              a owl:DatatypeProperty  ;                                        ; rdfs:comment "The weight of a `PhysicalObject` in kilograms."@en .
 
 ##  17. Ontology
 
