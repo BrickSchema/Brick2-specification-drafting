@@ -104,6 +104,12 @@
     @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
     @prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
 
+### 4.4 RDF Semantics
+
+#.  *Entailment Regime:* To determine the set of facts asserted by a graph, we assume an **RDFS Interpretation** recognizing D={ `rdf:langString`, `xsd:string`, `xsd:boolean`, `xsd:decimal`, `xsd:integer`, `xsd:double`, `xsd:float`, `xsd:date`, `xsd:time`, `xsd:dateTime`, `xsd:dateTimeStamp`, `xsd:byte`, `xsd:short`, `xsd:int`, `xsd:long`, `xsd:unsignedByte`, `xsd:unsignedShort`, `xsd:unsignedInt`, `xsd:unsignedLong`, `xsd:positiveInteger`, `xsd:nonNegativeInteger`, `xsd:negativeInteger`, `xsd:nonPositiveInteger`, `xsd:anyURI` }.
+
+#.  All SHACL shapes and rules shall produce equivalent validation results whether evaluated against the asserted RDF graph or against the RDF graph after application of the entailment regime. That is, SHACL rules shall not rely on the presence or absence of RDFS-inferred triples.
+
 ##  5. External Ontologies
 
 ### 5.1 Brick and REC
@@ -553,9 +559,13 @@
     bro:Agent
         rdfs:comment "An `Entity` that can act on behalf of itself or others, such as a person, organization, or software agent."@en .
 
+#### Properties
+
     bro:Agent                           sh:property [ sh:path bro:owns                  ; sh:class     bro:Asset                        ;               ] .
 
 ### 13.2 Person Class
+
+#### Properties
 
     bro:Person                          sh:property [ sh:path bro:name                  ; sh:datatype  xsd:string                       ;               ] .
 
@@ -564,6 +574,8 @@
 #.  Organization are simplify defined as collections of `bro:Person` (see below).
 
 ### 13.4 PostalAddress Class
+
+#### Properties
 
     bro:PostalAddress                   sh:property [ sh:path bro:addressLine1          ; sh:datatype  xsd:string                       ; sh:maxCount 1 ] .
     bro:PostalAddress                   sh:property [ sh:path bro:addressLine2          ; sh:datatype  xsd:string                       ; sh:maxCount 1 ] .
@@ -686,6 +698,8 @@
 
 ##  18. References
 
+#### Design Inputs
+
 #.  [1] @PeteHart, [REC 5 Ontology Translation Principles and Methodology](https://github.com/RealEstateCore/rec-5/blob/main/docs/ontology-principles.pdf), 2026-01-30.
 
 #.  [2] @PeteHart, [REC 5: Breaking Changes and Semantic Incompatibilities](https://github.com/RealEstateCore/rec-5/blob/main/docs/rec5-breaking-changes.pdf), 2026-01-30.
@@ -693,3 +707,11 @@
 #.  [3] @jbkoh, [lets use pascal case](https://github.com/BrickSchema/Brick2-specification-drafting/pull/3), 2026-05-14.
 
 #.  [4] @ektrah, [Initial wish list for Brick 2.0](https://github.com/BrickSchema/Brick2-specification-drafting/pull/1), 2025-10-09.
+
+#### Specifications
+
+#.  W3C, [RDF 1.2 Concepts and Abstract Data Model](https://w3c.github.io/rdf-concepts/spec/), Editor's Draft, 2026.
+
+#.  W3C, [RDF 1.2 Schema](https://w3c.github.io/rdf-schema/spec/), Editor's Draft, 2026.
+
+#.  W3C, [RDF 1.2 Semantics](https://w3c.github.io/rdf-semantics/spec/), Editor's Draft, 2026.
