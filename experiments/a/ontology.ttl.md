@@ -167,7 +167,7 @@
 
 ### 6.3 Patches
 
-#.  Patching releases allow for changes without breaking compatibility.
+#.  Patching releases allows for changes without breaking compatibility.
 
 #.  *Compatibility Rule:* We do not consider it to break compatibility if a patch release fixes any bugs introduced in a release with the same major and minor version, even if that changes the set of facts.
 
@@ -273,98 +273,7 @@
 
 #.  *Background:* A typed collection restricts its member type; for example, `FruitBasket` could be defined as a collection that permits only `Fruit` members. If `Apple` is a subclass of `Fruit`, *covariance* means `AppleBasket` is a subclass of `FruitBasket` (taking a `Fruit` from an `AppleBasket` is safe), *contravariance* means `FruitBasket` is a subclass of `AppleBasket` (putting an `Apple` into a `FruitBasket` is safe), and *invariance* means that neither is a subclass of the other.
 
-##  8. Modeling Topics
-
-### 8.1 Connections
-
-#.  Connections are modeled after 223:
-
-#.  &mdash; `Connectable` &ndash;*connectedTo*&rarr; `Connectable` (formerly known as `brick:feeds`/`rec:feeds`)
-
-#.  &mdash; `Connectable` &ndash;*connectedThrough*&rarr; `Connection` &ndash;*connectsTo*&rarr; `Connectable`
-
-#.  &mdash; `Connectable` &ndash;*hasConnectionPoint*&rarr; `ConnectionPoint` &ndash;*connectsThrough*&rarr; `Connection` &ndash;*connectsAt*&rarr; `ConnectionPoint` &ndash;*isConnectionPointOf*&rarr; `Connectable`
-
-### 8.2 Locations
-
-#.  Some locations are demarcated by physical boundaries (such as rooms), while others are defined logically (such as lighting zones). Brick and REC previously defined these within the same hierarchy. We are changing this and cleanly separating physical locations from logical locations.
-
-#### Physical Locations
-
-#.  Physical locations are aligned with IFC:
-
-#.  &mdash; [IfcSite](https://standards.buildingsmart.org/IFC/DEV/IFC4_3/HTML/lexical/IfcSite.html)                     COMPLEX (site complex)            &rarr; collection of `bro:Site`     <br>
-#.  &mdash; [IfcSite](https://standards.buildingsmart.org/IFC/DEV/IFC4_3/HTML/lexical/IfcSite.html)                     ELEMENT (site)                    &rarr; `bro:Site`                   <br>
-#.  &mdash; [IfcSite](https://standards.buildingsmart.org/IFC/DEV/IFC4_3/HTML/lexical/IfcSite.html)                     PARTIAL (site section)            &rarr; n/a                          <br>
-#.  &mdash; [IfcBuilding](https://standards.buildingsmart.org/IFC/DEV/IFC4_3/HTML/lexical/IfcBuilding.html)             COMPLEX (building complex)        &rarr; collection of `bro:Building` <br>
-#.  &mdash; [IfcBuilding](https://standards.buildingsmart.org/IFC/DEV/IFC4_3/HTML/lexical/IfcBuilding.html)             ELEMENT (building)                &rarr; `bro:Building`               <br>
-#.  &mdash; [IfcBuilding](https://standards.buildingsmart.org/IFC/DEV/IFC4_3/HTML/lexical/IfcBuilding.html)             PARTIAL (building section)        &rarr; n/a                          <br>
-#.  &mdash; [IfcBuildingStorey](https://standards.buildingsmart.org/IFC/DEV/IFC4_3/HTML/lexical/IfcBuildingStorey.html) COMPLEX (building storey complex) &rarr; collection of `bro:Floor`    <br>
-#.  &mdash; [IfcBuildingStorey](https://standards.buildingsmart.org/IFC/DEV/IFC4_3/HTML/lexical/IfcBuildingStorey.html) ELEMENT (building storey)         &rarr; `bro:Floor`                  <br>
-#.  &mdash; [IfcBuildingStorey](https://standards.buildingsmart.org/IFC/DEV/IFC4_3/HTML/lexical/IfcBuildingStorey.html) PARTIAL (partial building storey) &rarr; n/a                          <br>
-#.  &mdash; [IfcSpace](https://standards.buildingsmart.org/IFC/DEV/IFC4_3/HTML/lexical/IfcSpace.html)                   COMPLEX (space group)             &rarr; collection of `bro:Space`    <br>
-#.  &mdash; [IfcSpace](https://standards.buildingsmart.org/IFC/DEV/IFC4_3/HTML/lexical/IfcSpace.html)                   ELEMENT (space)                   &rarr; `bro:Space`                  <br>
-#.  &mdash; [IfcSpace](https://standards.buildingsmart.org/IFC/DEV/IFC4_3/HTML/lexical/IfcSpace.html)                   PARTIAL (partial space)           &rarr; n/a                          <br>
-
-#.  *Open Issue:* In REC, there is `rec:SubBuilding`/`rec:Wing` for partial buildings, but there is no vocabulary for partial sites, partial floors, or partial spaces. Should those be added?
-
-#### Zones
-
-#.  Zones are defined as collections of physical locations.
-
-#### Domain Spaces
-
-#.  A "domain space" (`s223:DomainSpace`) conceptually sits between physical locations (`s223:PhysicalSpace`) and logical locations (`s223:Zone`): they are physically connectable (`s223:Connectable`) but not demarcated by physical boundaries; they are logically defined regions contained in physical locations.
-
-#.  *Open Issue:* Should `DomainSpace` be adopted?
-
-### 8.3 Equipment and its Function
-
-#.  *Terminology:* "function (noun) &ndash; the action for which a person or thing is specially fitted or used or for which a thing exists"
-
-#.  What a thing physically *is* and what it *does* don't always line up one-to-one.
-
-#.  &mdash; What it is, where it is, its asset tag, serial number, model number, and manufacturer are important for asset management, work orders, etc.
-
-#.  &mdash; What it does, what it measures, what it actuates, and how it functionally relates to other things are important for building automation, fault diagnostics, etc.
-
-#.  A single piece of equipment may realize one or several functions (such as a multifunction device that both prints and scans), and a single function may in turn be realized jointly by several pieces of equipment.
-
-#.  *Open Issue:* Should this distinction be made? For example, we could say that a `MultifunctionDevice` has the functions `Print`, `Copy`, and `Scan`. Or do we say that a `MultifunctionDevice` is physically composed of a `Printer`, `Copier`, and `Scanner`, even though these are not actually distinct physical parts of it?
-
-### 8.4 Properties and Points
-
-#.  In Brick, REC, and 223, there are many different ways in which entities are linked to quantities &ndash; whether static (such as rated voltage or maximum operating temperature), mostly static (such as the date of the last scheduled maintenance or a serial number until the device is replaced), or dynamic (such as current operating temperature). Here is a selection.
-
-#.  *Open Issue:* Unify the different ways.
-
-#### Brick
-
-#.  &mdash; Static quantity in a simple statement: `:x a brick:Motor ; brick:expectedLifetime "P1Y"^^xsd:duration .`
-
-#.  &mdash; Static quantity with a unit: `:x a brick:Motor ; brick:conversionEfficiency [ brick:hasUnit unit:PERCENT ; brick:value 1 ] .`
-
-#.  &mdash; Dynamic quantity with a last known value: `:x a brick:Motor ; brick:hasPoint [ a brick:Temperature_Sensor ; brick:lastKnownValue [ brick:timestamp "2026-09-17T12:00:00Z"^^xsd:dateTime ; brick:value 50 ] ] .`
-
-#.  &mdash; Dynamic quantity with an external reference: `:x a brick:Motor ; brick:hasPoint [ a brick:Temperature_Sensor ; ref:hasExternalReference [ ... ] ] .`
-
-#### RealEstateCore
-
-#.  &mdash; Static quantity in a simple statement: `:x a rec:Asset ; rec:weight 5.0 .`
-
-#.  &mdash; Static quantity with an extra step: `:x a rec:Stadium ; rec:capacity [ rec:seatingCapacity 42100 ] .`
-
-#.  &mdash; Dynamic quantity in a simple statement: `:x a rec:SensorEquipment ; rec:wifiSignalStrength 100 .`
-
-#.  &mdash; Dynamic quantity with an observation timestamp: `[ a rec:TemperatureObservation ; rec:value 50 ; rec:timestamp "2026-09-17T12:00:00Z"^^xsd:dateTime ] .`
-
-#### 223
-
-#.  &mdash; Static quantity with a unit: `:x a s223:Motor ; s223:hasProperty [ a s223:QuantifiableProperty ; s223:hasAspect s223:Aspect-Rated ; qudt:hasQuantityKind qk:Voltage ; qudt:hasUnit unit:V ; qudt:quantityValue [ qudt:value 240 ] ] .`
-
-#.  &mdash; Dynamic quantity with an external reference: `:x a s223:Motor ; s223:hasProperty [ a s223:QuantifiableObservableProperty ; qudt:hasQuantityKind qk:Temperature ; qudt:hasUnit unit:DEG_C ; s223:hasExternalReference [ ... ] ] .`
-
-##  9. Class Hierarchy
+##  8. Classes Overview
 
 #.  Here is an initial draft of a class hierarchy combining Brick, REC, and 223:
 
@@ -425,15 +334,15 @@
                 bro:Junction                        a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:Connectable                .
                 bro:Space                           a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:Connectable                .
 
-##  10. The 3 Root Concepts
-
-### 10.1 Entity
+### 8.1 Entity Class
 
 #.  *Terminology:* "entity (noun) &ndash; something that has separate and distinct existence and objective or conceptual reality"
 
+#### Properties
+
     bro:Entity                          sh:property [ sh:path bro:name                  ; sh:datatype  xsd:string                       ;               ] .
 
-### 10.2 PhysicalObject
+### 8.2 PhysicalObject Class
 
     bro:PhysicalObject
         rdfs:comment "An `Entity` that occupies space and has mass."@en .
@@ -450,14 +359,50 @@
 
     bro:PhysicalObject                  sh:property [ sh:path bro:documentation         ; sh:class     bro:Document                     ;               ] .
 
-### 10.3 InformationObject
+### 8.3 InformationObject Class
 
     bro:InformationObject
         rdfs:comment "An `Entity` that captures information about something."@en .
 
-##  11. The 6 Core Concepts
+##  9. Properties/Points
 
-### 11.1 Architecture
+#.  In Brick, REC, and 223, there are many different ways in which entities are linked to quantities &ndash; whether static (such as rated voltage or maximum operating temperature), mostly static (such as the date of the last scheduled maintenance or a serial number until the device is replaced), or dynamic (such as current operating temperature). Here is a selection.
+
+#### Brick
+
+#.  &mdash; Static quantity in a simple statement: `:x a brick:Motor ; brick:expectedLifetime "P1Y"^^xsd:duration .`
+
+#.  &mdash; Static quantity with a unit: `:x a brick:Motor ; brick:conversionEfficiency [ brick:hasUnit unit:PERCENT ; brick:value 1 ] .`
+
+#.  &mdash; Dynamic quantity with a last known value: `:x a brick:Motor ; brick:hasPoint [ a brick:Temperature_Sensor ; brick:lastKnownValue [ brick:timestamp "2026-09-17T12:00:00Z"^^xsd:dateTime ; brick:value 50 ] ] .`
+
+#.  &mdash; Dynamic quantity with an external reference: `:x a brick:Motor ; brick:hasPoint [ a brick:Temperature_Sensor ; ref:hasExternalReference [ ... ] ] .`
+
+#### RealEstateCore
+
+#.  &mdash; Static quantity in a simple statement: `:x a rec:Asset ; rec:weight 5.0 .`
+
+#.  &mdash; Static quantity with an extra step: `:x a rec:Stadium ; rec:capacity [ rec:seatingCapacity 42100 ] .`
+
+#.  &mdash; Dynamic quantity in a simple statement: `:x a rec:SensorEquipment ; rec:wifiSignalStrength 100 .`
+
+#.  &mdash; Dynamic quantity with an observation timestamp: `[ a rec:TemperatureObservation ; rec:value 50 ; rec:timestamp "2026-09-17T12:00:00Z"^^xsd:dateTime ] .`
+
+#### 223
+
+#.  &mdash; Static quantity with a unit: `:x a s223:Motor ; s223:hasProperty [ a s223:QuantifiableProperty ; s223:hasAspect s223:Aspect-Rated ; qudt:hasQuantityKind qk:Voltage ; qudt:hasUnit unit:V ; qudt:quantityValue [ qudt:value 240 ] ] .`
+
+#.  &mdash; Dynamic quantity with an external reference: `:x a s223:Motor ; s223:hasProperty [ a s223:QuantifiableObservableProperty ; qudt:hasQuantityKind qk:Temperature ; qudt:hasUnit unit:DEG_C ; s223:hasExternalReference [ ... ] ] .`
+
+#.  💢 *Open Issue:* Unify the different ways.
+
+##  10. Locations
+
+#.  Some locations are demarcated by physical boundaries (such as rooms), while others are defined logically (such as lighting zones). Brick and REC previously defined these within the same hierarchy. We are changing this and cleanly separating physical locations from logical locations.
+
+### 10.1 Architecture Class
+
+#### Properties
 
     bro:Architecture                    sh:property [ sh:path bro:address               ; sh:class     bro:PostalAddress                ;               ] .
 
@@ -475,147 +420,52 @@
 
     bro:Architecture                    sh:property [ sh:path bro:hasPoint              ; sh:class     bro:Point                        ;               ] .
 
-### 11.2 Connection
+#### Subclasses
 
-    bro:Connection                      sh:property [ sh:path bro:connectsAt            ; sh:class     bro:ConnectionPoint              ;               ] .
-    bro:Connection                      sh:property [ sh:path bro:connectsFrom          ; sh:class     bro:Connectable                  ;               ] .
-    bro:Connection                      sh:property [ sh:path bro:connectsTo            ; sh:class     bro:Connectable                  ;               ] .
+#.  The subclasses are are aligned with IFC:
 
-### 11.3 ConnectionPoint
+#.  &mdash; [IfcSite](https://standards.buildingsmart.org/IFC/DEV/IFC4_3/HTML/lexical/IfcSite.html)                     COMPLEX (site complex)            &rarr; collection of `bro:Site`     <br>
+#.  &mdash; [IfcSite](https://standards.buildingsmart.org/IFC/DEV/IFC4_3/HTML/lexical/IfcSite.html)                     ELEMENT (site)                    &rarr; `bro:Site`                   <br>
+#.  &mdash; [IfcSite](https://standards.buildingsmart.org/IFC/DEV/IFC4_3/HTML/lexical/IfcSite.html)                     PARTIAL (site section)            &rarr; n/a                          <br>
+#.  &mdash; [IfcBuilding](https://standards.buildingsmart.org/IFC/DEV/IFC4_3/HTML/lexical/IfcBuilding.html)             COMPLEX (building complex)        &rarr; collection of `bro:Building` <br>
+#.  &mdash; [IfcBuilding](https://standards.buildingsmart.org/IFC/DEV/IFC4_3/HTML/lexical/IfcBuilding.html)             ELEMENT (building)                &rarr; `bro:Building`               <br>
+#.  &mdash; [IfcBuilding](https://standards.buildingsmart.org/IFC/DEV/IFC4_3/HTML/lexical/IfcBuilding.html)             PARTIAL (building section)        &rarr; n/a                          <br>
+#.  &mdash; [IfcBuildingStorey](https://standards.buildingsmart.org/IFC/DEV/IFC4_3/HTML/lexical/IfcBuildingStorey.html) COMPLEX (building storey complex) &rarr; collection of `bro:Floor`    <br>
+#.  &mdash; [IfcBuildingStorey](https://standards.buildingsmart.org/IFC/DEV/IFC4_3/HTML/lexical/IfcBuildingStorey.html) ELEMENT (building storey)         &rarr; `bro:Floor`                  <br>
+#.  &mdash; [IfcBuildingStorey](https://standards.buildingsmart.org/IFC/DEV/IFC4_3/HTML/lexical/IfcBuildingStorey.html) PARTIAL (partial building storey) &rarr; n/a                          <br>
+#.  &mdash; [IfcSpace](https://standards.buildingsmart.org/IFC/DEV/IFC4_3/HTML/lexical/IfcSpace.html)                   COMPLEX (space group)             &rarr; collection of `bro:Space`    <br>
+#.  &mdash; [IfcSpace](https://standards.buildingsmart.org/IFC/DEV/IFC4_3/HTML/lexical/IfcSpace.html)                   ELEMENT (space)                   &rarr; `bro:Space`                  <br>
+#.  &mdash; [IfcSpace](https://standards.buildingsmart.org/IFC/DEV/IFC4_3/HTML/lexical/IfcSpace.html)                   PARTIAL (partial space)           &rarr; n/a                          <br>
 
-    bro:ConnectionPoint                 sh:property [ sh:path bro:isConnectionPointOf   ; sh:class     bro:Connectable                  ;               ] .
-    bro:ConnectionPoint                 sh:property [ sh:path bro:mapsTo                ; sh:class     bro:ConnectionPoint              ;               ] .
+#.  💢 *Open Issue:* In REC, there is `rec:SubBuilding`/`rec:Wing` for partial buildings, but there is no vocabulary for partial sites, partial floors, or partial spaces. Should those be added?
 
-    bro:BidirectionalConnectionPoint    sh:property [ sh:path bro:mapsTo                ; sh:class     bro:BidirectionalConnectionPoint ;               ] .
-    bro:InletConnectionPoint            sh:property [ sh:path bro:mapsTo                ; sh:class     bro:InletConnectionPoint         ;               ] .
-    bro:OutletConnectionPoint           sh:property [ sh:path bro:mapsTo                ; sh:class     bro:OutletConnectionPoint        ;               ] .
+### 10.2 Zones
 
-### 11.4 Equipment
+#.  Zones are simply defined as collections of physical locations (see below).
 
-    bro:Equipment                       sh:property [ sh:path bro:hasPoint              ; sh:class     bro:Point                        ;               ] .
-    bro:Equipment                       sh:property [ sh:path bro:ipAddress             ; sh:datatype  xsd:string                       ;               ] .
-    bro:Equipment                       sh:property [ sh:path bro:locatedIn             ; sh:class     bro:Architecture                 ;               ] .
-    bro:Equipment                       sh:property [ sh:path bro:macAddress            ; sh:datatype  xsd:string                       ;               ] .
+### 10.3 Domain Spaces
 
-### 11.5 Furniture
+#.  A "domain space" (`s223:DomainSpace`) sits conceptually between physical locations (`s223:PhysicalSpace`) and logical locations (`s223:Zone`): they are physically connectable (`s223:Connectable`) but not demarcated by physical boundaries; they are logically defined regions contained in physical locations.
 
-    bro:Furniture                       sh:property [ sh:path bro:locatedIn             ; sh:class     bro:Architecture                 ;               ] .
+#.  💢 *Open Issue:* Should `DomainSpace` be adopted?
 
-### 11.6 Person
+##  11. Assets
 
-    bro:Person                          sh:property [ sh:path bro:name                  ; sh:datatype  xsd:string                       ;               ] .
+### 11.1 Equipment and its Function
 
-##  12. Composition
+#.  *Terminology:* "function (noun) &ndash; the action for which a person or thing is specially fitted or used or for which a thing exists"
 
-### 12.1 hasPart
+#.  What a thing physically *is* and what it *does* don't always line up one-to-one.
 
-    bro:PhysicalObject                  sh:property [ sh:path bro:hasPart               ; sh:class     bro:PhysicalObject               ;               ] .
-    bro:InformationObject               sh:property [ sh:path bro:hasPart               ; sh:class     bro:InformationObject            ;               ] .
+#.  &mdash; What it is, where it is, its asset tag, serial number, model number, and manufacturer are important for asset management, work orders, etc.
 
-    bro:Architecture                    sh:property [ sh:path bro:hasPart               ; sh:class     bro:Architecture                 ;               ] .
-    bro:Connection                      sh:property [ sh:path bro:hasPart               ;                                               ; sh:maxCount 0 ] .
-    bro:ConnectionPoint                 sh:property [ sh:path bro:hasPart               ;                                               ; sh:maxCount 0 ] .
-    bro:Equipment                       sh:property [ sh:path bro:hasPart               ; sh:class     bro:Equipment                    ;               ] .
-    bro:Furniture                       sh:property [ sh:path bro:hasPart               ; sh:class     bro:Furniture                    ;               ] .
-    bro:Person                          sh:property [ sh:path bro:hasPart               ;                                               ; sh:maxCount 0 ] .
+#.  &mdash; What it does, what it measures, what it actuates, and how it functionally relates to other things are important for building automation, fault diagnostics, etc.
 
-    bro:Site                            sh:property [ sh:path bro:hasPart               ; sh:or ( [ sh:class bro:Building        ] [ sh:class bro:ExternalSpace             ] ) ] .
-    bro:Building                        sh:property [ sh:path bro:hasPart               ; sh:class     bro:Floor                        ;               ] .
-    bro:Floor                           sh:property [ sh:path bro:hasPart               ; sh:class     bro:Space                        ;               ] .
-    bro:Space                           sh:property [ sh:path bro:hasPart               ;                                               ; sh:maxCount 0 ] .
-    bro:ExternalSpace                   sh:property [ sh:path bro:hasPart               ;                                               ; sh:maxCount 0 ] .
+#.  A single piece of equipment may realize one or several functions (such as a multifunction device that both prints and scans), and a single function may in turn be realized jointly by several pieces of equipment.
 
-    bro:Junction                        sh:property [ sh:path bro:hasPart               ;                                               ; sh:maxCount 0 ] .
+#.  💢 *Open Issue:* Should this distinction be made? For example, we could say that a `MultifunctionDevice` has the functions `Print`, `Copy`, and `Scan`. Or do we say that a `MultifunctionDevice` is physically composed of a `Printer`, `Copier`, and `Scanner`, even though these are not actually distinct physical parts of it?
 
-### 12.2 partOf
-
-    bro:PhysicalObject                  sh:property [ sh:path bro:partOf                ; sh:class     bro:PhysicalObject               ; sh:maxCount 1 ] .
-    bro:InformationObject               sh:property [ sh:path bro:partOf                ; sh:class     bro:InformationObject            ; sh:maxCount 1 ] .
-
-    bro:Architecture                    sh:property [ sh:path bro:partOf                ; sh:class     bro:Architecture                 ;               ] .
-    bro:Connection                      sh:property [ sh:path bro:partOf                ;                                               ; sh:maxCount 0 ] .
-    bro:ConnectionPoint                 sh:property [ sh:path bro:partOf                ;                                               ; sh:maxCount 0 ] .
-    bro:Equipment                       sh:property [ sh:path bro:partOf                ; sh:class     bro:Equipment                    ;               ] .
-    bro:Furniture                       sh:property [ sh:path bro:partOf                ; sh:class     bro:Furniture                    ;               ] .
-    bro:Person                          sh:property [ sh:path bro:partOf                ;                                               ; sh:maxCount 0 ] .
-
-    bro:Site                            sh:property [ sh:path bro:partOf                ;                                               ; sh:maxCount 0 ] .
-    bro:Building                        sh:property [ sh:path bro:partOf                ; sh:class     bro:Site                         ;               ] .
-    bro:Floor                           sh:property [ sh:path bro:partOf                ; sh:class     bro:Building                     ;               ] .
-    bro:Space                           sh:property [ sh:path bro:partOf                ; sh:class     bro:Floor                        ;               ] .
-    bro:ExternalSpace                   sh:property [ sh:path bro:partOf                ; sh:class     bro:Site                         ;               ] .
-
-    bro:Junction                        sh:property [ sh:path bro:partOf                ;                                               ; sh:maxCount 0 ] .
-
-##  13. Collections
-
-### 13.1 Classes
-
-    bro:PhysicalObjectCollection        rdfs:comment "A grouping of `PhysicalObject`s and/or other `PhysicalObjectCollection`s.\n\nWhere applicable, use a more specific subclass to indicate the purpose of the grouping; create a new subclass when an appropriate one does not exist."@en .
-
-    bro:ArchitectureCollection          rdfs:comment "A grouping of `Architecture` and/or other `ArchitectureCollection`s.\n\nWhere applicable, use a more specific subclass to indicate the purpose of the grouping; create a new subclass when an appropriate one does not exist."@en .
-    bro:ConnectionCollection            rdfs:comment "A grouping of `Connection`s and/or other `ConnectionCollection`s.\n\nWhere applicable, use a more specific subclass to indicate the purpose of the grouping; create a new subclass when an appropriate one does not exist."@en .
-    bro:ConnectionPointCollection       rdfs:comment "A grouping of `ConnectionPoint`s and/or other `ConnectionPointCollection`s.\n\nWhere applicable, use a more specific subclass to indicate the purpose of the grouping; create a new subclass when an appropriate one does not exist."@en .
-    bro:EquipmentCollection             rdfs:comment "A grouping of `Equipment` and/or other `EquipmentCollection`s.\n\nWhere applicable, use a more specific subclass to indicate the purpose of the grouping; create a new subclass when an appropriate one does not exist."@en .
-    bro:FurnitureCollection             rdfs:comment "A grouping of `Furniture` and/or other `FurnitureCollection`s.\n\nWhere applicable, use a more specific subclass to indicate the purpose of the grouping; create a new subclass when an appropriate one does not exist."@en .
-    bro:PersonCollection                rdfs:comment "A grouping of `Person`s and/or other `PersonCollection`s.\n\nWhere applicable, use a more specific subclass to indicate the purpose of the grouping; create a new subclass when an appropriate one does not exist."@en .
-
-    bro:PointCollection                 rdfs:comment "A grouping of `Point`s and/or other `PointCollection`s.\n\nWhere applicable, use a more specific subclass to indicate the purpose of the grouping; create a new subclass when an appropriate one does not exist."@en .
-
-### 13.2 hasMember
-
-    bro:PhysicalObjectCollection        sh:property [ sh:path bro:hasMember             ; sh:or ( [ sh:class bro:PhysicalObject  ] [ sh:class bro:PhysicalObjectCollection  ] ) ] .
-
-    bro:ArchitectureCollection          sh:property [ sh:path bro:hasMember             ; sh:or ( [ sh:class bro:Architecture    ] [ sh:class bro:ArchitectureCollection    ] ) ] .
-    bro:ConnectionCollection            sh:property [ sh:path bro:hasMember             ; sh:or ( [ sh:class bro:Connection      ] [ sh:class bro:ConnectionCollection      ] ) ] .
-    bro:ConnectionPointCollection       sh:property [ sh:path bro:hasMember             ; sh:or ( [ sh:class bro:ConnectionPoint ] [ sh:class bro:ConnectionPointCollection ] ) ] .
-    bro:EquipmentCollection             sh:property [ sh:path bro:hasMember             ; sh:or ( [ sh:class bro:Equipment       ] [ sh:class bro:EquipmentCollection       ] ) ] .
-    bro:FurnitureCollection             sh:property [ sh:path bro:hasMember             ; sh:or ( [ sh:class bro:Furniture       ] [ sh:class bro:FurnitureCollection       ] ) ] .
-    bro:PersonCollection                sh:property [ sh:path bro:hasMember             ; sh:or ( [ sh:class bro:Person          ] [ sh:class bro:PersonCollection          ] ) ] .
-
-    bro:Apartment                       sh:property [ sh:path bro:hasMember             ; sh:or ( [ sh:class bro:Space           ]                                            ) ] .
-    bro:Campus                          sh:property [ sh:path bro:hasMember             ; sh:or ( [ sh:class bro:Architecture    ]                                            ) ] .
-    bro:Portfolio                       sh:property [ sh:path bro:hasMember             ; sh:or ( [ sh:class bro:Architecture    ] [ sh:class bro:ArchitectureCollection    ] ) ] .
-    bro:Premises                        sh:property [ sh:path bro:hasMember             ; sh:or ( [ sh:class bro:Architecture    ]                                            ) ] .
-    bro:RealEstate                      sh:property [ sh:path bro:hasMember             ; sh:or ( [ sh:class bro:Architecture    ]                                            ) ] .
-    bro:Zone                            sh:property [ sh:path bro:hasMember             ; sh:or ( [ sh:class bro:Architecture    ] [ sh:class bro:Zone                      ] ) ] .
-
-    bro:Loop                            sh:property [ sh:path bro:hasMember             ; sh:or ( [ sh:class bro:Connection      ]                                            ) ] .
-
-    bro:PointCollection                 sh:property [ sh:path bro:hasMember             ; sh:or ( [ sh:class bro:Point           ] [ sh:class bro:PointCollection           ] ) ] .
-
-### 13.3 memberOf
-
-    bro:PhysicalObjectCollection        sh:property [ sh:path bro:memberOf              ;                                               ;               ] .
-
-    bro:ArchitectureCollection          sh:property [ sh:path bro:memberOf              ;                                               ;               ] .
-    bro:ConnectionCollection            sh:property [ sh:path bro:memberOf              ;                                               ;               ] .
-    bro:ConnectionPointCollection       sh:property [ sh:path bro:memberOf              ;                                               ;               ] .
-    bro:EquipmentCollection             sh:property [ sh:path bro:memberOf              ;                                               ;               ] .
-    bro:FurnitureCollection             sh:property [ sh:path bro:memberOf              ;                                               ;               ] .
-    bro:PersonCollection                sh:property [ sh:path bro:memberOf              ;                                               ;               ] .
-
-    bro:PhysicalObject                  sh:property [ sh:path bro:memberOf              ;                                               ;               ] .
-
-    bro:Architecture                    sh:property [ sh:path bro:memberOf              ;                                               ;               ] .
-    bro:Connection                      sh:property [ sh:path bro:memberOf              ;                                               ;               ] .
-    bro:ConnectionPoint                 sh:property [ sh:path bro:memberOf              ;                                               ;               ] .
-    bro:Equipment                       sh:property [ sh:path bro:memberOf              ;                                               ;               ] .
-    bro:Furniture                       sh:property [ sh:path bro:memberOf              ;                                               ;               ] .
-    bro:Person                          sh:property [ sh:path bro:memberOf              ;                                               ;               ] .
-
-##  14. Unions
-
-### 14.1 Agent
-
-    bro:Agent
-        rdfs:comment "An `Entity` that can act on behalf of itself or others, such as a person, organization, or software agent."@en .
-
-#### Properties
-
-    bro:Agent                           sh:property [ sh:path bro:owns                  ; sh:class     bro:Asset                        ;               ] .
-
-### 14.2 Asset
+### 11.2 Asset Class
 
     bro:Asset
         rdfs:comment "An `Entity` that is of value to a person, organization, or other entity, whether tangible or intangible."@en .
@@ -639,7 +489,32 @@
     bro:Asset                           sh:property [ sh:path bro:initialCost           ;                                               ; sh:maxCount 1 ] .
     bro:Asset                           sh:property [ sh:path bro:maintenanceInterval   ; sh:datatype  xsd:duration                     ;               ] .
 
-### 14.3 Connectable
+### 11.3 Equipment Class
+
+#### Properties
+
+    bro:Equipment                       sh:property [ sh:path bro:hasPoint              ; sh:class     bro:Point                        ;               ] .
+    bro:Equipment                       sh:property [ sh:path bro:ipAddress             ; sh:datatype  xsd:string                       ;               ] .
+    bro:Equipment                       sh:property [ sh:path bro:locatedIn             ; sh:class     bro:Architecture                 ;               ] .
+    bro:Equipment                       sh:property [ sh:path bro:macAddress            ; sh:datatype  xsd:string                       ;               ] .
+
+### 11.4 Furniture Class
+
+#### Properties
+
+    bro:Furniture                       sh:property [ sh:path bro:locatedIn             ; sh:class     bro:Architecture                 ;               ] .
+
+##  12. Connections
+
+#.  Connections are modeled after 223:
+
+#.  &mdash; `Connectable` &ndash;*connectedTo*&rarr; `Connectable` (formerly known as `brick:feeds`/`rec:feeds`)
+
+#.  &mdash; `Connectable` &ndash;*connectedThrough*&rarr; `Connection` &ndash;*connectsTo*&rarr; `Connectable`
+
+#.  &mdash; `Connectable` &ndash;*hasConnectionPoint*&rarr; `ConnectionPoint` &ndash;*connectsThrough*&rarr; `Connection` &ndash;*connectsAt*&rarr; `ConnectionPoint` &ndash;*isConnectionPointOf*&rarr; `Connectable`
+
+### 12.1 Connectable Class
 
     bro:Connectable
         rdfs:comment "An `Entity` that can be physically connected to another entity."@en .
@@ -652,9 +527,43 @@
     bro:Connectable                     sh:property [ sh:path bro:connectedTo           ; sh:class     bro:Connectable                  ;               ] .
     bro:Connectable                     sh:property [ sh:path bro:hasConnectionPoint    ; sh:class     bro:ConnectionPoint              ;               ] .
 
-##  15. Other Concepts
+### 12.2 ConnectionPoint Class
 
-### 15.1 PostalAddress
+#### Properties
+
+    bro:ConnectionPoint                 sh:property [ sh:path bro:isConnectionPointOf   ; sh:class     bro:Connectable                  ;               ] .
+    bro:ConnectionPoint                 sh:property [ sh:path bro:mapsTo                ; sh:class     bro:ConnectionPoint              ;               ] .
+
+    bro:BidirectionalConnectionPoint    sh:property [ sh:path bro:mapsTo                ; sh:class     bro:BidirectionalConnectionPoint ;               ] .
+    bro:InletConnectionPoint            sh:property [ sh:path bro:mapsTo                ; sh:class     bro:InletConnectionPoint         ;               ] .
+    bro:OutletConnectionPoint           sh:property [ sh:path bro:mapsTo                ; sh:class     bro:OutletConnectionPoint        ;               ] .
+
+### 12.3 Connection Class
+
+#### Properties
+
+    bro:Connection                      sh:property [ sh:path bro:connectsAt            ; sh:class     bro:ConnectionPoint              ;               ] .
+    bro:Connection                      sh:property [ sh:path bro:connectsFrom          ; sh:class     bro:Connectable                  ;               ] .
+    bro:Connection                      sh:property [ sh:path bro:connectsTo            ; sh:class     bro:Connectable                  ;               ] .
+
+##  13. Agents
+
+### 13.1 Agent Class
+
+    bro:Agent
+        rdfs:comment "An `Entity` that can act on behalf of itself or others, such as a person, organization, or software agent."@en .
+
+    bro:Agent                           sh:property [ sh:path bro:owns                  ; sh:class     bro:Asset                        ;               ] .
+
+### 13.2 Person Class
+
+    bro:Person                          sh:property [ sh:path bro:name                  ; sh:datatype  xsd:string                       ;               ] .
+
+### 13.3 Organizations
+
+#.  Organization are simplify defined as collections of `bro:Person` (see below).
+
+### 13.4 PostalAddress Class
 
     bro:PostalAddress                   sh:property [ sh:path bro:addressLine1          ; sh:datatype  xsd:string                       ; sh:maxCount 1 ] .
     bro:PostalAddress                   sh:property [ sh:path bro:addressLine2          ; sh:datatype  xsd:string                       ; sh:maxCount 1 ] .
@@ -662,6 +571,103 @@
     bro:PostalAddress                   sh:property [ sh:path bro:postalCode            ; sh:datatype  xsd:string                       ; sh:maxCount 1 ] .
     bro:PostalAddress                   sh:property [ sh:path bro:region                ; sh:datatype  xsd:string                       ; sh:maxCount 1 ] .
     bro:PostalAddress                   sh:property [ sh:path bro:country               ; sh:datatype  xsd:string                       ; sh:maxCount 1 ] .
+
+##  14. Composition
+
+### 14.1 hasPart
+
+    bro:PhysicalObject                  sh:property [ sh:path bro:hasPart               ; sh:class     bro:PhysicalObject               ;               ] .
+    bro:InformationObject               sh:property [ sh:path bro:hasPart               ; sh:class     bro:InformationObject            ;               ] .
+
+    bro:Architecture                    sh:property [ sh:path bro:hasPart               ; sh:class     bro:Architecture                 ;               ] .
+    bro:Connection                      sh:property [ sh:path bro:hasPart               ;                                               ; sh:maxCount 0 ] .
+    bro:ConnectionPoint                 sh:property [ sh:path bro:hasPart               ;                                               ; sh:maxCount 0 ] .
+    bro:Equipment                       sh:property [ sh:path bro:hasPart               ; sh:class     bro:Equipment                    ;               ] .
+    bro:Furniture                       sh:property [ sh:path bro:hasPart               ; sh:class     bro:Furniture                    ;               ] .
+    bro:Person                          sh:property [ sh:path bro:hasPart               ;                                               ; sh:maxCount 0 ] .
+
+    bro:Site                            sh:property [ sh:path bro:hasPart               ; sh:or ( [ sh:class bro:Building        ] [ sh:class bro:ExternalSpace             ] ) ] .
+    bro:Building                        sh:property [ sh:path bro:hasPart               ; sh:class     bro:Floor                        ;               ] .
+    bro:Floor                           sh:property [ sh:path bro:hasPart               ; sh:class     bro:Space                        ;               ] .
+    bro:Space                           sh:property [ sh:path bro:hasPart               ;                                               ; sh:maxCount 0 ] .
+    bro:ExternalSpace                   sh:property [ sh:path bro:hasPart               ;                                               ; sh:maxCount 0 ] .
+
+    bro:Junction                        sh:property [ sh:path bro:hasPart               ;                                               ; sh:maxCount 0 ] .
+
+### 14.2 partOf
+
+    bro:PhysicalObject                  sh:property [ sh:path bro:partOf                ; sh:class     bro:PhysicalObject               ; sh:maxCount 1 ] .
+    bro:InformationObject               sh:property [ sh:path bro:partOf                ; sh:class     bro:InformationObject            ; sh:maxCount 1 ] .
+
+    bro:Architecture                    sh:property [ sh:path bro:partOf                ; sh:class     bro:Architecture                 ;               ] .
+    bro:Connection                      sh:property [ sh:path bro:partOf                ;                                               ; sh:maxCount 0 ] .
+    bro:ConnectionPoint                 sh:property [ sh:path bro:partOf                ;                                               ; sh:maxCount 0 ] .
+    bro:Equipment                       sh:property [ sh:path bro:partOf                ; sh:class     bro:Equipment                    ;               ] .
+    bro:Furniture                       sh:property [ sh:path bro:partOf                ; sh:class     bro:Furniture                    ;               ] .
+    bro:Person                          sh:property [ sh:path bro:partOf                ;                                               ; sh:maxCount 0 ] .
+
+    bro:Site                            sh:property [ sh:path bro:partOf                ;                                               ; sh:maxCount 0 ] .
+    bro:Building                        sh:property [ sh:path bro:partOf                ; sh:class     bro:Site                         ;               ] .
+    bro:Floor                           sh:property [ sh:path bro:partOf                ; sh:class     bro:Building                     ;               ] .
+    bro:Space                           sh:property [ sh:path bro:partOf                ; sh:class     bro:Floor                        ;               ] .
+    bro:ExternalSpace                   sh:property [ sh:path bro:partOf                ; sh:class     bro:Site                         ;               ] .
+
+    bro:Junction                        sh:property [ sh:path bro:partOf                ;                                               ; sh:maxCount 0 ] .
+
+##  15. Collections
+
+    bro:PhysicalObjectCollection        rdfs:comment "A grouping of `PhysicalObject`s and/or other `PhysicalObjectCollection`s.\n\nWhere applicable, use a more specific subclass to indicate the purpose of the grouping; create a new subclass when an appropriate one does not exist."@en .
+
+    bro:ArchitectureCollection          rdfs:comment "A grouping of `Architecture` and/or other `ArchitectureCollection`s.\n\nWhere applicable, use a more specific subclass to indicate the purpose of the grouping; create a new subclass when an appropriate one does not exist."@en .
+    bro:ConnectionCollection            rdfs:comment "A grouping of `Connection`s and/or other `ConnectionCollection`s.\n\nWhere applicable, use a more specific subclass to indicate the purpose of the grouping; create a new subclass when an appropriate one does not exist."@en .
+    bro:ConnectionPointCollection       rdfs:comment "A grouping of `ConnectionPoint`s and/or other `ConnectionPointCollection`s.\n\nWhere applicable, use a more specific subclass to indicate the purpose of the grouping; create a new subclass when an appropriate one does not exist."@en .
+    bro:EquipmentCollection             rdfs:comment "A grouping of `Equipment` and/or other `EquipmentCollection`s.\n\nWhere applicable, use a more specific subclass to indicate the purpose of the grouping; create a new subclass when an appropriate one does not exist."@en .
+    bro:FurnitureCollection             rdfs:comment "A grouping of `Furniture` and/or other `FurnitureCollection`s.\n\nWhere applicable, use a more specific subclass to indicate the purpose of the grouping; create a new subclass when an appropriate one does not exist."@en .
+    bro:PersonCollection                rdfs:comment "A grouping of `Person`s and/or other `PersonCollection`s.\n\nWhere applicable, use a more specific subclass to indicate the purpose of the grouping; create a new subclass when an appropriate one does not exist."@en .
+
+    bro:PointCollection                 rdfs:comment "A grouping of `Point`s and/or other `PointCollection`s.\n\nWhere applicable, use a more specific subclass to indicate the purpose of the grouping; create a new subclass when an appropriate one does not exist."@en .
+
+### 15.1 hasMember
+
+    bro:PhysicalObjectCollection        sh:property [ sh:path bro:hasMember             ; sh:or ( [ sh:class bro:PhysicalObject  ] [ sh:class bro:PhysicalObjectCollection  ] ) ] .
+
+    bro:ArchitectureCollection          sh:property [ sh:path bro:hasMember             ; sh:or ( [ sh:class bro:Architecture    ] [ sh:class bro:ArchitectureCollection    ] ) ] .
+    bro:ConnectionCollection            sh:property [ sh:path bro:hasMember             ; sh:or ( [ sh:class bro:Connection      ] [ sh:class bro:ConnectionCollection      ] ) ] .
+    bro:ConnectionPointCollection       sh:property [ sh:path bro:hasMember             ; sh:or ( [ sh:class bro:ConnectionPoint ] [ sh:class bro:ConnectionPointCollection ] ) ] .
+    bro:EquipmentCollection             sh:property [ sh:path bro:hasMember             ; sh:or ( [ sh:class bro:Equipment       ] [ sh:class bro:EquipmentCollection       ] ) ] .
+    bro:FurnitureCollection             sh:property [ sh:path bro:hasMember             ; sh:or ( [ sh:class bro:Furniture       ] [ sh:class bro:FurnitureCollection       ] ) ] .
+    bro:PersonCollection                sh:property [ sh:path bro:hasMember             ; sh:or ( [ sh:class bro:Person          ] [ sh:class bro:PersonCollection          ] ) ] .
+
+    bro:Apartment                       sh:property [ sh:path bro:hasMember             ; sh:or ( [ sh:class bro:Space           ]                                            ) ] .
+    bro:Campus                          sh:property [ sh:path bro:hasMember             ; sh:or ( [ sh:class bro:Architecture    ]                                            ) ] .
+    bro:Portfolio                       sh:property [ sh:path bro:hasMember             ; sh:or ( [ sh:class bro:Architecture    ] [ sh:class bro:ArchitectureCollection    ] ) ] .
+    bro:Premises                        sh:property [ sh:path bro:hasMember             ; sh:or ( [ sh:class bro:Architecture    ]                                            ) ] .
+    bro:RealEstate                      sh:property [ sh:path bro:hasMember             ; sh:or ( [ sh:class bro:Architecture    ]                                            ) ] .
+    bro:Zone                            sh:property [ sh:path bro:hasMember             ; sh:or ( [ sh:class bro:Architecture    ] [ sh:class bro:Zone                      ] ) ] .
+
+    bro:Loop                            sh:property [ sh:path bro:hasMember             ; sh:or ( [ sh:class bro:Connection      ]                                            ) ] .
+
+    bro:PointCollection                 sh:property [ sh:path bro:hasMember             ; sh:or ( [ sh:class bro:Point           ] [ sh:class bro:PointCollection           ] ) ] .
+
+### 15.2 memberOf
+
+    bro:PhysicalObjectCollection        sh:property [ sh:path bro:memberOf              ;                                               ;               ] .
+
+    bro:ArchitectureCollection          sh:property [ sh:path bro:memberOf              ;                                               ;               ] .
+    bro:ConnectionCollection            sh:property [ sh:path bro:memberOf              ;                                               ;               ] .
+    bro:ConnectionPointCollection       sh:property [ sh:path bro:memberOf              ;                                               ;               ] .
+    bro:EquipmentCollection             sh:property [ sh:path bro:memberOf              ;                                               ;               ] .
+    bro:FurnitureCollection             sh:property [ sh:path bro:memberOf              ;                                               ;               ] .
+    bro:PersonCollection                sh:property [ sh:path bro:memberOf              ;                                               ;               ] .
+
+    bro:PhysicalObject                  sh:property [ sh:path bro:memberOf              ;                                               ;               ] .
+
+    bro:Architecture                    sh:property [ sh:path bro:memberOf              ;                                               ;               ] .
+    bro:Connection                      sh:property [ sh:path bro:memberOf              ;                                               ;               ] .
+    bro:ConnectionPoint                 sh:property [ sh:path bro:memberOf              ;                                               ;               ] .
+    bro:Equipment                       sh:property [ sh:path bro:memberOf              ;                                               ;               ] .
+    bro:Furniture                       sh:property [ sh:path bro:memberOf              ;                                               ;               ] .
+    bro:Person                          sh:property [ sh:path bro:memberOf              ;                                               ;               ] .
 
 ##  16. Properties
 
