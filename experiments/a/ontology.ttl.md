@@ -346,7 +346,11 @@
 
     bro:Entity
         sh:property 
-            [ sh:path bro:name                  ;               ; sh:datatype  xsd:string                       ] .
+            [ sh:path bro:name                  ;               ; sh:datatype  rdf:langString                   ] ,
+            [ sh:path bro:description           ;               ; sh:datatype  rdf:langString                   ] .
+
+    bro:name                a owl:DatatypeProperty  ; rdfs:comment "A name for a given `Entity`."@en .
+    bro:description         a owl:DatatypeProperty  ; rdfs:comment "A description for a given `Entity`."@en .
 
 ### 8.2 PhysicalObject Class
 
@@ -361,7 +365,20 @@
             [ sh:path bro:volume                ; sh:maxCount 1 ; sh:datatype  xsd:double                       ] ,
             [ sh:path bro:weight                ; sh:maxCount 1 ; sh:datatype  xsd:double                       ] ,
 
+            [ sh:path bro:locatedIn             ;               ; sh:class     bro:Architecture                 ] ,
             [ sh:path bro:documentation         ;               ; sh:class     bro:Document                     ] .
+
+    bro:geometry            a owl:ObjectProperty    ; rdfs:comment "A spatial representation for a given `PhysicalObject`."@en .
+
+    bro:area                a owl:DatatypeProperty  ; rdfs:comment "The area of a given `PhysicalObject` in square meters."@en .
+    bro:length              a owl:DatatypeProperty  ; rdfs:comment "The length of a given `PhysicalObject` in meters."@en .
+    bro:perimeterLength     a owl:DatatypeProperty  ; rdfs:comment "The length of the perimeter of a given `PhysicalObject` in meters."@en .
+    bro:volume              a owl:DatatypeProperty  ; rdfs:comment "The volume of a given `PhysicalObject` in cubic meters."@en .
+    bro:weight              a owl:DatatypeProperty  ; rdfs:comment "The weight of a given `PhysicalObject` in kilograms."@en .
+
+    bro:locatedIn           a owl:ObjectProperty    ; rdfs:comment "`Architecture` that contains a given `PhysicalObject` spatially."@en .
+
+    bro:documentation       a owl:ObjectProperty    .
 
 ### 8.3 InformationObject Class
 
@@ -400,6 +417,8 @@
 
 #.  💢 *Open Issue:* Unify the different ways.
 
+    bro:hasPoint            a owl:ObjectProperty    .
+
 ##  10. Locations
 
 #.  Some locations are demarcated by physical boundaries (such as rooms), while others are defined logically (such as lighting zones). Brick and REC previously defined these within the same hierarchy. We are changing this and cleanly separating physical locations from logical locations.
@@ -423,6 +442,19 @@
             [ sh:path bro:seatingCapacity       ; sh:maxCount 1 ; sh:datatype  xsd:integer                      ] ,
 
             [ sh:path bro:hasPoint              ;               ; sh:class     bro:Point                        ] .
+
+    bro:address             a owl:ObjectProperty    .
+
+    bro:architectedBy       a owl:ObjectProperty    .
+    bro:constructedBy       a owl:ObjectProperty    .
+    bro:operatedBy          a owl:ObjectProperty    .
+
+    bro:grossArea           a owl:DatatypeProperty  ; rdfs:comment "The total gross area of a given `Architecture` in square meters."@en .
+    bro:netArea             a owl:DatatypeProperty  ; rdfs:comment "The total net area of a given `Architecture` in square meters."@en .
+    bro:rentableArea        a owl:DatatypeProperty  ; rdfs:comment "The total rentable area of a given `Architecture` in square meters."@en .
+
+    bro:maximumOccupancy    a owl:DatatypeProperty  ; rdfs:comment "The maximum number of people that can occupy a given `Architecture`."@en .
+    bro:seatingCapacity     a owl:DatatypeProperty  ; rdfS:comment "The maximum number of people that can be seated in a given `Architecture`."@en .
 
 #.  The subclasses are are aligned with IFC:
 
@@ -489,30 +521,70 @@
             [ sh:path bro:initialCost           ; sh:maxCount 1 ;                                               ] ,
             [ sh:path bro:maintenanceInterval   ;               ; sh:datatype  xsd:duration                     ] .
 
+    bro:assetTag            a owl:DatatypeProperty  .
+    bro:modelNumber         a owl:DatatypeProperty  .
+    bro:serialNumber        a owl:DatatypeProperty  .
+
+    bro:commissionedBy      a owl:ObjectProperty    .
+    bro:installedBy         a owl:ObjectProperty    .
+    bro:manufacturedBy      a owl:ObjectProperty    .
+    bro:ownedBy             a owl:ObjectProperty    ; owl:inverseOf bro:owns .
+    bro:servicedBy          a owl:ObjectProperty    .
+
+    bro:commissioningDate   a owl:DatatypeProperty  .
+    bro:installationDate    a owl:DatatypeProperty  .
+    bro:turnoverDate        a owl:DatatypeProperty  .
+
+    bro:initialCost         a owl:DatatypeProperty  .
+    bro:maintenanceInterval a owl:DatatypeProperty  .
+
 ### 11.3 Equipment Class
 
     bro:Equipment
         sh:property
             [ sh:path bro:hasPoint              ;               ; sh:class     bro:Point                        ] ,
             [ sh:path bro:ipAddress             ;               ; sh:datatype  xsd:string                       ] ,
-            [ sh:path bro:locatedIn             ;               ; sh:class     bro:Architecture                 ] ,
             [ sh:path bro:macAddress            ;               ; sh:datatype  xsd:string                       ] .
 
-### 11.4 Furniture Class
+    bro:ipAddress           a owl:DatatypeProperty  .
+    bro:macAddress          a owl:DatatypeProperty  .
 
-    bro:Furniture
-        sh:property
-            [ sh:path bro:locatedIn             ;               ; sh:class     bro:Architecture                 ] .
+### 11.4 Furniture Class
 
 ##  12. Connections
 
 #.  Connections are modeled after 223:
 
-#.  &mdash; `Connectable` &ndash;*connectedTo*&rarr; `Connectable` (formerly known as `brick:feeds`/`rec:feeds`)
+#.  &bull; `Connectable` &ndash;*connected*&rarr; `Connectable` <br>
+#.  &bull; `Connectable` &larr;*connected*&ndash; `Connectable`
 
-#.  &mdash; `Connectable` &ndash;*connectedThrough*&rarr; `Connection` &ndash;*connectsTo*&rarr; `Connectable`
+    bro:connected           a owl:SymmetricProperty .
 
-#.  &mdash; `Connectable` &ndash;*hasConnectionPoint*&rarr; `ConnectionPoint` &ndash;*connectsThrough*&rarr; `Connection` &ndash;*connectsAt*&rarr; `ConnectionPoint` &ndash;*isConnectionPointOf*&rarr; `Connectable`
+#.  &bull; `Connectable` &ndash;*connectedTo*&rarr; `Connectable` (replaces `brick:feeds`/`rec:feeds`) <br>
+#.  &bull; `Connectable` &larr;*connectedFrom*&ndash; `Connectable`
+
+    bro:connectedTo         a owl:ObjectProperty    ; owl:inverseOf bro:connectedFrom .
+    bro:connectedFrom       a owl:ObjectProperty    ; owl:inverseOf bro:connectedTo .
+
+#.  &bull; `Connectable` &ndash;*connectedThrough*&rarr; `Connection` &ndash;*connectsTo*&rarr; `Connectable` <br>
+#.  &bull; `Connectable` &larr;*connectsFrom*&ndash; `Connection` &larr;*connectedThrough*&ndash; `Connectable`
+
+    bro:connectedThrough    a owl:ObjectProperty    .
+    bro:connectsFrom        a owl:ObjectProperty    .
+    bro:connectsTo          a owl:ObjectProperty    .
+
+#.  &bull; `Connectable` &ndash;*hasConnectionPoint*&rarr; `ConnectionPoint` &ndash;*connectsThrough*&rarr; `Connection` &ndash;*connectsAt*&rarr; `ConnectionPoint` &ndash;*isConnectionPointOf*&rarr; `Connectable` <br>
+#.  &bull; `Connectable` &larr;*isConnectionPointOf*&ndash; `ConnectionPoint` &larr;*connectsAt*&ndash; `Connection` &larr;*connectsThrough*&ndash; `ConnectionPoint` &larr;*hasConnectionPoint*&ndash; `Connectable`
+
+    bro:hasConnectionPoint  a owl:ObjectProperty    ; owl:inverseOf bro:isConnectionPointOf .
+    bro:isConnectionPointOf a owl:ObjectProperty    ; owl:inverseOf bro:hasConnectionPoint .
+
+    bro:connectsAt          a owl:ObjectProperty    ; owl:inverseOf bro:connectsThrough .
+    bro:connectsThrough     a owl:ObjectProperty    ; owl:inverseOf bro:connectsAt .
+
+#.  &bull; `ConnectionPoint` &ndash;mapsTo&rarr; `ConnectionPoint`
+
+    bro:mapsTo              a owl:ObjectProperty    .
 
 ### 12.1 Connectable Class
 
@@ -520,43 +592,43 @@
         rdfs:comment "An `Entity` that can be physically connected to another entity."@en ;
         sh:property
             [ sh:path bro:connected             ;               ; sh:class     bro:Connectable                  ] ,
-            [ sh:path bro:connectedFrom         ;               ; sh:class     bro:Connectable                  ] ,
-            [ sh:path bro:connectedThrough      ;               ; sh:class     bro:Connection                   ] ,
+
             [ sh:path bro:connectedTo           ;               ; sh:class     bro:Connectable                  ] ,
+            [ sh:path bro:connectedFrom         ;               ; sh:class     bro:Connectable                  ] ,
+
+            [ sh:path bro:connectedThrough      ;               ; sh:class     bro:Connection                   ] ,
+
             [ sh:path bro:hasConnectionPoint    ;               ; sh:class     bro:ConnectionPoint              ] .
 
-### 12.2 ConnectionPoint Class
+### 12.2 Connection Class
+
+    bro:Connection
+        sh:property
+            [ sh:path bro:connectsTo            ;               ; sh:class     bro:Connectable                  ] ,
+            [ sh:path bro:connectsFrom          ;               ; sh:class     bro:Connectable                  ] ,
+
+            [ sh:path bro:connectsAt            ;               ; sh:class     bro:ConnectionPoint              ] .
+
+### 12.3 ConnectionPoint Class
 
     bro:ConnectionPoint
         sh:property
-            [ sh:path bro:isConnectionPointOf   ;               ; sh:class     bro:Connectable                  ] ,
-            [ sh:path bro:mapsTo                ;               ; sh:class     bro:ConnectionPoint              ] .
+            [ sh:path bro:connectsThrough       ; sh:maxCount 1 ; sh:class     bro:Connection                   ] ,
+            [ sh:path bro:isConnectionPointOf   ; sh:maxCount 1 ; sh:class     bro:Connectable                  ] ,
 
-#### 12.2.1 BidirectionalConnectionPoint Class
+            [ sh:path bro:mapsTo                ; sh:maxCount 1 ; sh:class     bro:ConnectionPoint              ] .
 
     bro:BidirectionalConnectionPoint
         sh:property
             [ sh:path bro:mapsTo                ;               ; sh:class     bro:BidirectionalConnectionPoint ] .
 
-#### 12.2.2 InletConnectionPoint Class
-
     bro:InletConnectionPoint
         sh:property
             [ sh:path bro:mapsTo                ;               ; sh:class     bro:InletConnectionPoint         ] .
 
-#### 12.2.3 OutletConnectionPoint Class
-
     bro:OutletConnectionPoint
         sh:property
             [ sh:path bro:mapsTo                ;               ; sh:class     bro:OutletConnectionPoint        ] .
-
-### 12.3 Connection Class
-
-    bro:Connection
-        sh:property
-            [ sh:path bro:connectsAt            ;               ; sh:class     bro:ConnectionPoint              ] ,
-            [ sh:path bro:connectsFrom          ;               ; sh:class     bro:Connectable                  ] ,
-            [ sh:path bro:connectsTo            ;               ; sh:class     bro:Connectable                  ] .
 
 ##  13. Agents
 
@@ -566,6 +638,8 @@
         rdfs:comment "An `Entity` that can act on behalf of itself or others, such as a person, organization, or software agent."@en ;
         sh:property
             [ sh:path bro:owns                  ;               ; sh:class     bro:Asset                        ] .
+
+    bro:owns                a owl:ObjectProperty    ; owl:inverseOf bro:ownedBy              .
 
 ### 13.2 Person Class
 
@@ -581,12 +655,23 @@
 
     bro:PostalAddress
         sh:property
+            [ sh:path bro:name                  ; sh:maxCount 0 ;                                               ] ,
+            [ sh:path bro:description           ; sh:maxCount 0 ;                                               ] ,
             [ sh:path bro:addressLine1          ; sh:maxCount 1 ; sh:datatype  xsd:string                       ] ,
             [ sh:path bro:addressLine2          ; sh:maxCount 1 ; sh:datatype  xsd:string                       ] ,
             [ sh:path bro:city                  ; sh:maxCount 1 ; sh:datatype  xsd:string                       ] ,
             [ sh:path bro:postalCode            ; sh:maxCount 1 ; sh:datatype  xsd:string                       ] ,
             [ sh:path bro:region                ; sh:maxCount 1 ; sh:datatype  xsd:string                       ] ,
             [ sh:path bro:country               ; sh:maxCount 1 ; sh:datatype  xsd:string                       ] .
+
+    bro:addressLine1        a owl:DatatypeProperty  ; rdfs:comment "The first line of a given `PostalAddress`."@en .
+    bro:addressLine2        a owl:DatatypeProperty  ; rdfs:comment "The second line of a given `PostalAddress`."@en .
+    bro:city                a owl:DatatypeProperty  ; rdfs:comment "The city specified by a given `PostalAddress`."@en .
+    bro:postalCode          a owl:DatatypeProperty  ; rdfs:comment "The postal code specified by a given `PostalAddress`."@en .
+    bro:region              a owl:DatatypeProperty  ; rdfs:comment "The region, state, or province specified by a given `PostalAddress`."@en .
+    bro:country             a owl:DatatypeProperty  ; rdfs:comment "The country specified by a given `PostalAddress`."@en .
+
+#.  *Note:* `bro:name` would be providing a name for the postal address itself, not the name of the recipient. To avoid confusion, giving a postal address a name is forbidden.
 
 ##  14. Composition
 
@@ -610,6 +695,9 @@
 
     bro:Junction                        sh:property [ sh:path bro:hasPart   ; sh:maxCount 0 ;                                        ] .
 
+    bro:ExternalReference               sh:property [ sh:path bro:hasPart   ; sh:maxCount 0 ;                                        ] .
+    bro:PostalAddress                   sh:property [ sh:path bro:hasPart   ; sh:maxCount 0 ;                                        ] .
+
 ### 14.2 partOf
 
     bro:PhysicalObject                  sh:property [ sh:path bro:partOf    ; sh:maxCount 1 ; sh:class     bro:PhysicalObject        ] .
@@ -629,6 +717,9 @@
     bro:ExternalSpace                   sh:property [ sh:path bro:partOf    ;               ; sh:class     bro:Site                  ] .
 
     bro:Junction                        sh:property [ sh:path bro:partOf    ; sh:maxCount 0 ;                                        ] .
+
+    bro:ExternalReference               sh:property [ sh:path bro:partOf    ; sh:maxCount 0 ;                                        ] .
+    bro:PostalAddress                   sh:property [ sh:path bro:partOf    ; sh:maxCount 0 ;                                        ] .
 
 ##  15. Collections
 
@@ -685,69 +776,15 @@
     bro:Furniture                       sh:property [ sh:path bro:memberOf  ] .
     bro:Person                          sh:property [ sh:path bro:memberOf  ] .
 
-##  16. Properties
-
-    bro:address             a owl:ObjectProperty    ;                                        .
-    bro:addressLine1        a owl:DatatypeProperty  ;                                        .
-    bro:addressLine2        a owl:DatatypeProperty  ;                                        .
-    bro:architectedBy       a owl:ObjectProperty    ;                                        .
-    bro:area                a owl:DatatypeProperty  ;                                        ; rdfs:comment "The area of a `PhysicalObject` in square meters."@en .
-    bro:assetTag            a owl:DatatypeProperty  ;                                        .
-    bro:city                a owl:DatatypeProperty  ;                                        .
-    bro:commissionedBy      a owl:ObjectProperty    ;                                        .
-    bro:commissioningDate   a owl:DatatypeProperty  ;                                        .
-    bro:connected           a owl:ObjectProperty    ;                                        .
-    bro:connectedFrom       a owl:ObjectProperty    ;                                        .
-    bro:connectedThrough    a owl:ObjectProperty    ;                                        .
-    bro:connectedTo         a owl:ObjectProperty    ;                                        .
-    bro:connectsAt          a owl:ObjectProperty    ;                                        .
-    bro:connectsFrom        a owl:ObjectProperty    ;                                        .
-    bro:connectsTo          a owl:ObjectProperty    ;                                        .
-    bro:constructedBy       a owl:ObjectProperty    ;                                        .
-    bro:country             a owl:DatatypeProperty  ;                                        .
-    bro:documentation       a owl:ObjectProperty    ;                                        .
-    bro:geometry            a owl:ObjectProperty    ;                                        ; rdfs:comment "A spatial representation for a given `PhysicalObject`."@en .
-    bro:grossArea           a owl:DatatypeProperty  ;                                        .
-    bro:hasConnectionPoint  a owl:ObjectProperty    ; owl:inverseOf bro:isConnectionPointOf  .
-    bro:hasPoint            a owl:ObjectProperty    ;                                        .
-    bro:initialCost         a owl:DatatypeProperty  ;                                        .
-    bro:installationDate    a owl:DatatypeProperty  ;                                        .
-    bro:installedBy         a owl:ObjectProperty    ;                                        .
-    bro:ipAddress           a owl:DatatypeProperty  ;                                        .
-    bro:isConnectionPointOf a owl:ObjectProperty    ; owl:inverseOf bro:hasConnectionPoint   .
-    bro:length              a owl:DatatypeProperty  ;                                        ; rdfs:comment "The length of a `PhysicalObject` in meters."@en .
-    bro:locatedIn           a owl:ObjectProperty    ;                                        .
-    bro:macAddress          a owl:DatatypeProperty  ;                                        .
-    bro:maintenanceInterval a owl:DatatypeProperty  ;                                        .
-    bro:manufacturedBy      a owl:ObjectProperty    ;                                        .
-    bro:mapsTo              a owl:ObjectProperty    ;                                        .
-    bro:maximumOccupancy    a owl:DatatypeProperty  ;                                        .
-    bro:modelNumber         a owl:DatatypeProperty  ;                                        .
-    bro:name                a owl:DatatypeProperty  ;                                        .
-    bro:netArea             a owl:DatatypeProperty  ;                                        .
-    bro:operatedBy          a owl:ObjectProperty    ;                                        .
-    bro:ownedBy             a owl:ObjectProperty    ; owl:inverseOf bro:owns                 .
-    bro:owns                a owl:ObjectProperty    ; owl:inverseOf bro:ownedBy              .
-    bro:perimeterLength     a owl:DatatypeProperty  ;                                        ; rdfs:comment "The length of the perimeter of a `PhysicalObject` in meters."@en .
-    bro:postalCode          a owl:DatatypeProperty  ;                                        .
-    bro:region              a owl:DatatypeProperty  ;                                        .
-    bro:rentableArea        a owl:DatatypeProperty  ;                                        .
-    bro:seatingCapacity     a owl:DatatypeProperty  ;                                        .
-    bro:serialNumber        a owl:DatatypeProperty  ;                                        .
-    bro:servicedBy          a owl:ObjectProperty    ;                                        .
-    bro:turnoverDate        a owl:DatatypeProperty  ;                                        .
-    bro:volume              a owl:DatatypeProperty  ;                                        ; rdfs:comment "The volume of a `PhysicalObject` in cubic meters."@en .
-    bro:weight              a owl:DatatypeProperty  ;                                        ; rdfs:comment "The weight of a `PhysicalObject` in kilograms."@en .
-
-##  17. Ontology
+##  16. Ontology
 
     <https://ontology.brickschema.org/2.0/>
         a owl:Ontology ;
-        owl:versionInfo "2.0.0-alpha.3" .
+        owl:versionInfo "2.0.0-alpha.4" .
 
-##  18. References
+##  17. References
 
-### 18.1 Design Inputs
+### 17.1 Design Inputs
 
 #.  [1] @PeteHart, [REC 5 Ontology Translation Principles and Methodology](https://github.com/RealEstateCore/rec-5/blob/main/docs/ontology-principles.pdf), 2026-01-30.
 
@@ -757,7 +794,7 @@
 
 #.  [4] @ektrah, [Initial wish list for Brick 2.0](https://github.com/BrickSchema/Brick2-specification-drafting/pull/1), 2025-10-09.
 
-### 18.2 Specifications
+### 17.2 Specifications
 
 #.  W3C, [RDF 1.2 Concepts and Abstract Data Model](https://w3c.github.io/rdf-concepts/spec/), Editor's Draft, 2026.
 
