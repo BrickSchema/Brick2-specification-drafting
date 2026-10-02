@@ -454,7 +454,7 @@
     bro:rentableArea        a owl:DatatypeProperty  ; rdfs:comment "The total rentable area of a given `Architecture` in square meters."@en .
 
     bro:maximumOccupancy    a owl:DatatypeProperty  ; rdfs:comment "The maximum number of people that can occupy a given `Architecture`."@en .
-    bro:seatingCapacity     a owl:DatatypeProperty  ; rdfS:comment "The maximum number of people that can be seated in a given `Architecture`."@en .
+    bro:seatingCapacity     a owl:DatatypeProperty  ; rdfs:comment "The maximum number of people that can be seated in a given `Architecture`."@en .
 
 #.  The subclasses are are aligned with IFC:
 
