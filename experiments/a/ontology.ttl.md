@@ -66,7 +66,7 @@
 
 ### 3.1 Name
 
-#.  Both **Brick Schema** and **RealEstateCore** have significant brand recognition that should not be discarded lightly. It would therefore make sense to keep both names alive in some way. (The number of consortiums is orthogonal to this.)
+#.  Both **Brick Schema** and **RealEstateCore** have significant brand recognition that should not be discarded lightly. It would therefore make sense to keep both names alive in some way.
 
 ### 3.2 Prefix
 
@@ -106,7 +106,7 @@
 
 ### 4.4 RDF Semantics
 
-#.  *Entailment Regime:* To determine the set of facts asserted by a graph, we assume an **RDFS Interpretation** recognizing D={ `rdf:langString`, `xsd:string`, `xsd:boolean`, `xsd:decimal`, `xsd:integer`, `xsd:double`, `xsd:float`, `xsd:date`, `xsd:time`, `xsd:dateTime`, `xsd:dateTimeStamp`, `xsd:byte`, `xsd:short`, `xsd:int`, `xsd:long`, `xsd:unsignedByte`, `xsd:unsignedShort`, `xsd:unsignedInt`, `xsd:unsignedLong`, `xsd:positiveInteger`, `xsd:nonNegativeInteger`, `xsd:negativeInteger`, `xsd:nonPositiveInteger`, `xsd:anyURI` }.
+#.  *Entailment Regime:* To determine the set of facts asserted by a graph, we assume an **RDFS Interpretation** recognizing D={ `rdf:langString`, `rdf:dirLangString`, `xsd:string`, `xsd:boolean`, `xsd:decimal`, `xsd:integer`, `xsd:double`, `xsd:float`, `xsd:date`, `xsd:time`, `xsd:dateTime`, `xsd:dateTimeStamp`, `xsd:byte`, `xsd:short`, `xsd:int`, `xsd:long`, `xsd:unsignedByte`, `xsd:unsignedShort`, `xsd:unsignedInt`, `xsd:unsignedLong`, `xsd:positiveInteger`, `xsd:nonNegativeInteger`, `xsd:negativeInteger`, `xsd:nonPositiveInteger`, `xsd:anyURI` }.
 
 #.  All SHACL shapes and rules shall be written such that their intended semantics are independent of whether RDFS entailment has been materialized in the data graph (i.e., SHACL rules shall not rely on the presence or absence of RDFS-inferred triples).
 
@@ -326,33 +326,41 @@
             bro:ExternalReference                   a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:InformationObject          .
                 bro:BACnetExternalReference         a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:ExternalReference          .
             bro:PostalAddress                       a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:InformationObject          .
+        bro:Agent                               a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:Entity                         .
+            bro:Person                          a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:Agent                          .
+            bro:PersonCollection                a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:Agent                          .
+        bro:Asset                               a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:Entity                         .
+            bro:Equipment                       a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:Asset                          .
+            bro:Furniture                       a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:Asset                          .
+        bro:Connectable                         a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:Entity                         .
+            bro:Equipment                       a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:Connectable                    .
+            bro:Junction                        a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:Connectable                    .
+            bro:Space                           a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:Connectable                    .
         bro:Point                                   a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:Entity                     .
-        bro:PointCollection                         a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:Entity                     .
-        bro:Other                                   a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:Entity                     .
-            bro:Agent                               a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:Other                      .
-                bro:Person                          a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:Agent                      .
-                bro:PersonCollection                a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:Agent                      .
-            bro:Asset                               a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:Other                      .
-                bro:Equipment                       a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:Asset                      .
-                bro:Furniture                       a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:Asset                      .
-            bro:Connectable                         a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:Other                      .
-                bro:Equipment                       a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:Connectable                .
-                bro:Junction                        a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:Connectable                .
-                bro:Space                           a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:Connectable                .
 
-### 8.1 Entity Class
+##  9. Base Classes
+
+### 9.1 Entity Class
 
 #.  *Terminology:* "entity (noun) &ndash; something that has separate and distinct existence and objective or conceptual reality"
 
     bro:Entity
         sh:property 
-            [ sh:path bro:name                  ;               ; sh:datatype  rdf:langString                   ] ,
-            [ sh:path bro:description           ;               ; sh:datatype  rdf:langString                   ] .
+            [ sh:path bro:name                  ;               ; sh:or ( [ sh:datatype rdf:langString ] [ sh:datatype rdf:dirLangString ] ) ] ,
+            [ sh:path bro:description           ;               ; sh:or ( [ sh:datatype rdf:langString ] [ sh:datatype rdf:dirLangString ] ) ] ,
 
-    bro:name                a owl:DatatypeProperty  ; rdfs:comment "A name for a given `Entity`."@en .
-    bro:description         a owl:DatatypeProperty  ; rdfs:comment "A description for a given `Entity`."@en .
+            [ sh:path bro:documentation         ;               ; sh:class bro:Document                                                      ] ,
 
-### 8.2 PhysicalObject Class
+            [ sh:path bro:hasPoint              ;               ; sh:class bro:Point                                                         ] .
+
+    bro:name                a owl:DatatypeProperty  ; rdfs:comment "A name for a given `Entity`."                                               @en.
+    bro:description         a owl:DatatypeProperty  ; rdfs:comment "A description for a given `Entity`."                                        @en.
+
+    bro:documentation       a owl:ObjectProperty    ;                                                                                              .
+
+    bro:hasPoint            a owl:ObjectProperty    ;                                                                                              .
+
+### 9.2 PhysicalObject Class
 
     bro:PhysicalObject
         rdfs:comment "An `Entity` that occupies space and has mass."@en ;
@@ -365,27 +373,24 @@
             [ sh:path bro:volume                ; sh:maxCount 1 ; sh:datatype  xsd:double                       ] ,
             [ sh:path bro:weight                ; sh:maxCount 1 ; sh:datatype  xsd:double                       ] ,
 
-            [ sh:path bro:locatedIn             ;               ; sh:class     bro:Architecture                 ] ,
-            [ sh:path bro:documentation         ;               ; sh:class     bro:Document                     ] .
+            [ sh:path bro:locatedIn             ;               ; sh:class     bro:Architecture                 ] .
 
-    bro:geometry            a owl:ObjectProperty    ; rdfs:comment "A spatial representation for a given `PhysicalObject`."@en .
+    bro:geometry            a owl:ObjectProperty    ; rdfs:comment "A spatial representation for a given `PhysicalObject`."                     @en.
 
-    bro:area                a owl:DatatypeProperty  ; rdfs:comment "The area of a given `PhysicalObject` in square meters."@en .
-    bro:length              a owl:DatatypeProperty  ; rdfs:comment "The length of a given `PhysicalObject` in meters."@en .
-    bro:perimeterLength     a owl:DatatypeProperty  ; rdfs:comment "The length of the perimeter of a given `PhysicalObject` in meters."@en .
-    bro:volume              a owl:DatatypeProperty  ; rdfs:comment "The volume of a given `PhysicalObject` in cubic meters."@en .
-    bro:weight              a owl:DatatypeProperty  ; rdfs:comment "The weight of a given `PhysicalObject` in kilograms."@en .
+    bro:area                a owl:DatatypeProperty  ; rdfs:comment "The area of a given `PhysicalObject` in square meters."                     @en.
+    bro:length              a owl:DatatypeProperty  ; rdfs:comment "The length of a given `PhysicalObject` in meters."                          @en.
+    bro:perimeterLength     a owl:DatatypeProperty  ; rdfs:comment "The length of the perimeter of a given `PhysicalObject` in meters."         @en.
+    bro:volume              a owl:DatatypeProperty  ; rdfs:comment "The volume of a given `PhysicalObject` in cubic meters."                    @en.
+    bro:weight              a owl:DatatypeProperty  ; rdfs:comment "The weight of a given `PhysicalObject` in kilograms."                       @en.
 
-    bro:locatedIn           a owl:ObjectProperty    ; rdfs:comment "`Architecture` that contains a given `PhysicalObject` spatially."@en .
+    bro:locatedIn           a owl:ObjectProperty    ; rdfs:comment "`Architecture` that contains a given `PhysicalObject` spatially."           @en.
 
-    bro:documentation       a owl:ObjectProperty    .
-
-### 8.3 InformationObject Class
+### 9.3 InformationObject Class
 
     bro:InformationObject
         rdfs:comment "An `Entity` that captures information about something."@en .
 
-##  9. Properties/Points
+##  10. Properties/Points
 
 #.  In Brick, REC, and 223, there are many different ways in which entities are linked to quantities &ndash; whether static (such as rated voltage or maximum operating temperature), mostly static (such as the date of the last scheduled maintenance or a serial number until the device is replaced), or dynamic (such as current operating temperature). Here is a selection.
 
@@ -417,13 +422,17 @@
 
 #.  💢 *Open Issue:* Unify the different ways.
 
-    bro:hasPoint            a owl:ObjectProperty    .
+### 10.1 Point Class
 
-##  10. Locations
+    bro:Point
+        sh:property
+            [ sh:path bro:hasPoint              ; sh:maxCount 0 ;                                               ] .
+
+##  11. Locations
 
 #.  Some locations are demarcated by physical boundaries (such as rooms), while others are defined logically (such as lighting zones). Brick and REC previously defined these within the same hierarchy. We are changing this and cleanly separating physical locations from logical locations.
 
-### 10.1 Architecture Class
+### 11.1 Architecture Class
 
     bro:Architecture
         sh:property
@@ -439,22 +448,20 @@
             [ sh:path bro:rentableArea          ; sh:maxCount 1 ; sh:datatype  xsd:double                       ] ,
 
             [ sh:path bro:maximumOccupancy      ; sh:maxCount 1 ; sh:datatype  xsd:integer                      ] ,
-            [ sh:path bro:seatingCapacity       ; sh:maxCount 1 ; sh:datatype  xsd:integer                      ] ,
+            [ sh:path bro:seatingCapacity       ; sh:maxCount 1 ; sh:datatype  xsd:integer                      ] .
 
-            [ sh:path bro:hasPoint              ;               ; sh:class     bro:Point                        ] .
+    bro:address             a owl:ObjectProperty    ;                                                                                              .
 
-    bro:address             a owl:ObjectProperty    .
+    bro:architectedBy       a owl:ObjectProperty    ;                                                                                              .
+    bro:constructedBy       a owl:ObjectProperty    ;                                                                                              .
+    bro:operatedBy          a owl:ObjectProperty    ;                                                                                              .
 
-    bro:architectedBy       a owl:ObjectProperty    .
-    bro:constructedBy       a owl:ObjectProperty    .
-    bro:operatedBy          a owl:ObjectProperty    .
+    bro:grossArea           a owl:DatatypeProperty  ; rdfs:comment "The total gross area of a given `Architecture` in square meters."           @en.
+    bro:netArea             a owl:DatatypeProperty  ; rdfs:comment "The total net area of a given `Architecture` in square meters."             @en.
+    bro:rentableArea        a owl:DatatypeProperty  ; rdfs:comment "The total rentable area of a given `Architecture` in square meters."        @en.
 
-    bro:grossArea           a owl:DatatypeProperty  ; rdfs:comment "The total gross area of a given `Architecture` in square meters."@en .
-    bro:netArea             a owl:DatatypeProperty  ; rdfs:comment "The total net area of a given `Architecture` in square meters."@en .
-    bro:rentableArea        a owl:DatatypeProperty  ; rdfs:comment "The total rentable area of a given `Architecture` in square meters."@en .
-
-    bro:maximumOccupancy    a owl:DatatypeProperty  ; rdfs:comment "The maximum number of people that can occupy a given `Architecture`."@en .
-    bro:seatingCapacity     a owl:DatatypeProperty  ; rdfs:comment "The maximum number of people that can be seated in a given `Architecture`."@en .
+    bro:maximumOccupancy    a owl:DatatypeProperty  ; rdfs:comment "The maximum number of people that can occupy a given `Architecture`."       @en.
+    bro:seatingCapacity     a owl:DatatypeProperty  ; rdfs:comment "The maximum number of people that can be seated in a given `Architecture`." @en.
 
 #.  The subclasses are are aligned with IFC:
 
@@ -473,19 +480,19 @@
 
 #.  💢 *Open Issue:* In REC, there is `rec:SubBuilding`/`rec:Wing` for partial buildings, but there is no vocabulary for partial sites, partial floors, or partial spaces. Should those be added?
 
-### 10.2 Zones
+### 11.2 Zones
 
 #.  Zones are simply defined as collections of physical locations (see below).
 
-### 10.3 Domain Spaces
+### 11.3 Domain Spaces
 
 #.  A "domain space" (`s223:DomainSpace`) sits conceptually between physical locations (`s223:PhysicalSpace`) and logical locations (`s223:Zone`): they are physically connectable (`s223:Connectable`) but not demarcated by physical boundaries; they are logically defined regions contained in physical locations.
 
 #.  💢 *Open Issue:* Should `DomainSpace` be adopted?
 
-##  11. Assets
+##  12. Assets
 
-### 11.1 Equipment and its Function
+### 12.1 Equipment and its Function
 
 #.  *Terminology:* "function (noun) &ndash; the action for which a person or thing is specially fitted or used or for which a thing exists"
 
@@ -499,7 +506,7 @@
 
 #.  💢 *Open Issue:* Should this distinction be made? For example, we could say that a `MultifunctionDevice` has the functions `Print`, `Copy`, and `Scan`. Or do we say that a `MultifunctionDevice` is physically composed of a `Printer`, `Copier`, and `Scanner`, even though these are not actually distinct physical parts of it?
 
-### 11.2 Asset Class
+### 12.2 Asset Class
 
     bro:Asset
         rdfs:comment "An `Entity` that is of value to a person, organization, or other entity, whether tangible or intangible."@en ;
@@ -521,72 +528,75 @@
             [ sh:path bro:initialCost           ; sh:maxCount 1 ;                                               ] ,
             [ sh:path bro:maintenanceInterval   ;               ; sh:datatype  xsd:duration                     ] .
 
-    bro:assetTag            a owl:DatatypeProperty  .
-    bro:modelNumber         a owl:DatatypeProperty  .
-    bro:serialNumber        a owl:DatatypeProperty  .
+    bro:assetTag            a owl:DatatypeProperty  ;                                           .
+    bro:modelNumber         a owl:DatatypeProperty  ;                                           .
+    bro:serialNumber        a owl:DatatypeProperty  ;                                           .
 
-    bro:commissionedBy      a owl:ObjectProperty    .
-    bro:installedBy         a owl:ObjectProperty    .
-    bro:manufacturedBy      a owl:ObjectProperty    .
-    bro:ownedBy             a owl:ObjectProperty    ; owl:inverseOf bro:owns .
-    bro:servicedBy          a owl:ObjectProperty    .
+    bro:commissionedBy      a owl:ObjectProperty    ;                                           .
+    bro:installedBy         a owl:ObjectProperty    ;                                           .
+    bro:manufacturedBy      a owl:ObjectProperty    ;                                           .
+    bro:ownedBy             a owl:ObjectProperty    ; owl:inverseOf bro:owns                    .
+    bro:servicedBy          a owl:ObjectProperty    ;                                           .
 
-    bro:commissioningDate   a owl:DatatypeProperty  .
-    bro:installationDate    a owl:DatatypeProperty  .
-    bro:turnoverDate        a owl:DatatypeProperty  .
+    bro:commissioningDate   a owl:DatatypeProperty  ;                                           .
+    bro:installationDate    a owl:DatatypeProperty  ;                                           .
+    bro:turnoverDate        a owl:DatatypeProperty  ;                                           .
 
-    bro:initialCost         a owl:DatatypeProperty  .
-    bro:maintenanceInterval a owl:DatatypeProperty  .
+    bro:initialCost         a owl:DatatypeProperty  ;                                           .
+    bro:maintenanceInterval a owl:DatatypeProperty  ;                                           .
 
-### 11.3 Equipment Class
+### 12.3 Equipment Class
 
     bro:Equipment
         sh:property
-            [ sh:path bro:hasPoint              ;               ; sh:class     bro:Point                        ] ,
             [ sh:path bro:ipAddress             ;               ; sh:datatype  xsd:string                       ] ,
             [ sh:path bro:macAddress            ;               ; sh:datatype  xsd:string                       ] .
 
-    bro:ipAddress           a owl:DatatypeProperty  .
-    bro:macAddress          a owl:DatatypeProperty  .
+    bro:ipAddress           a owl:DatatypeProperty  ;                                           .
+    bro:macAddress          a owl:DatatypeProperty  ;                                           .
 
-### 11.4 Furniture Class
+### 12.4 Furniture Class
 
-##  12. Connections
+#.  This section intentionally left blank.
 
-#.  Connections are modeled after 223:
+##  13. Connections
+
+#.  Connections are modeled after 223.
+
+### 13.1 Relations
 
 #.  &bull; `Connectable` &ndash;*connected*&rarr; `Connectable` <br>
 #.  &bull; `Connectable` &larr;*connected*&ndash; `Connectable`
 
-    bro:connected           a owl:SymmetricProperty .
+    bro:connected           a owl:SymmetricProperty ;                                           .
 
 #.  &bull; `Connectable` &ndash;*connectedTo*&rarr; `Connectable` (replaces `brick:feeds`/`rec:feeds`) <br>
 #.  &bull; `Connectable` &larr;*connectedFrom*&ndash; `Connectable`
 
-    bro:connectedTo         a owl:ObjectProperty    ; owl:inverseOf bro:connectedFrom .
-    bro:connectedFrom       a owl:ObjectProperty    ; owl:inverseOf bro:connectedTo .
+    bro:connectedTo         a owl:ObjectProperty    ; owl:inverseOf bro:connectedFrom           .
+    bro:connectedFrom       a owl:ObjectProperty    ; owl:inverseOf bro:connectedTo             .
 
 #.  &bull; `Connectable` &ndash;*connectedThrough*&rarr; `Connection` &ndash;*connectsTo*&rarr; `Connectable` <br>
 #.  &bull; `Connectable` &larr;*connectsFrom*&ndash; `Connection` &larr;*connectedThrough*&ndash; `Connectable`
 
-    bro:connectedThrough    a owl:ObjectProperty    .
-    bro:connectsFrom        a owl:ObjectProperty    .
-    bro:connectsTo          a owl:ObjectProperty    .
+    bro:connectedThrough    a owl:ObjectProperty    ;                                           .
+    bro:connectsFrom        a owl:ObjectProperty    ;                                           .
+    bro:connectsTo          a owl:ObjectProperty    ;                                           .
 
 #.  &bull; `Connectable` &ndash;*hasConnectionPoint*&rarr; `ConnectionPoint` &ndash;*connectsThrough*&rarr; `Connection` &ndash;*connectsAt*&rarr; `ConnectionPoint` &ndash;*isConnectionPointOf*&rarr; `Connectable` <br>
 #.  &bull; `Connectable` &larr;*isConnectionPointOf*&ndash; `ConnectionPoint` &larr;*connectsAt*&ndash; `Connection` &larr;*connectsThrough*&ndash; `ConnectionPoint` &larr;*hasConnectionPoint*&ndash; `Connectable`
 
-    bro:hasConnectionPoint  a owl:ObjectProperty    ; owl:inverseOf bro:isConnectionPointOf .
-    bro:isConnectionPointOf a owl:ObjectProperty    ; owl:inverseOf bro:hasConnectionPoint .
+    bro:hasConnectionPoint  a owl:ObjectProperty    ; owl:inverseOf bro:isConnectionPointOf     .
+    bro:isConnectionPointOf a owl:ObjectProperty    ; owl:inverseOf bro:hasConnectionPoint      .
 
-    bro:connectsAt          a owl:ObjectProperty    ; owl:inverseOf bro:connectsThrough .
-    bro:connectsThrough     a owl:ObjectProperty    ; owl:inverseOf bro:connectsAt .
+    bro:connectsAt          a owl:ObjectProperty    ; owl:inverseOf bro:connectsThrough         .
+    bro:connectsThrough     a owl:ObjectProperty    ; owl:inverseOf bro:connectsAt              .
 
 #.  &bull; `ConnectionPoint` &ndash;mapsTo&rarr; `ConnectionPoint`
 
     bro:mapsTo              a owl:ObjectProperty    .
 
-### 12.1 Connectable Class
+### 13.2 Connectable Class
 
     bro:Connectable
         rdfs:comment "An `Entity` that can be physically connected to another entity."@en ;
@@ -600,7 +610,7 @@
 
             [ sh:path bro:hasConnectionPoint    ;               ; sh:class     bro:ConnectionPoint              ] .
 
-### 12.2 Connection Class
+### 13.3 Connection Class
 
     bro:Connection
         sh:property
@@ -609,7 +619,7 @@
 
             [ sh:path bro:connectsAt            ;               ; sh:class     bro:ConnectionPoint              ] .
 
-### 12.3 ConnectionPoint Class
+### 13.4 ConnectionPoint Class
 
     bro:ConnectionPoint
         sh:property
@@ -630,28 +640,28 @@
         sh:property
             [ sh:path bro:mapsTo                ;               ; sh:class     bro:OutletConnectionPoint        ] .
 
-##  13. Agents
+##  14. Agents
 
-### 13.1 Agent Class
+### 14.1 Agent Class
 
     bro:Agent
         rdfs:comment "An `Entity` that can act on behalf of itself or others, such as a person, organization, or software agent."@en ;
         sh:property
             [ sh:path bro:owns                  ;               ; sh:class     bro:Asset                        ] .
 
-    bro:owns                a owl:ObjectProperty    ; owl:inverseOf bro:ownedBy              .
+    bro:owns                a owl:ObjectProperty    ; owl:inverseOf bro:ownedBy                 .
 
-### 13.2 Person Class
+### 14.2 Person Class
 
     bro:Person
         sh:property
             [ sh:path bro:name                  ;               ; sh:datatype  xsd:string                       ] .
 
-### 13.3 Organizations
+### 14.3 Organizations
 
 #.  Organization are simplify defined as collections of `bro:Person` (see below).
 
-### 13.4 PostalAddress Class
+### 14.4 PostalAddress Class
 
     bro:PostalAddress
         sh:property
@@ -664,18 +674,18 @@
             [ sh:path bro:region                ; sh:maxCount 1 ; sh:datatype  xsd:string                       ] ,
             [ sh:path bro:country               ; sh:maxCount 1 ; sh:datatype  xsd:string                       ] .
 
-    bro:addressLine1        a owl:DatatypeProperty  ; rdfs:comment "The first line of a given `PostalAddress`."@en .
-    bro:addressLine2        a owl:DatatypeProperty  ; rdfs:comment "The second line of a given `PostalAddress`."@en .
-    bro:city                a owl:DatatypeProperty  ; rdfs:comment "The city specified by a given `PostalAddress`."@en .
-    bro:postalCode          a owl:DatatypeProperty  ; rdfs:comment "The postal code specified by a given `PostalAddress`."@en .
-    bro:region              a owl:DatatypeProperty  ; rdfs:comment "The region, state, or province specified by a given `PostalAddress`."@en .
-    bro:country             a owl:DatatypeProperty  ; rdfs:comment "The country specified by a given `PostalAddress`."@en .
+    bro:addressLine1        a owl:DatatypeProperty  ; rdfs:comment "The first line of a given `PostalAddress`."                                 @en.
+    bro:addressLine2        a owl:DatatypeProperty  ; rdfs:comment "The second line of a given `PostalAddress`."                                @en.
+    bro:city                a owl:DatatypeProperty  ; rdfs:comment "The city specified by a given `PostalAddress`."                             @en.
+    bro:postalCode          a owl:DatatypeProperty  ; rdfs:comment "The postal code specified by a given `PostalAddress`."                      @en.
+    bro:region              a owl:DatatypeProperty  ; rdfs:comment "The region, state, or province specified by a given `PostalAddress`."       @en.
+    bro:country             a owl:DatatypeProperty  ; rdfs:comment "The country specified by a given `PostalAddress`."                          @en.
 
 #.  *Note:* `bro:name` would be providing a name for the postal address itself, not the name of the recipient. To avoid confusion, giving a postal address a name is forbidden.
 
-##  14. Composition
+##  15. Composition
 
-### 14.1 hasPart
+### 15.1 hasPart
 
     bro:PhysicalObject                  sh:property [ sh:path bro:hasPart   ;               ; sh:class     bro:PhysicalObject        ] .
     bro:InformationObject               sh:property [ sh:path bro:hasPart   ;               ; sh:class     bro:InformationObject     ] .
@@ -687,7 +697,7 @@
     bro:Furniture                       sh:property [ sh:path bro:hasPart   ;               ; sh:class     bro:Furniture             ] .
     bro:Person                          sh:property [ sh:path bro:hasPart   ; sh:maxCount 0 ;                                        ] .
 
-    bro:Site                            sh:property [ sh:path bro:hasPart   ;               ; sh:or ( [ sh:class bro:Building        ] [ sh:class bro:ExternalSpace             ] ) ] .
+    bro:Site                            sh:property [ sh:path bro:hasPart   ;               ; sh:or ( [ sh:class bro:Building ] [ sh:class bro:ExternalSpace ] ) ] .
     bro:Building                        sh:property [ sh:path bro:hasPart   ;               ; sh:class     bro:Floor                 ] .
     bro:Floor                           sh:property [ sh:path bro:hasPart   ;               ; sh:class     bro:Space                 ] .
     bro:Space                           sh:property [ sh:path bro:hasPart   ; sh:maxCount 0 ;                                        ] .
@@ -698,7 +708,7 @@
     bro:ExternalReference               sh:property [ sh:path bro:hasPart   ; sh:maxCount 0 ;                                        ] .
     bro:PostalAddress                   sh:property [ sh:path bro:hasPart   ; sh:maxCount 0 ;                                        ] .
 
-### 14.2 partOf
+### 15.2 partOf
 
     bro:PhysicalObject                  sh:property [ sh:path bro:partOf    ; sh:maxCount 1 ; sh:class     bro:PhysicalObject        ] .
     bro:InformationObject               sh:property [ sh:path bro:partOf    ; sh:maxCount 1 ; sh:class     bro:InformationObject     ] .
@@ -721,20 +731,18 @@
     bro:ExternalReference               sh:property [ sh:path bro:partOf    ; sh:maxCount 0 ;                                        ] .
     bro:PostalAddress                   sh:property [ sh:path bro:partOf    ; sh:maxCount 0 ;                                        ] .
 
-##  15. Collections
+##  16. Collections
 
-    bro:PhysicalObjectCollection        rdfs:comment "A grouping of `PhysicalObject`s and/or other `PhysicalObjectCollection`s.\n\nWhere applicable, use a more specific subclass to indicate the purpose of the grouping; create a new subclass when an appropriate one does not exist."@en .
+    bro:PhysicalObjectCollection        rdfs:comment "A grouping of `PhysicalObject`s and/or other `PhysicalObjectCollection`s.\n\nWhere applicable, use a more specific subclass to indicate the purpose of the grouping; create a new subclass when an appropriate one does not exist."   @en.
 
-    bro:ArchitectureCollection          rdfs:comment "A grouping of `Architecture` and/or other `ArchitectureCollection`s.\n\nWhere applicable, use a more specific subclass to indicate the purpose of the grouping; create a new subclass when an appropriate one does not exist."@en .
-    bro:ConnectionCollection            rdfs:comment "A grouping of `Connection`s and/or other `ConnectionCollection`s.\n\nWhere applicable, use a more specific subclass to indicate the purpose of the grouping; create a new subclass when an appropriate one does not exist."@en .
-    bro:ConnectionPointCollection       rdfs:comment "A grouping of `ConnectionPoint`s and/or other `ConnectionPointCollection`s.\n\nWhere applicable, use a more specific subclass to indicate the purpose of the grouping; create a new subclass when an appropriate one does not exist."@en .
-    bro:EquipmentCollection             rdfs:comment "A grouping of `Equipment` and/or other `EquipmentCollection`s.\n\nWhere applicable, use a more specific subclass to indicate the purpose of the grouping; create a new subclass when an appropriate one does not exist."@en .
-    bro:FurnitureCollection             rdfs:comment "A grouping of `Furniture` and/or other `FurnitureCollection`s.\n\nWhere applicable, use a more specific subclass to indicate the purpose of the grouping; create a new subclass when an appropriate one does not exist."@en .
-    bro:PersonCollection                rdfs:comment "A grouping of `Person`s and/or other `PersonCollection`s.\n\nWhere applicable, use a more specific subclass to indicate the purpose of the grouping; create a new subclass when an appropriate one does not exist."@en .
+    bro:ArchitectureCollection          rdfs:comment "A grouping of `Architecture` and/or other `ArchitectureCollection`s.\n\nWhere applicable, use a more specific subclass to indicate the purpose of the grouping; create a new subclass when an appropriate one does not exist."        @en.
+    bro:ConnectionCollection            rdfs:comment "A grouping of `Connection`s and/or other `ConnectionCollection`s.\n\nWhere applicable, use a more specific subclass to indicate the purpose of the grouping; create a new subclass when an appropriate one does not exist."           @en.
+    bro:ConnectionPointCollection       rdfs:comment "A grouping of `ConnectionPoint`s and/or other `ConnectionPointCollection`s.\n\nWhere applicable, use a more specific subclass to indicate the purpose of the grouping; create a new subclass when an appropriate one does not exist." @en.
+    bro:EquipmentCollection             rdfs:comment "A grouping of `Equipment` and/or other `EquipmentCollection`s.\n\nWhere applicable, use a more specific subclass to indicate the purpose of the grouping; create a new subclass when an appropriate one does not exist."              @en.
+    bro:FurnitureCollection             rdfs:comment "A grouping of `Furniture` and/or other `FurnitureCollection`s.\n\nWhere applicable, use a more specific subclass to indicate the purpose of the grouping; create a new subclass when an appropriate one does not exist."              @en.
+    bro:PersonCollection                rdfs:comment "A grouping of `Person`s and/or other `PersonCollection`s.\n\nWhere applicable, use a more specific subclass to indicate the purpose of the grouping; create a new subclass when an appropriate one does not exist."                   @en.
 
-    bro:PointCollection                 rdfs:comment "A grouping of `Point`s and/or other `PointCollection`s.\n\nWhere applicable, use a more specific subclass to indicate the purpose of the grouping; create a new subclass when an appropriate one does not exist."@en .
-
-### 15.1 hasMember
+### 16.1 hasMember
 
     bro:PhysicalObjectCollection        sh:property [ sh:path bro:hasMember ;               ; sh:or ( [ sh:class bro:PhysicalObject  ] [ sh:class bro:PhysicalObjectCollection  ] ) ] .
 
@@ -754,9 +762,7 @@
 
     bro:Loop                            sh:property [ sh:path bro:hasMember ;               ; sh:or ( [ sh:class bro:Connection      ]                                            ) ] .
 
-    bro:PointCollection                 sh:property [ sh:path bro:hasMember ;               ; sh:or ( [ sh:class bro:Point           ] [ sh:class bro:PointCollection           ] ) ] .
-
-### 15.2 memberOf
+### 16.2 memberOf
 
     bro:PhysicalObjectCollection        sh:property [ sh:path bro:memberOf  ] .
 
@@ -776,15 +782,15 @@
     bro:Furniture                       sh:property [ sh:path bro:memberOf  ] .
     bro:Person                          sh:property [ sh:path bro:memberOf  ] .
 
-##  16. Ontology
+##  17. Ontology
 
     <https://ontology.brickschema.org/2.0/>
         a owl:Ontology ;
-        owl:versionInfo "2.0.0-alpha.4" .
+        owl:versionInfo "2.0.0-alpha.5" .
 
-##  17. References
+##  18. References
 
-### 17.1 Design Inputs
+### 18.1 Design Inputs
 
 #.  [1] @PeteHart, [REC 5 Ontology Translation Principles and Methodology](https://github.com/RealEstateCore/rec-5/blob/main/docs/ontology-principles.pdf), 2026-01-30.
 
@@ -794,7 +800,7 @@
 
 #.  [4] @ektrah, [Initial wish list for Brick 2.0](https://github.com/BrickSchema/Brick2-specification-drafting/pull/1), 2025-10-09.
 
-### 17.2 Specifications
+### 18.2 Specifications
 
 #.  W3C, [RDF 1.2 Concepts and Abstract Data Model](https://w3c.github.io/rdf-concepts/spec/), Editor's Draft, 2026.
 
