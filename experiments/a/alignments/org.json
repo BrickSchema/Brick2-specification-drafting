@@ -1,8 +1,8 @@
 {
   "ChangeEvent": null,
-  "FormalOrganization": "Organization",
+  "FormalOrganization": "FormalOrganization",
   "Membership": null,
-  "Organization": "PersonCollection",
+  "Organization": "Organization",
   "OrganizationalCollaboration": null,
   "OrganizationalUnit": "OrganizationalUnit",
   "Post": null,

@@ -1,0 +1,122 @@
+@prefix energystar: <https://portfoliomanager.energystar.gov/pm/glossary#> .
+@prefix owl:        <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs:       <http://www.w3.org/2000/01/rdf-schema#> .
+
+energystar:PropertyType
+    a owl:Class ;
+    rdfs:subClassOf owl:NamedIndividual .
+
+energystar:BankBranch                               a energystar:PropertyType ; rdfs:label "Bank Branch"@en .
+energystar:FinancialOffice                          a energystar:PropertyType ; rdfs:label "Financial Office"@en .
+
+energystar:AdultEducation                           a energystar:PropertyType ; rdfs:label "Adult Education"@en .
+energystar:CollegeUniversity                        a energystar:PropertyType ; rdfs:label "College/University"@en .
+energystar:K12School                                a energystar:PropertyType ; rdfs:label "K-12 School"@en .
+energystar:PreschoolDaycare                         a energystar:PropertyType ; rdfs:label "Pre-school/Daycare"@en .
+energystar:VocationalSchool                         a energystar:PropertyType ; rdfs:label "Vocational School"@en .
+energystar:OtherEducation                           a energystar:PropertyType ; rdfs:label "Other - Education"@en .
+
+energystar:Aquarium                                 a energystar:PropertyType ; rdfs:label "Aquarium"@en .
+energystar:BarNightclub                             a energystar:PropertyType ; rdfs:label "Bar/Nightclub"@en .
+energystar:BowlingAlley                             a energystar:PropertyType ; rdfs:label "Bowling Alley"@en .
+energystar:Casino                                   a energystar:PropertyType ; rdfs:label "Casino"@en .
+energystar:ConventionCenter                         a energystar:PropertyType ; rdfs:label "Convention Center"@en .
+energystar:FitnessCenterHealthClubGym               a energystar:PropertyType ; rdfs:label "Fitness Center/Health Club/Gym"@en .
+energystar:IceCurlingRink                           a energystar:PropertyType ; rdfs:label "Ice/Curling Rink"@en .
+energystar:IndoorArena                              a energystar:PropertyType ; rdfs:label "Indoor Arena"@en .
+energystar:MovieTheater                             a energystar:PropertyType ; rdfs:label "Movie Theater"@en .
+energystar:Museum                                   a energystar:PropertyType ; rdfs:label "Museum"@en .
+energystar:PerformingArts                           a energystar:PropertyType ; rdfs:label "Performing Arts"@en .
+energystar:RaceTrack                                a energystar:PropertyType ; rdfs:label "Race Track"@en .
+energystar:RollerRink                               a energystar:PropertyType ; rdfs:label "Roller Rink"@en .
+energystar:SocialMeetingHall                        a energystar:PropertyType ; rdfs:label "Social/Meeting Hall"@en .
+energystar:StadiumClosed                            a energystar:PropertyType ; rdfs:label "Stadium (Closed)"@en .
+energystar:StadiumOpen                              a energystar:PropertyType ; rdfs:label "Stadium (Open)"@en .
+energystar:SwimmingPool                             a energystar:PropertyType ; rdfs:label "Swimming Pool"@en .
+energystar:Zoo                                      a energystar:PropertyType ; rdfs:label "Zoo"@en .
+energystar:OtherEntertainmentPublicAssembly         a energystar:PropertyType ; rdfs:label "Other - Entertainment/Public Assembly"@en .
+energystar:OtherRecreation                          a energystar:PropertyType ; rdfs:label "Other - Recreation"@en .
+energystar:OtherStadium                             a energystar:PropertyType ; rdfs:label "Other - Stadium"@en .
+
+energystar:BarNightclub                             a energystar:PropertyType ; rdfs:label "Bar/Nightclub"@en .
+energystar:ConvenienceStoreWithGasStation           a energystar:PropertyType ; rdfs:label "Convenience Store with Gas Station"@en .
+energystar:ConvenienceStoreWithoutGasStation        a energystar:PropertyType ; rdfs:label "Convenience Store without Gas Station"@en .
+energystar:FastFoodRestaurant                       a energystar:PropertyType ; rdfs:label "Fast Food Restaurant"@en .
+energystar:FoodSales                                a energystar:PropertyType ; rdfs:label "Food Sales"@en .
+energystar:FoodService                              a energystar:PropertyType ; rdfs:label "Food Service"@en .
+energystar:Restaurant                               a energystar:PropertyType ; rdfs:label "Restaurant"@en .
+energystar:SupermarketGroceryStore                  a energystar:PropertyType ; rdfs:label "Supermarket/Grocery Store"@en .
+energystar:WholesaleClubSupercenter                 a energystar:PropertyType ; rdfs:label "Wholesale Club/Supercenter"@en .
+energystar:OtherRestaurantBar                       a energystar:PropertyType ; rdfs:label "Other - Restaurant/Bar"@en .
+
+energystar:AmbulatorySurgicalCenter                 a energystar:PropertyType ; rdfs:label "Ambulatory Surgical Center"@en .
+energystar:HospitalGeneralMedicalAndSurgical        a energystar:PropertyType ; rdfs:label "Hospital (General Medical & Surgical)"@en .
+energystar:MedicalOffice                            a energystar:PropertyType ; rdfs:label "Medical Office"@en .
+energystar:OutpatientRehabilitationPhysicalTherapy  a energystar:PropertyType ; rdfs:label "Outpatient Rehabilitation/Physical Therapy"@en .
+energystar:ResidentialCareFacility                  a energystar:PropertyType ; rdfs:label "Residential Care Facility"@en .
+energystar:SeniorCareCommunity                      a energystar:PropertyType ; rdfs:label "Senior Living Community"@en .
+energystar:UrgentCareClinicOtherOutpatient          a energystar:PropertyType ; rdfs:label "Urgent Care/Clinic/Other Outpatient"@en .
+energystar:OtherSpecialtyHospital                   a energystar:PropertyType ; rdfs:label "Other - Specialty Hospital"@en .
+
+energystar:Barracks                                 a energystar:PropertyType ; rdfs:label "Barracks"@en .
+energystar:Hotel                                    a energystar:PropertyType ; rdfs:label "Hotel"@en .
+energystar:MultifamilyHousing                       a energystar:PropertyType ; rdfs:label "Multifamily Housing"@en .
+energystar:PrisonIncarceration                      a energystar:PropertyType ; rdfs:label "Prison/Incarceration"@en .
+energystar:ResidenceHallDormitory                   a energystar:PropertyType ; rdfs:label "Residence Hall/Dormitory"@en .
+energystar:SeniorCareCommunity                      a energystar:PropertyType ; rdfs:label "Senior Living Community"@en .
+energystar:SingleFamilyHome                         a energystar:PropertyType ; rdfs:label "Single Family Home"@en .
+energystar:OtherLodgingResidential                  a energystar:PropertyType ; rdfs:label "Other - Lodging/Residential"@en .
+
+energystar:ManufacturingIndustrialPlant             a energystar:PropertyType ; rdfs:label "Manufacturing/Industrial Plant"@en .
+
+energystar:mixeduse                                 a energystar:PropertyType ; rdfs:label "Mixed Use Property"@en .
+
+energystar:MedicalOffice                            a energystar:PropertyType ; rdfs:label "Medical Office"@en .
+energystar:Office                                   a energystar:PropertyType ; rdfs:label "Office"@en .
+energystar:VeterinaryOffice                         a energystar:PropertyType ; rdfs:label "Veterinary Office"@en .
+
+energystar:Parking                                  a energystar:PropertyType ; rdfs:label "Parking"@en .
+
+energystar:Courthouse                               a energystar:PropertyType ; rdfs:label "Courthouse"@en .
+energystar:DrinkingWaterTreatmentAndDistribution    a energystar:PropertyType ; rdfs:label "Drinking Water Treatment & Distribution"@en .
+energystar:FireStation                              a energystar:PropertyType ; rdfs:label "Fire Station"@en .
+energystar:Library                                  a energystar:PropertyType ; rdfs:label "Library"@en .
+energystar:MailingCenterPostOffice                  a energystar:PropertyType ; rdfs:label "Mailing Center/Post Office"@en .
+energystar:PoliceStation                            a energystar:PropertyType ; rdfs:label "Police Station"@en .
+energystar:PrisonIncarceration                      a energystar:PropertyType ; rdfs:label "Prison/Incarceration"@en .
+energystar:SocialMeetingHall                        a energystar:PropertyType ; rdfs:label "Social/Meeting Hall"@en .
+energystar:TransportationTerminalStation            a energystar:PropertyType ; rdfs:label "Transportation Terminal/Station"@en .
+energystar:WastewaterTreatmentPlant                 a energystar:PropertyType ; rdfs:label "Wastewater Treatment Plant"@en .
+energystar:OtherPublicServices                      a energystar:PropertyType ; rdfs:label "Other - Public Services"@en .
+
+energystar:WorshipFacility                          a energystar:PropertyType ; rdfs:label "Worship Facility"@en .
+
+energystar:ConvenienceStoreWithGasStation           a energystar:PropertyType ; rdfs:label "Convenience Store with Gas Station"@en .
+energystar:ConvenienceStoreWithoutGasStation        a energystar:PropertyType ; rdfs:label "Convenience Store without Gas Station"@en .
+energystar:EnclosedMall                             a energystar:PropertyType ; rdfs:label "Enclosed Mall"@en .
+energystar:LifestyleCenter                          a energystar:PropertyType ; rdfs:label "Lifestyle Center"@en .
+energystar:RetailStore                              a energystar:PropertyType ; rdfs:label "Retail Store"@en .
+energystar:StripMall                                a energystar:PropertyType ; rdfs:label "Strip Mall"@en .
+energystar:SupermarketGroceryStore                  a energystar:PropertyType ; rdfs:label "Supermarket/Grocery Store"@en .
+energystar:AutomobileDealership                     a energystar:PropertyType ; rdfs:label "Vehicle Dealership"@en .
+energystar:WholesaleClubSupercenter                 a energystar:PropertyType ; rdfs:label "Wholesale Club/Supercenter"@en .
+energystar:OtherMall                                a energystar:PropertyType ; rdfs:label "Other - Mall"@en .
+
+energystar:DataCenter                               a energystar:PropertyType ; rdfs:label "Data Center"@en .
+energystar:Laboratory                               a energystar:PropertyType ; rdfs:label "Laboratory"@en .
+energystar:OtherTechnologyScience                   a energystar:PropertyType ; rdfs:label "Other - Technology/Science"@en .
+
+energystar:DataCenter                               a energystar:PropertyType ; rdfs:label "Data Center"@en .
+energystar:PersonalServices                         a energystar:PropertyType ; rdfs:label "Personal Services (Health/Beauty, Dry Cleaning, etc.)"@en .
+energystar:RepairServices                           a energystar:PropertyType ; rdfs:label "Repair Services (Vehicle, Shoe, Locksmith, etc.)"@en .
+energystar:OtherServices                            a energystar:PropertyType ; rdfs:label "Other - Services"@en .
+
+energystar:DrinkingWaterTreatmentAndDistribution    a energystar:PropertyType ; rdfs:label "Drinking Water Treatment & Distribution"@en .
+energystar:EnergyPowerStation                       a energystar:PropertyType ; rdfs:label "Energy/Power Station"@en .
+energystar:WastewaterTreatmentPlant                 a energystar:PropertyType ; rdfs:label "Wastewater Treatment Plant"@en .
+energystar:OtherUtility                             a energystar:PropertyType ; rdfs:label "Other - Utility"@en .
+
+energystar:SelfStorageFacility                      a energystar:PropertyType ; rdfs:label "Self-Storage Facility"@en .
+energystar:DistributionCenter                       a energystar:PropertyType ; rdfs:label "Distribution Center"@en .
+energystar:NonRefrigeratedWarehouse                 a energystar:PropertyType ; rdfs:label "Non-Refrigerated Warehouse"@en .
+energystar:RefrigeratedWarehouse                    a energystar:PropertyType ; rdfs:label "Refrigerated Warehouse"@en .

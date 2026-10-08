@@ -1,10 +1,10 @@
 {
   "IfcBuilding": "Building",
-  "IfcBuildingStorey": "Floor",
-  "IfcExternalSpatialElement": "ExternalSpace",
+  "IfcBuildingStorey": "Storey",
+  "IfcExternalSpatialElement": "OutdoorSpace",
   "IfcExternalSpatialStructureElement": "Architecture",
   "IfcSite": "Site",
   "IfcSpace": "Space",
   "IfcSpatialStructureElement": "Architecture",
-  "IfcSpatialZone": "ArchitectureCollection"
+  "IfcSpatialZone": "DomainSpace"
 }

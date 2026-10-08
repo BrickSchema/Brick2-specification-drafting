@@ -2,6 +2,6 @@
   "Zone": "Architecture",
   "Site": "Site",
   "Building": "Building",
-  "Storey": "Floor",
+  "Storey": "Storey",
   "Space": "Space"
 }
