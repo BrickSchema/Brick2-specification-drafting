@@ -183,7 +183,7 @@
 
 #.  We will keep using Brick's established deprecation mechanism: Instead of removing a concept (class, property, ...) from the graph, we add a triple stating that it is deprecated. There may be additional metadata, such as the version since when it is deprecated, a message helping users to migrate, and a suitable replacement for automatic migration (if available).
 
-#.  Because it's an additive change, deprecating something cannot negatively impact users: The deprecation is more like a hint that the node should no longer be referred to (for whatever reason), but the deprecated node still exists and is fully usable.
+#.  Because it's an additive change, deprecating something cannot negatively impact users: The deprecation is more like a hint that the concept should no longer be referred to (for whatever reason), but the deprecated concept still exists and is fully usable.
 
 #.  *Compatibility Rule:* We do not consider the addition, change, and removal of deprecation statements to break compatibility.
 
@@ -223,7 +223,7 @@
 
 #.  *Compatibility Rule:* The addition of aliasing statements is a non-breaking change as long as the new group member is added to the ontology in the same release. The change of aliasing statements is a non-breaking change as long as the new canonical class is already a member of the group. Any other addition, change, or removal of aliasing statements is a breaking change.
 
-#.  When a node is an alias, any other statements about that node shall be removed from the ontology, with the exception of any deprecation statements. As a consequence, users must be prepared to always follow aliasing statements to the canonical class first (e.g., `?x bro:aliasClassOf?/rdfs:label ?y` instead of `?x rdfs:label ?y`).
+#.  When a concept is an alias, any other statements about that concept shall be removed from the ontology, with the exception of any deprecation statements. As a consequence, users must be prepared to always follow aliasing statements to the canonical class first (e.g., `?x bro:aliasClassOf?/rdfs:label ?y` instead of `?x rdfs:label ?y`).
 
 #.  *Compatibility Rule:* Removing statements about an alias is a non-breaking change.
 
@@ -253,26 +253,6 @@
 
 #.  We cleanly distinguish composition from aggregation. Composition is expressed with `bro:hasPart`/`bro:partOf`, while aggregation is expressed with `bro:hasMember`/`bro:memberOf`.
 
-    bro:hasPart
-        a owl:ObjectProperty, owl:InverseFunctionalProperty ;
-        owl:inverseOf bro:partOf ;
-        rdfs:comment "Relates a whole to an entity that is a part of it."@en .
-
-    bro:partOf
-        a owl:ObjectProperty, owl:FunctionalProperty ;
-        owl:inverseOf bro:hasPart ;
-        rdfs:comment "Relates an entity to the whole of which it is a part."@en .
-
-    bro:hasMember
-        a owl:ObjectProperty ;
-        owl:inverseOf bro:memberOf ;
-        rdfs:comment "Relates a collection to an entity that is a member of it."@en .
-
-    bro:memberOf
-        a owl:ObjectProperty ;
-        owl:inverseOf bro:hasMember ;
-        rdfs:comment "Relates an entity to a collection of which it is a member."@en .
-
 ### 7.4 Typed Collection Variance
 
 #.  For typed collections, we need to decide whether they are **covariant** or **invariant**. For a start, they are covariant.
@@ -293,17 +273,6 @@
                 bro:Space                           a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:Architecture               .
             bro:PhysicalEquipment                   a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:PhysicalObject             .
             bro:Furniture                           a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:PhysicalObject             .
-        bro:Collection                              a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:Entity                     .
-            bro:Apartment                           a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:Collection                 .
-            bro:Campus                              a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:Collection                 .
-            bro:Inventory                           a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:Collection                 .
-            bro:Loop                                a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:Collection                 .
-            bro:Organization                        a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:Collection                 .
-            bro:Portfolio                           a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:Collection                 .
-            bro:Premises                            a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:Collection                 .
-            bro:RealEstate                          a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:Collection                 .
-            bro:System                              a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:Collection                 .
-            bro:Zone                                a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:Collection                 .
         bro:InformationObject                       a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:Entity                     .
             bro:Document                            a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:InformationObject          .
                 bro:LeaseContract                   a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:Document                   .
@@ -329,6 +298,17 @@
             bro:BidirectionalConnectionPoint        a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:ConnectionPoint            .
             bro:InletConnectionPoint                a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:ConnectionPoint            .
             bro:OutletConnectionPoint               a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:ConnectionPoint            .
+        bro:Collection                              a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:Entity                     .
+            bro:Apartment                           a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:Collection                 .
+            bro:Campus                              a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:Collection                 .
+            bro:Inventory                           a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:Collection                 .
+            bro:Loop                                a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:Collection                 .
+            bro:Organization                        a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:Collection                 .
+            bro:Portfolio                           a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:Collection                 .
+            bro:Premises                            a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:Collection                 .
+            bro:RealEstate                          a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:Collection                 .
+            bro:System                              a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:Collection                 .
+            bro:Zone                                a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:Collection                 .
         bro:Point                                   a owl:Class, sh:NodeShape ; rdfs:subClassOf bro:Entity                     .
 
 ##  9. Base Classes
@@ -545,26 +525,30 @@
 
 #.  The subclasses are are aligned with IFC:
 
-#.  &mdash; [IfcSite](https://standards.buildingsmart.org/IFC/DEV/IFC4_3/HTML/lexical/IfcSite.html)                     COMPLEX (site complex)            &rarr; collection of `bro:Site`     <br>
+#.  &mdash; [IfcSite](https://standards.buildingsmart.org/IFC/DEV/IFC4_3/HTML/lexical/IfcSite.html)                     COMPLEX (site complex)            &rarr; n/a                          <br>
 #.  &mdash; [IfcSite](https://standards.buildingsmart.org/IFC/DEV/IFC4_3/HTML/lexical/IfcSite.html)                     ELEMENT (site)                    &rarr; `bro:Site`                   <br>
 #.  &mdash; [IfcSite](https://standards.buildingsmart.org/IFC/DEV/IFC4_3/HTML/lexical/IfcSite.html)                     PARTIAL (site section)            &rarr; n/a                          <br>
-#.  &mdash; [IfcBuilding](https://standards.buildingsmart.org/IFC/DEV/IFC4_3/HTML/lexical/IfcBuilding.html)             COMPLEX (building complex)        &rarr; collection of `bro:Building` <br>
+#.  &mdash; [IfcBuilding](https://standards.buildingsmart.org/IFC/DEV/IFC4_3/HTML/lexical/IfcBuilding.html)             COMPLEX (building complex)        &rarr; n/a                          <br>
 #.  &mdash; [IfcBuilding](https://standards.buildingsmart.org/IFC/DEV/IFC4_3/HTML/lexical/IfcBuilding.html)             ELEMENT (building)                &rarr; `bro:Building`               <br>
 #.  &mdash; [IfcBuilding](https://standards.buildingsmart.org/IFC/DEV/IFC4_3/HTML/lexical/IfcBuilding.html)             PARTIAL (building section)        &rarr; n/a                          <br>
-#.  &mdash; [IfcBuildingStorey](https://standards.buildingsmart.org/IFC/DEV/IFC4_3/HTML/lexical/IfcBuildingStorey.html) COMPLEX (building storey complex) &rarr; collection of `bro:Storey`   <br>
+#.  &mdash; [IfcBuildingStorey](https://standards.buildingsmart.org/IFC/DEV/IFC4_3/HTML/lexical/IfcBuildingStorey.html) COMPLEX (building storey complex) &rarr; n/a                          <br>
 #.  &mdash; [IfcBuildingStorey](https://standards.buildingsmart.org/IFC/DEV/IFC4_3/HTML/lexical/IfcBuildingStorey.html) ELEMENT (building storey)         &rarr; `bro:Storey`                 <br>
 #.  &mdash; [IfcBuildingStorey](https://standards.buildingsmart.org/IFC/DEV/IFC4_3/HTML/lexical/IfcBuildingStorey.html) PARTIAL (partial building storey) &rarr; n/a                          <br>
-#.  &mdash; [IfcSpace](https://standards.buildingsmart.org/IFC/DEV/IFC4_3/HTML/lexical/IfcSpace.html)                   COMPLEX (space group)             &rarr; collection of `bro:Space`    <br>
+#.  &mdash; [IfcSpace](https://standards.buildingsmart.org/IFC/DEV/IFC4_3/HTML/lexical/IfcSpace.html)                   COMPLEX (space group)             &rarr; n/a                          <br>
 #.  &mdash; [IfcSpace](https://standards.buildingsmart.org/IFC/DEV/IFC4_3/HTML/lexical/IfcSpace.html)                   ELEMENT (space)                   &rarr; `bro:Space`                  <br>
 #.  &mdash; [IfcSpace](https://standards.buildingsmart.org/IFC/DEV/IFC4_3/HTML/lexical/IfcSpace.html)                   PARTIAL (partial space)           &rarr; n/a                          <br>
 
 #.  💢 *Open Issue:* In REC, there is `rec:SubBuilding`/`rec:Wing` for partial buildings, but there is no vocabulary for partial sites, partial floors, or partial spaces. Should those be added?
 
+#.  💢 *Open Issue:* In IFC, there are also site complexes, building complexes, storey complexes, and space groups. Should those be added?
+
 ### 11.2 Building Class
 
-#.  REC has been providing a taxonomy that consists of `rec:Hospital`, `rec:School`, `rec:ShoppingMall`, `rec:Stadium`, and `rec:VirtualBuilding`.
+#.  REC has been providing a taxonomy for building types that consists of five elements: `rec:Hospital`, `rec:School`, `rec:ShoppingMall`, `rec:Stadium`, and `rec:VirtualBuilding`.
 
-#.  There are other taxonomies that be used to provide a more comprehensive set. For example, buildings could be classified using the [Energy Star Property Types taxonomy](https://www.energystar.gov/buildings/benchmark/understand-metrics/property-types).
+#.  There are other taxonomies that provide a more comprehensive set, such as the [Energy Star Property Types taxonomy](https://www.energystar.gov/buildings/benchmark/understand-metrics/property-types).
+
+#.  💢 *Open Issue:* Significantly extend the taxonomy in Brick 2.0 (e.g., by copying from Energy Star) or allow users to choose the most appropriate taxonomy and provide the predicates for them (instead of defining a comprehensive taxonomy ourselves)?
 
     @prefix energystar: <https://portfoliomanager.energystar.gov/pm/glossary#> .
 
@@ -576,11 +560,9 @@
         a owl:AnnotationProperty ;
         rdfs:comment "An [Energy Star Property Type](https://www.energystar.gov/buildings/benchmark/understand-metrics/property-types) indicating a single, primary use of a given `Building`." .
 
-#.  Brick 2.0 could also support additional taxomies, so users can choose the most appropriate taxonomy (rather than trying to build a comprehensive taxonomy ourselves).
-
 ### 11.3 Storey Class
 
-#.  REC has been providing a taxonomy that consists of `rec:BasementLevel`, `rec:MezzanineLevel`, and `rec:RoofLevel`.
+#.  REC has been providing a taxonomy for storey kinds that consists of three elements: `rec:BasementLevel`, `rec:MezzanineLevel`, and `rec:RoofLevel`.
 
 #.  Here are a few more kinds of storeys:
 
@@ -606,7 +588,7 @@
 
 ### 11.4 Space and OutdoorSpace Class
 
-#.  Spaces could be classified, for example, using the [Uniclass Spaces/Locations taxonomy](https://uniclass.thenbs.com/taxon/sl).
+#.  REC offers a more extensive taxonomy for room types than for building types. Nevertheless, other taxonomies could also be permitted in Brick 2.0, either additionally or as a replacement. For example, [Uniclass](https://uniclass.thenbs.com/) is available under a Creative Commons license and provides [a comprehensive taxonomy for spaces and locations](https://uniclass.thenbs.com/taxon/sl).
 
     bro:Space
         sh:property
@@ -805,6 +787,12 @@
 
     bro:owns                a owl:ObjectProperty    ; owl:inverseOf bro:ownedBy                 .
 
+### 14.2 Person Class
+
+### 14.3 Organization Class
+
+#.  This is aligned with the [W3C Organization Ontology](https://www.w3.org/TR/vocab-org/).
+
 ### 14.4 PostalAddress Class
 
     bro:PostalAddress
@@ -831,6 +819,11 @@
 
 ### 15.1 hasPart
 
+    bro:hasPart
+        a owl:ObjectProperty, owl:InverseFunctionalProperty ;
+        owl:inverseOf bro:partOf ;
+        rdfs:comment "Relates a whole to an entity that is a part of it."@en .
+
     bro:PhysicalObject                  sh:property [ sh:path bro:hasPart   ;               ; sh:class bro:PhysicalObject        ] .
     bro:Organization                    sh:property [ sh:path bro:hasPart   ;               ; sh:class bro:Organization          ] .
 
@@ -843,6 +836,11 @@
     bro:PhysicalEquipment               sh:property [ sh:path bro:hasPart   ;               ; sh:or ( [ sh:class bro:PhysicalEquipment  ]                                    ) ] .
 
 ### 15.2 partOf
+
+    bro:partOf
+        a owl:ObjectProperty, owl:FunctionalProperty ;
+        owl:inverseOf bro:hasPart ;
+        rdfs:comment "Relates an entity to the whole of which it is a part."@en .
 
     bro:PhysicalObject                  sh:property [ sh:path bro:partOf    ; sh:maxCount 1 ; sh:class bro:PhysicalObject        ] .
     bro:Organization                    sh:property [ sh:path bro:partOf    ; sh:maxCount 1 ; sh:class bro:Organization          ] .
@@ -862,6 +860,11 @@
 
 ### 16.1 hasMember
 
+    bro:hasMember
+        a owl:ObjectProperty ;
+        owl:inverseOf bro:memberOf ;
+        rdfs:comment "Relates a collection to an entity that is a member of it."@en .
+
     bro:Collection                      sh:property [ sh:path bro:hasMember ;               ; sh:or ( [ sh:class bro:Entity             ] [ sh:class bro:Collection        ] ) ] .
 
     bro:Apartment                       sh:property [ sh:path bro:hasMember ;               ; sh:or ( [ sh:class bro:Space              ]                                    ) ] .
@@ -876,6 +879,11 @@
     bro:Zone                            sh:property [ sh:path bro:hasMember ;               ; sh:or ( [ sh:class bro:DomainSpace        ] [ sh:class bro:Zone              ] ) ] .
 
 ### 16.2 memberOf
+
+    bro:memberOf
+        a owl:ObjectProperty ;
+        owl:inverseOf bro:hasMember ;
+        rdfs:comment "Relates an entity to a collection of which it is a member."@en .
 
     bro:Agent                           sh:property [ sh:path bro:memberOf  ;               ; sh:class bro:Organization          ] .
     bro:Entity                          sh:property [ sh:path bro:memberOf  ;               ; sh:class bro:Collection            ] .
