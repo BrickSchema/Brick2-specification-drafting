@@ -1,0 +1,165 @@
+# Building types (Byggnadstyper)
+#
+# Source: Swedish Tax Agency (Skatteverket), Rättslig vägledning,
+# edition 2026.14, "Byggnadstyper".
+# https://www4.skatteverket.se/rattsligvagledning/edition/2026.14/408769.html
+#
+# Reuse notice: Skatteverket states that its explanatory publications
+# are subject to limited copyright under Section 26a, second paragraph,
+# of the Swedish Copyright Act (Upphovsrättslagen). Reproduction and
+# translation are permitted subject to appropriate attribution of the
+# source and author.
+# https://www4.skatteverket.se/rattsligvagledning/327641.html
+#
+# Swedish labels preserve the source terminology.
+# English labels are AI-generated translations.
+#
+# This taxonomy represents tax-related building types (byggnadstyper)
+# and should not be confused with building purposes (byggnadsändamål)
+# in Lantmäteriet's Fastighetsregister.
+
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix sh:   <http://www.w3.org/ns/shacl#> .
+@prefix ex:   <https://example.org/byggnadstyper/> .
+
+ex:Byggnadstyp
+    a rdfs:Class ;
+    rdfs:subClassOf skos:Concept ;
+    rdfs:comment "Ett begrepp som representerar en byggnadstyp enligt Skatteverkets klassificering av byggnadstyper i Rättslig vägledning, utgåva 2026.14."@sv ;
+    rdfs:comment "A concept representing a building type according to the Swedish Tax Agency's (Skatteverket) classification of building types (Byggnadstyper), as described in its legal guidance, edition 2026.14."@en .
+
+ex:Byggnadstyper
+    a skos:ConceptScheme ;
+    skos:prefLabel "Byggnadstyper"@sv, "Building types"@en ;
+    skos:hasTopConcept
+        ex:Smahus,
+        ex:Agarlagenhet,
+        ex:Hyreshus,
+        ex:Ekonomibyggnad,
+        ex:Kraftverksbyggnad,
+        ex:Industribyggnad,
+        ex:Specialbyggnad,
+        ex:OvrigByggnad .
+
+ex:Smahus
+    a ex:Byggnadstyp ;
+    skos:prefLabel "Småhus"@sv, "One- or two-dwelling building (Småhus)"@en ;
+    skos:inScheme ex:Byggnadstyper .
+
+ex:Agarlagenhet
+    a ex:Byggnadstyp ;
+    skos:prefLabel "Ägarlägenhet"@sv, "Owner-occupied apartment (Ägarlägenhet)"@en ;
+    skos:inScheme ex:Byggnadstyper .
+
+ex:Hyreshus
+    a ex:Byggnadstyp ;
+    skos:prefLabel "Hyreshus"@sv, "Rental building (Hyreshus)"@en ;
+    skos:inScheme ex:Byggnadstyper .
+
+ex:Ekonomibyggnad
+    a ex:Byggnadstyp ;
+    skos:prefLabel "Ekonomibyggnad"@sv, "Agricultural building (Ekonomibyggnad)"@en ;
+    skos:inScheme ex:Byggnadstyper .
+
+ex:Kraftverksbyggnad
+    a ex:Byggnadstyp ;
+    skos:prefLabel "Kraftverksbyggnad"@sv, "Power plant building (Kraftverksbyggnad)"@en ;
+    skos:inScheme ex:Byggnadstyper .
+
+ex:Industribyggnad
+    a ex:Byggnadstyp ;
+    skos:prefLabel "Industribyggnad"@sv, "Industrial building (Industribyggnad)"@en ;
+    skos:inScheme ex:Byggnadstyper .
+
+ex:Specialbyggnad
+    a ex:Byggnadstyp ;
+    skos:prefLabel "Specialbyggnad"@sv, "Special-purpose building (Specialbyggnad)"@en ;
+    skos:inScheme ex:Byggnadstyper ;
+    skos:narrower
+        ex:Forsvarsbyggnad,
+        ex:Kommunikationsbyggnad,
+        ex:Distributionsbyggnad,
+        ex:Varmecentral,
+        ex:Reningsanlaggning,
+        ex:Vardbyggnad,
+        ex:BadSportIdrottsanlaggning,
+        ex:Skolbyggnad,
+        ex:Kulturbyggnad,
+        ex:Ecklesiastikbyggnad,
+        ex:AllmanByggnad .
+
+ex:Forsvarsbyggnad
+    a ex:Byggnadstyp ;
+    skos:prefLabel "Försvarsbyggnad"@sv, "Defence building (Försvarsbyggnad)"@en ;
+    skos:broader ex:Specialbyggnad ;
+    skos:inScheme ex:Byggnadstyper .
+
+ex:Kommunikationsbyggnad
+    a ex:Byggnadstyp ;
+    skos:prefLabel "Kommunikationsbyggnad"@sv, "Transport and communications building (Kommunikationsbyggnad)"@en ;
+    skos:broader ex:Specialbyggnad ;
+    skos:inScheme ex:Byggnadstyper .
+
+ex:Distributionsbyggnad
+    a ex:Byggnadstyp ;
+    skos:prefLabel "Distributionsbyggnad"@sv, "Distribution building (Distributionsbyggnad)"@en ;
+    skos:broader ex:Specialbyggnad ;
+    skos:inScheme ex:Byggnadstyper .
+
+ex:Varmecentral
+    a ex:Byggnadstyp ;
+    skos:prefLabel "Värmecentral"@sv, "Heating plant (Värmecentral)"@en ;
+    skos:broader ex:Specialbyggnad ;
+    skos:inScheme ex:Byggnadstyper .
+
+ex:Reningsanlaggning
+    a ex:Byggnadstyp ;
+    skos:prefLabel "Reningsanläggning"@sv, "Treatment plant (Reningsanläggning)"@en ;
+    skos:broader ex:Specialbyggnad ;
+    skos:inScheme ex:Byggnadstyper .
+
+ex:Vardbyggnad
+    a ex:Byggnadstyp ;
+    skos:prefLabel "Vårdbyggnad"@sv, "Healthcare building (Vårdbyggnad)"@en ;
+    skos:broader ex:Specialbyggnad ;
+    skos:inScheme ex:Byggnadstyper .
+
+ex:BadSportIdrottsanlaggning
+    a ex:Byggnadstyp ;
+    skos:prefLabel "Bad-, sport- och idrottsanläggning"@sv, "Swimming, sports and athletic facility (Bad-, sport- och idrottsanläggning)"@en ;
+    skos:broader ex:Specialbyggnad ;
+    skos:inScheme ex:Byggnadstyper .
+
+ex:Skolbyggnad
+    a ex:Byggnadstyp ;
+    skos:prefLabel "Skolbyggnad"@sv, "School building (Skolbyggnad)"@en ;
+    skos:broader ex:Specialbyggnad ;
+    skos:inScheme ex:Byggnadstyper .
+
+ex:Kulturbyggnad
+    a ex:Byggnadstyp ;
+    skos:prefLabel "Kulturbyggnad"@sv, "Cultural building (Kulturbyggnad)"@en ;
+    skos:broader ex:Specialbyggnad ;
+    skos:inScheme ex:Byggnadstyper .
+
+ex:Ecklesiastikbyggnad
+    a ex:Byggnadstyp ;
+    skos:prefLabel "Ecklesiastikbyggnad"@sv, "Ecclesiastical building (Ecklesiastikbyggnad)"@en ;
+    skos:broader ex:Specialbyggnad ;
+    skos:inScheme ex:Byggnadstyper .
+
+ex:AllmanByggnad
+    a ex:Byggnadstyp ;
+    skos:prefLabel "Allmän byggnad"@sv, "Public building (Allmän byggnad)"@en ;
+    skos:broader ex:Specialbyggnad ;
+    skos:inScheme ex:Byggnadstyper .
+
+ex:OvrigByggnad
+    a ex:Byggnadstyp ;
+    skos:prefLabel "Övrig byggnad"@sv, "Other building (Övrig byggnad)"@en ;
+    skos:definition "Resterande byggnader."@sv ;
+    skos:definition "Remaining buildings."@en ;
+    skos:inScheme ex:Byggnadstyper .

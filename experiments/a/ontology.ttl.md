@@ -391,7 +391,7 @@
     #           ]
     #       ] .
 
-#.  &mdash; Dynamic quantity with a REC observation:
+#.  &mdash; Dynamic quantity as a REC observation:
 
     #   :x  a brick:Motor ;
     #       brick:hasPoint :y .
@@ -400,8 +400,8 @@
     #       brick:lastKnownValue [
     #           a rec:TemperatureObservation ;
     #           rec:sourcePoint :y ;
-    #           rec:value 50 ;
     #           rec:timestamp "2026-09-17T12:00:00Z"^^xsd:dateTime ;
+    #           rec:value 50 ;
     #           brick:timestamp "2026-09-17T12:00:00Z"^^xsd:dateTime ;
     #           brick:value 50 ;
     #       ] .
@@ -465,7 +465,7 @@
 
 #### QUDT
 
-#.  &mdash; Quantity:
+#.  &mdash; Quantity in QUDT:
 
     #   :x  a :Motor ;
     #       qudt:quantity [
@@ -546,23 +546,29 @@
 
 #.  REC has been providing a taxonomy for building types that consists of five elements: `rec:Hospital`, `rec:School`, `rec:ShoppingMall`, `rec:Stadium`, and `rec:VirtualBuilding`.
 
-#.  There are other taxonomies that provide a more comprehensive set, such as the [Energy Star Property Types taxonomy](https://www.energystar.gov/buildings/benchmark/understand-metrics/property-types).
+#.  There are other taxonomies that provide a more comprehensive set, such as the [Energy Star Property Types taxonomy](https://www.energystar.gov/buildings/benchmark/understand-metrics/property-types) or the [Swedish Tax Agency's (Skatteverket) Building Types (Byggnadstyper) taxonomy](https://www4.skatteverket.se/rattsligvagledning/edition/2026.14/408769.html).
 
-#.  💢 *Open Issue:* Significantly extend the taxonomy in Brick 2.0 (e.g., by copying from Energy Star) or allow users to choose the most appropriate taxonomy and provide the predicates for them (instead of defining a comprehensive taxonomy ourselves)?
+#.  💢 *Open Issue:* Significantly extend the taxonomy in Brick 2.0 (e.g., by copying from Energy Star and/or Skatteverket) or allow users to choose the most appropriate taxonomy and provide the predicates for them (instead of defining a comprehensive taxonomy ourselves)?
 
     @prefix energystar: <https://portfoliomanager.energystar.gov/pm/glossary#> .
+    @prefix ex:         <https://example.org/byggnadstyper/> .
 
     bro:Building
         sh:property
-            [ sh:path bro:energyStarPropertyType ; sh:maxCount 1 ; sh:class energystar:PropertyType             ] .
+            [ sh:path bro:energyStarPropertyType ; sh:maxCount 1 ; sh:class energystar:PropertyType             ] ,
+            [ sh:path bro:byggnadstyp            ; sh:maxCount 1 ; sh:class ex:Byggnadstyp                      ] .
 
     bro:energyStarPropertyType
         a owl:AnnotationProperty ;
-        rdfs:comment "An [Energy Star Property Type](https://www.energystar.gov/buildings/benchmark/understand-metrics/property-types) indicating a single, primary use of a given `Building`." .
+        rdfs:comment "An [Energy Star Property Type](https://www.energystar.gov/buildings/benchmark/understand-metrics/property-types) indicating a single, primary use of a given `Building`."@en .
+
+    bro:byggnadstyp
+        a owl:AnnotationProperty ;
+        rdfs:comment "The type of a `Building` according to the Swedish Tax Agency's classification of building types ([Byggnadstyper](https://www4.skatteverket.se/rattsligvagledning/edition/2026.14/408769.html))."@en .
 
 ### 11.3 Storey Class
 
-#.  REC has been providing a taxonomy for storey kinds that consists of three elements: `rec:BasementLevel`, `rec:MezzanineLevel`, and `rec:RoofLevel`.
+#.  REC has been providing a taxonomy for storeys that consists of three elements: `rec:BasementLevel`, `rec:MezzanineLevel`, and `rec:RoofLevel`.
 
 #.  Here are a few more kinds of storeys:
 
@@ -892,7 +898,7 @@
 
     <https://ontology.brickschema.org/2.0/>
         a owl:Ontology ;
-        owl:versionInfo "2.0.0-alpha.6" .
+        owl:versionInfo "2.0.0-alpha.7" .
 
 ##  18. References
 

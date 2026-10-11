@@ -1,10 +1,24 @@
-@prefix energystar: <https://portfoliomanager.energystar.gov/pm/glossary#> .
-@prefix owl:        <http://www.w3.org/2002/07/owl#> .
+# Property Types in Portfolio Manager
+# https://www.energystar.gov/buildings/benchmark/understand-metrics/property-types
+
+# Source: U.S. Environmental Protection Agency, ENERGY STAR program (https://www.energystar.gov/).
+
+# ENERGY STAR website information may be freely distributed or copied with attribution. Commercial use may be subject to applicable copyright laws.
+# https://energystar.my.site.com/PortfolioManager/s/article/May-I-copy-and-distribute-materials-from-your-website-1748913892411
+
 @prefix rdfs:       <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:        <http://www.w3.org/2002/07/owl#> .
+@prefix energystar: <https://portfoliomanager.energystar.gov/pm/glossary#> .
 
 energystar:PropertyType
     a owl:Class ;
-    rdfs:subClassOf owl:NamedIndividual .
+    rdfs:subClassOf owl:NamedIndividual ;
+    rdfs:label "Property Type"@en,
+               "Type de propriété"@fr-CA,
+               "Tipo de propiedad"@es-US ;
+    rdfs:comment "The property type indicates the single, primary use of your property."@en,
+                 "Le type de propriété indique l'utilisation principale de votre propriété."@fr-CA,
+                 "En el tipo de propiedad, se indica el uso único y principal de su propiedad."@es-US .
 
 energystar:BankBranch                               a energystar:PropertyType ; rdfs:label "Bank Branch"@en .
 energystar:FinancialOffice                          a energystar:PropertyType ; rdfs:label "Financial Office"@en .
