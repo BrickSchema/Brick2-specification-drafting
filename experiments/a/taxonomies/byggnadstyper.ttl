@@ -28,8 +28,8 @@
 ex:Byggnadstyp
     a rdfs:Class ;
     rdfs:subClassOf skos:Concept ;
-    rdfs:comment "Ett begrepp som representerar en byggnadstyp enligt Skatteverkets klassificering av byggnadstyper i Rättslig vägledning, utgåva 2026.14."@sv ;
-    rdfs:comment "A concept representing a building type according to the Swedish Tax Agency's (Skatteverket) classification of building types (Byggnadstyper), as described in its legal guidance, edition 2026.14."@en .
+    rdfs:comment "Representerar en byggnadstyp enligt Skatteverkets klassificering av byggnadstyper i Rättslig vägledning, utgåva 2026.14."@sv ;
+    rdfs:comment "Represents a building type according to the Swedish Tax Agency's (Skatteverket) classification of building types (Byggnadstyper), as described in its legal guidance (Rättslig vägledning), edition 2026.14."@en .
 
 ex:Byggnadstyper
     a skos:ConceptScheme ;

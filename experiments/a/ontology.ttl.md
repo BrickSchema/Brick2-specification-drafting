@@ -479,6 +479,36 @@
     #           ]
     #       ] .
 
+#### BACnet
+
+#.  &mdash; Analog input:
+
+    #  BACnet Object
+    #  
+    #  Object_Identifier:  analog-input, 3
+    #  Object_Name:        Motor M-101 Winding Temp
+    #  Object_Type:        ANALOG_INPUT
+    #  
+    #  Present_Value:      78.4
+    #  Units:              degrees-celsius
+    #  Description:        Stator winding temperature, Motor M-101
+    #  
+    #  Status_Flags:       { FALSE, FALSE, FALSE, FALSE }
+    #                      IN_ALARM:        FALSE
+    #                      FAULT:           FALSE
+    #                      OVERRIDDEN:      FALSE
+    #                      OUT_OF_SERVICE:  FALSE
+    #  
+    #  Event_State:        NORMAL
+    #  Reliability:        NO_FAULT_DETECTED
+    #  Out_Of_Service:     FALSE
+    #  
+    #  Resolution:         0.1
+    #  Min_Pres_Value:     -20.0
+    #  Max_Pres_Value:     180.0
+    #  
+    #  COV_Increment:      1.0
+
 ### 10.1 Point Class
 
     bro:Point
@@ -544,7 +574,7 @@
 
 ### 11.2 Building Class
 
-#.  REC has been providing a taxonomy for building types that consists of five elements: `rec:Hospital`, `rec:School`, `rec:ShoppingMall`, `rec:Stadium`, and `rec:VirtualBuilding`.
+#.  REC has been providing a taxonomy for building types that encompasses five types: `rec:Hospital`, `rec:School`, `rec:ShoppingMall`, `rec:Stadium`, and `rec:VirtualBuilding`.
 
 #.  There are other taxonomies that provide a more comprehensive set, such as the [Energy Star Property Types taxonomy](https://www.energystar.gov/buildings/benchmark/understand-metrics/property-types) or the [Swedish Tax Agency's (Skatteverket) Building Types (Byggnadstyper) taxonomy](https://www4.skatteverket.se/rattsligvagledning/edition/2026.14/408769.html).
 
@@ -566,9 +596,11 @@
         a owl:AnnotationProperty ;
         rdfs:comment "The type of a `Building` according to the Swedish Tax Agency's classification of building types ([Byggnadstyper](https://www4.skatteverket.se/rattsligvagledning/edition/2026.14/408769.html))."@en .
 
+#.  💢 *Open Issue:* A property very often does not occupy an entire building. In a high-rise, for example, the lower floors might house a shopping center, with a hotel on the floors above, a restaurant above that, and residential units in the penthouse. How to model that?
+
 ### 11.3 Storey Class
 
-#.  REC has been providing a taxonomy for storeys that consists of three elements: `rec:BasementLevel`, `rec:MezzanineLevel`, and `rec:RoofLevel`.
+#.  REC has been providing a taxonomy for storeys that encompasses three kinds: `rec:BasementLevel`, `rec:MezzanineLevel`, and `rec:RoofLevel`.
 
 #.  Here are a few more kinds of storeys:
 
@@ -617,6 +649,10 @@
 ### 11.6 Zones
 
 #.  Zones are collections of `DomainSpace`.
+
+### 11.7 Facades, Walls, Slabs, and Roofs
+
+#.  Out of scope of the ontology.
 
 ##  12. Assets
 
@@ -699,9 +735,19 @@
     bro:Furniture
         rdfs:comment "A `PhysicalObject` that provides a non-technical function in the built environment (e.g., comfort, decoration, storage) and is an `Asset` to a person or organization."@en .
 
+#.  💢 *Open Issue:* Electric recliner chairs, electrically adjustable beds, motorized desks, etc. require a power connection. Does furniture participate in connections and is therefore equipment?
+
+### 12.7 Doors and Windows
+
+#.  Doors and Windows participate in connections and are therefore equipment.
+
 ##  13. Connections
 
 #.  Connections are modeled after 223.
+
+#.  Note that the 223 connection model is not physical but concepual: You cannot ask what the diameter of an `s223:OutletConnectionPoint` is or what the length of a `s223:Duct` is. You can only ask whether they *can be connected* (that's a `s223:ConnectionPoint`) and, if so, *what they are connected to* (that's a `s223:Connection`). I.e., a `s223:Connection` between two `s223:Connectable`s represents the *existance* of a physical connection, not the physical connection itself.
+
+#.  💢 *Open Issue:* Do we need the ability to model connections as physical objects?
 
 ### 13.1 Relations
 
@@ -834,7 +880,7 @@
     bro:Organization                    sh:property [ sh:path bro:hasPart   ;               ; sh:class bro:Organization          ] .
 
     bro:Site                            sh:property [ sh:path bro:hasPart   ;               ; sh:or ( [ sh:class bro:Building           ] [ sh:class bro:OutdoorSpace      ] ) ] .
-    bro:Building                        sh:property [ sh:path bro:hasPart   ;               ; sh:or ( [ sh:class bro:Storey             ] [ sh:class bro:OutdoorSpace      ] ) ] .
+    bro:Building                        sh:property [ sh:path bro:hasPart   ;               ; sh:or ( [ sh:class bro:Storey             ]                                    ) ] .
     bro:Storey                          sh:property [ sh:path bro:hasPart   ;               ; sh:or ( [ sh:class bro:Space              ] [ sh:class bro:OutdoorSpace      ] ) ] .
     bro:Space                           sh:property [ sh:path bro:hasPart   ;               ; sh:or ( [ sh:class bro:Furniture          ] [ sh:class bro:PhysicalEquipment ] ) ] .
     bro:OutdoorSpace                    sh:property [ sh:path bro:hasPart   ;               ; sh:or ( [ sh:class bro:Furniture          ] [ sh:class bro:PhysicalEquipment ] ) ] .
@@ -898,7 +944,7 @@
 
     <https://ontology.brickschema.org/2.0/>
         a owl:Ontology ;
-        owl:versionInfo "2.0.0-alpha.7" .
+        owl:versionInfo "2.0.0-alpha.8" .
 
 ##  18. References
 
