@@ -1,0 +1,109 @@
+# -----------------------------------------------------------
+# Simple statement
+# -----------------------------------------------------------
+
+:mypump1
+    a                       ex:Pump                         ;
+    ex:manufacturerName     "Siemens"                       .
+
+ex:manufacturerName
+    a                       rdf:Property                    .
+
+
+# -----------------------------------------------------------
+# Reified statement
+# -----------------------------------------------------------
+
+[]
+    a                       rdf:Statement                   ;
+    rdf:subject             :mypump1                        ;
+    rdf:predicate           ex:manufacturerName             ;
+    rdf:object              "Siemens"                       .
+
+:mypump1
+    a                       ex:Pump                         .
+
+ex:manufacturerName
+    a                       rdf:Property                    .
+
+
+# -----------------------------------------------------------
+# Reified property
+# -----------------------------------------------------------
+
+:mypump1
+    a                       ex:Pump                         ;
+    ex:hasProperty          :mypump1-manufacturername       .
+
+:mypump1-manufacturername
+    a                       ex:ManufacturerNameProperty     ;
+    ex:hasValue             "Siemens"                       .
+
+ex:ManufacturerNameProperty
+    a                       rdfs:Class                      ;
+    rdfs:subClassOf         ex:Property                     .
+
+ex:Property
+    a                       rdfs:Class                      .
+
+
+# -----------------------------------------------------------
+# Reified property with an external reference
+# -----------------------------------------------------------
+
+:mypump1
+    a                       ex:Pump                         ;
+    ex:hasProperty          :mypump1-manufacturername       .
+
+:mypump1-manufacturername
+    a                       ex:ManufacturerNameProperty     ;
+    ex:hasValueAt           "bacnet://123/45,678/90"        ;
+    ex:hasLastKnownValue    "Siemens"                       .
+
+ex:ManufacturerNameProperty
+    a                       rdfs:Class                      ;
+    rdfs:subClassOf         ex:Property                     .
+
+ex:Property
+    a                       rdfs:Class                      .
+
+
+# -----------------------------------------------------------
+# Reified property without a value
+# -----------------------------------------------------------
+
+:mypump1
+    a                       ex:Pump                         ;
+    ex:hasProperty          :mypump1-manufacturername       .
+
+:mypump1-manufacturername
+    a                       ex:ManufacturerNameProperty     .
+
+ex:ManufacturerNameProperty
+    a                       rdfs:Class                      ;
+    rdfs:subClassOf         ex:Property                     .
+
+ex:Property
+    a                       rdfs:Class                      .
+
+
+# -----------------------------------------------------------
+# Point for a property
+# -----------------------------------------------------------
+
+:mycontroller1
+    a                       ex:Controller                   ;
+    ex:hostsPoint           :mycontroller1-point678         .
+
+:mycontroller1-point678
+    a                       ex:Point                        ;
+    ex:pointName            "B01_Flr02_Pump1_MnftrNm"       ;
+    ex:hasAddress           "bacnet://123/45,678/90"        ;
+    ex:providesValueOfType  xsd:string                      ;
+    ex:providesValueFor     :mypump1-manufacturername       .
+
+ex:Point
+    a                       rdfs:Class                      .
+
+
+# -----------------------------------------------------------
