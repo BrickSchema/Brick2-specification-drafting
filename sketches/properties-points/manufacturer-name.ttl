@@ -6,9 +6,6 @@
     a                       ex:Pump                         ;
     ex:manufacturerName     "Siemens"                       .
 
-ex:manufacturerName
-    a                       rdf:Property                    .
-
 
 # -----------------------------------------------------------
 # Reified statement
@@ -23,9 +20,6 @@ ex:manufacturerName
 :mypump1
     a                       ex:Pump                         .
 
-ex:manufacturerName
-    a                       rdf:Property                    .
-
 
 # -----------------------------------------------------------
 # Reified property
@@ -39,13 +33,6 @@ ex:manufacturerName
     a                       ex:ManufacturerNameProperty     ;
     ex:hasValue             "Siemens"                       .
 
-ex:ManufacturerNameProperty
-    a                       rdfs:Class                      ;
-    rdfs:subClassOf         ex:Property                     .
-
-ex:Property
-    a                       rdfs:Class                      .
-
 
 # -----------------------------------------------------------
 # Reified property with an external reference
@@ -57,15 +44,7 @@ ex:Property
 
 :mypump1-manufacturername
     a                       ex:ManufacturerNameProperty     ;
-    ex:hasValueAt           "bacnet://123/45,678/90"        ;
-    ex:hasLastKnownValue    "Siemens"                       .
-
-ex:ManufacturerNameProperty
-    a                       rdfs:Class                      ;
-    rdfs:subClassOf         ex:Property                     .
-
-ex:Property
-    a                       rdfs:Class                      .
+    ex:hasValueAt           "bacnet://123/45,678/90"        .
 
 
 # -----------------------------------------------------------
@@ -78,13 +57,6 @@ ex:Property
 
 :mypump1-manufacturername
     a                       ex:ManufacturerNameProperty     .
-
-ex:ManufacturerNameProperty
-    a                       rdfs:Class                      ;
-    rdfs:subClassOf         ex:Property                     .
-
-ex:Property
-    a                       rdfs:Class                      .
 
 
 # -----------------------------------------------------------
@@ -100,10 +72,27 @@ ex:Property
     ex:pointName            "B01_Flr02_Pump1_MnftrNm"       ;
     ex:hasAddress           "bacnet://123/45,678/90"        ;
     ex:providesValueOfType  xsd:string                      ;
-    ex:providesValueFor     :mypump1-manufacturername       .
-
-ex:Point
-    a                       rdfs:Class                      .
+    ex:providesValueFor     :mypump1-manufacturername       ;
+    ex:readable             true                            ;
+    ex:writable             true                            ;
+    ex:hasLastKnownValue    "Siemens"                       .
 
 
 # -----------------------------------------------------------
+
+ex:manufacturerName
+    a                       rdf:Property                    .
+
+ex:ManufacturerNameProperty
+    a                       rdfs:Class                      ;
+    rdfs:subClassOf         ex:StringProperty               .
+
+ex:StringProperty
+    a                       rdfs:Class                      ;
+    rdfs:subClassOf         ex:Property                     .
+
+ex:Property
+    a                       rdfs:Class                      .
+
+ex:Point
+    a                       rdfs:Class                      .

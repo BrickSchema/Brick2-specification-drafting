@@ -1,0 +1,115 @@
+# -----------------------------------------------------------
+# Simple statement
+# -----------------------------------------------------------
+
+:mymotor1
+    a                       ex:Motor                        ;
+    ex:temperatureInCelsius 50.3                            .
+
+
+# -----------------------------------------------------------
+# Reified statement
+# -----------------------------------------------------------
+
+[]
+    a                       rdf:Statement                   ;
+    rdf:subject             :mymotor1                       ;
+    rdf:predicate           ex:temperatureInCelsius         ;
+    rdf:object              50.3                            .
+
+:mymotor1
+    a                       ex:Motor                        .
+
+
+# -----------------------------------------------------------
+# Reified property
+# -----------------------------------------------------------
+
+:mymotor1
+    a                       ex:Motor                        ;
+    ex:hasProperty          :mymotor1-temperature           .
+
+:mymotor1-temperature
+    a                       ex:TemperatureProperty          ;
+    ex:hasQuantityKind      quantitykind:Temperature        ;
+    ex:hasValue             :mymotor1-temperature-value     .
+
+:mymotor1-temperature-value
+    a                       ex:QuantityValue                ;
+    ex:value                50.3                            ;
+    ex:unit                 unit:DEG_C                      .
+
+
+# -----------------------------------------------------------
+# Reified property with an external reference
+# -----------------------------------------------------------
+
+:mymotor1
+    a                       ex:Motor                        ;
+    ex:hasProperty          :mymotor1-temperature           .
+
+:mymotor1-temperature
+    a                       ex:TemperatureProperty          ;
+    ex:hasQuantityKind      quantitykind:Temperature        ;
+    ex:hasValueAt           "bacnet://123/45,678/90"        .
+
+
+# -----------------------------------------------------------
+# Reified property without a value
+# -----------------------------------------------------------
+
+:mymotor1
+    a                       ex:Motor                        ;
+    ex:hasProperty          :mymotor1-temperature           .
+
+:mymotor1-temperature
+    a                       ex:TemperatureProperty          ;
+    ex:hasQuantityKind      quantitykind:Temperature        .
+
+
+# -----------------------------------------------------------
+# Point for a property
+# -----------------------------------------------------------
+
+:mycontroller2
+    a                       ex:Controller                   ;
+    ex:hostsPoint           :mycontroller2-point678         .
+
+:mycontroller2-point678
+    a                       ex:Point                        ;
+    ex:pointName            "Motor M-101 Winding Temp"      ;
+    ex:hasAddress           "bacnet://123/45,678/90"        ;
+    ex:providesValueOfType  xsd:double                      ;
+    ex:providesValueIn      unit:DEG_C                      ;
+    ex:providesValueFor     :mymotor1-temperature           ;
+    ex:readable             true                            ;
+    ex:writable             false                           ;
+    ex:hasResolution        0.1                             ;
+    ex:hasMinValue          -20.0                           ;
+    ex:hasMaxValue          180.0                           ;
+    ex:hasLastKnownValue    :mycontroller2-point678-value   .
+
+:mycontroller2-point678-value
+    a                       ex:QuantityValue                ;
+    ex:value                50.3                            ;
+    ex:unit                 unit:DEG_:C                     .
+
+
+# -----------------------------------------------------------
+
+ex:temperatureInCelsius
+    a                       rdf:Property                    .
+
+ex:TemperatureProperty
+    a                       rdfs:Class                      ;
+    rdfs:subClassOf         ex:PhysicalQuantity             .
+
+ex:PhysicalQuantity
+    a                       rdfs:Class                      ;
+    rdfs:subClassOf         ex:Property                     .
+
+ex:Property
+    a                       rdfs:Class                      .
+
+ex:Point
+    a                       rdfs:Class                      .
