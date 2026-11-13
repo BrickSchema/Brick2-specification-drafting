@@ -31,7 +31,6 @@
 
 :mymotor1-temperature
     a                       ex:TemperatureProperty          ;
-    ex:hasQuantityKind      quantitykind:Temperature        ;
     ex:hasValue             :mymotor1-temperature-value     .
 
 :mymotor1-temperature-value
@@ -50,7 +49,6 @@
 
 :mymotor1-temperature
     a                       ex:TemperatureProperty          ;
-    ex:hasQuantityKind      quantitykind:Temperature        ;
     ex:hasValueAt           "bacnet://123/45,678/90"        .
 
 
@@ -63,8 +61,7 @@
     ex:hasProperty          :mymotor1-temperature           .
 
 :mymotor1-temperature
-    a                       ex:TemperatureProperty          ;
-    ex:hasQuantityKind      quantitykind:Temperature        .
+    a                       ex:TemperatureProperty          .
 
 
 # -----------------------------------------------------------
@@ -92,7 +89,7 @@
 :mycontroller2-point678-value
     a                       ex:QuantityValue                ;
     ex:value                50.3                            ;
-    ex:unit                 unit:DEG_:C                     .
+    ex:unit                 unit:DEG_C                      .
 
 
 # -----------------------------------------------------------
@@ -102,7 +99,8 @@ ex:temperatureInCelsius
 
 ex:TemperatureProperty
     a                       rdfs:Class                      ;
-    rdfs:subClassOf         ex:PhysicalQuantity             .
+    rdfs:subClassOf         ex:PhysicalQuantity             ;
+    ex:ofKind               quantitykind:Temperature        .
 
 ex:PhysicalQuantity
     a                       rdfs:Class                      ;
