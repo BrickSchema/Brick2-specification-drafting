@@ -4,7 +4,7 @@
 
 #.  Companion to [ontology.ttl.md](ontology.ttl.md), §10, Properties/Points.
 
-#.  Property-first design based on [this sketch](../../sketches/properties-points.ttl), the design discussion, and our [point-attribute notes](../../point-attributes/point-attributes.md).
+#.  Property-first design based on [this sketch](../../sketches/properties-points), the design discussion, and our [point-attribute notes](../../point-attributes).
 
 #.  Examples share prefixes and identifiers. Turtle blocks form one example graph.
 
@@ -41,7 +41,7 @@
 
 ### 2.1 Brick Classifications on Properties
 
-#.  Retain existing Brick class names for former point classifications. For static attributes, use Klaus's `...Property` naming pattern: `ManufacturerNameProperty`, `SerialNumberProperty`, `AreaProperty`, and `RatedVoltageInputProperty`.
+#.  Retain existing Brick class names for former point classifications. For static attributes, use the `...Property` naming pattern: `ManufacturerNameProperty`, `SerialNumberProperty`, `AreaProperty`, and `RatedVoltageInputProperty`.
 
 #.  `Sensor`, `Setpoint`, and `Alarm` classify the property's meaning. Physical sensing equipment remains `SensorEquipment`; the access component remains `Point`. Validation of these classifications is omitted here; §3.3 includes rules and validation for last-known values.
 
@@ -145,8 +145,8 @@
         qudt:value "Siemens" .
 ### 3.2 Value with a Unit
 
-#. Attaching units to a value uses `qudt:quantityValue` with `qudt:hasUnit`. The quantity kind is identified on the property instance.
-#. This allows a property to have multiple values, perhaps with different timestamps, see below, or from different sensors.
+#. Attaching units to a value uses `qudt:quantityValue` with `qudt:hasUnit`. The quantity kind is identified on the property instance. This allows a property to have multiple values, perhaps with different timestamps, see below, or from different sensors.
+
 #. The quantity kind keeps the units compatible without requiring that all of the values have the same unit. 
 
     bro:AreaProperty
@@ -188,6 +188,7 @@
 ### 3.3 Value with a Unit and Timestamp
 
 #. `bro:lastKnownValue` is a subproperty of `qudt:quantityValue` that also requires a timestamp.
+
 #. Timestamped quantity values are inferred to be last-known values. More than one for a property produces a validation violation; the rules do not choose between them.
 
     bro:lastKnownValue rdfs:subPropertyOf qudt:quantityValue .
@@ -279,9 +280,10 @@
 ### 3.4 Enumerated Value
 
 #. We use the enumeration pattern from 223. Each enum kind is a class; each named value is a class and "punned" as an instance of itself.
-#. Each value record uses `bro:hasEnumKind` to identify its enumeration. This takes the place of the unit; not clear what the 'quantity kind' would be.
-#. Different points/observers can use different enumerations for the same property, so each value has its own enum kind.
 
+#. Each value record uses `bro:hasEnumKind` to identify its enumeration. This takes the place of the unit; not clear what the 'quantity kind' would be.
+
+#. Different points/observers can use different enumerations for the same property, so each value has its own enum kind.
 
     bro:EnumerationKind a owl:Class .
     bro:EnumerationKind-Operating_Mode a owl:Class ; rdfs:subClassOf bro:EnumerationKind .
@@ -375,9 +377,11 @@
 #.  The attributes associated with Points in Brick 1.x are now going on the Property. The Point carries the access information and its own attributes (§5.2).
 
 #.  Some examples: Temperature goes in `qudt:hasQuantityKind`; Air goes in `bro:ofMedium`. We use `bro:ofConstituent` for ammonia in air, `bro:inMode` for Occupied, `bro:measurementModifier` for Average, and `bro:hasPhenomenon` for Solar. The enum kind goes on the value record (§3.4).
+
 #.  We also propose Phenomenon as a supertype of Substance; see [§4.5 below](#phenomenon).
 
 #.  We use the enum pattern from §3.4: each named value is a class and an instance of itself. Occupied and Unoccupied sit under both Operating_Mode and Occupancy. Names include their parent kind, e.g., `Occupancy-Unoccupied`.
+
 #. TODO: how do we provide the mapping between the enums and the actual data values? For example, Occupancy-Unoccupied might be 0 in one system and 1 in another. Borrow from KNX?
 
     bro:EnumerationKind-Measurement_Modifier a owl:Class ; rdfs:subClassOf bro:EnumerationKind .
@@ -430,8 +434,8 @@
         rdfs:subClassOf bro:EnumerationKind-Operating_Mode .
 
 #.  `inMode` says when a setpoint applies. An occupied cooling setpoint applies in Occupied mode; that doesn't mean the room is currently occupied.
-#. Importantly, if you use the same enum values for the setpoint's mode and the reported mode, then you can compare them directly to see which setpoints apply at a point in time.
 
+#. Importantly, if you use the same enum values for the setpoint's mode and the reported mode, then you can compare them directly to see which setpoints apply at a point in time.
 
     ex:room101 bro:hasProperty ex:occupiedCoolingSetpoint,
         ex:unoccupiedCoolingSetpoint, ex:loadShedCoolingSetpoint, ex:roomOperatingMode .
@@ -464,6 +468,7 @@
         ] .
 
 #.  TODO: Can Occupied and LoadShed apply at the same time? How do we combine modes or pick which setpoint applies?
+
 #.  I think it's important to not try to model all of the fallback logic redundantly inside the knowledge graph. But what is a useful thing for us to model instead? 
 
 ### 4.4 Measurement Modifier
@@ -517,6 +522,7 @@
 #.  We propose Phenomenon as a supertype of Substance.
 
 #.  Solar, Hail, Frost, Contact, and People come from our notes. Solar azimuth has a numeric value; door contact has an enum value. Saying what we're observing doesn't tell us the value's unit or datatype.
+
 #. This phenomenon stuff is similar to what Haystack does.
 
     bro:Phenomenon-Solar
@@ -602,9 +608,13 @@
 ### 5.1 External Access through a Point
 
 #. A `Point` represents the digital object that exposes a property's value. It can be hosted by a controller; it can have a network address, a historian ID, or other access information.
+
 #. It can have its own attributes, such as resolution or accuracy. A point can be associated with a physical sensor or actuator, but it is not the sensor itself (that is `bro:SensorEquipment` or `bro:ActuatorEquipment`).
+
 #. A point can be associated with a property, but it is not the property itself (that is `bro:Property`).
+
 #. There are no subclasse of `Point` yet.
+
 #. TODO: what would we reserve subclasses for? By protocol, e.g. BACnet point?
 
     ex:room102
@@ -627,6 +637,7 @@
 ### 5.2 Properties of a Point
 
 #. A `Point` can have its own properties, such as minimum, maximum, and resolution. We use `bro:hasProperty` for these, just as we do for properties of equipment or spaces.
+
 #. The point provides a value for the room's temperature property (`bro:providesValueFor`).
 
     bro:MinimumValueProperty
@@ -680,6 +691,7 @@
         ] .
 
 #. The minimum and maximum describe the range of values the point exposes; they are not the room's operating limits. Resolution describes the smallest increment the point can report (0.1 °C here), not the physical sensor's accuracy. It is a difference, so we use `qudt:isDeltaQuantity`.
+
 #. A property's value can be given directly, be unknown, or come from another point. For example, if we can read the resolution from the controller, we can describe that access with another point that provides a value for the resolution property.
 
 ### 5.3 Multiple Access Systems and Readers
@@ -702,8 +714,7 @@
 
 ### 5.4 Independent Points for One Property
 
-#.  Two independent sources (like 2 different sensors) can provide values for the same identified property.
-#.  Each point declares its own unit and datatype, which may be different. The property declares the quantity kind, which is the same for both points.
+#.  Two independent sources (like 2 different sensors) can provide values for the same identified property. Each point declares its own unit and datatype, which may be different. The property declares the quantity kind, which is the same for both points.
 
     ex:room101
         a bro:Space ;
@@ -756,8 +767,8 @@
 
 ### 5.5 Internal References
 
-#. A common modeling problem we had before was a single outside air temperature sensor which was re-exposed virtually at many places in a BACnet network.
-#. We have one sensor, but three points with different addresses. They all provide values for the same outside-air-temperature property. How do we say that two of the points are copies of the first?
+#. A common modeling problem we had before was a single outside air temperature sensor which was re-exposed virtually at many places in a BACnet network: We have one sensor, but three points with different addresses. They all provide values for the same outside-air-temperature property. How do we say that two of the points are copies of the first?
+
 #. We propose `bro:hasInternalReference` to point from a virtual point to the point it copies. The network address goes on each point, as before.
 
     bro:hasInternalReference
@@ -815,8 +826,8 @@
         a bro:PhysicalEquipment ;
         bro:hostsPoint ex:virtualOutsideAirTemperatureB .
 
-#. We keep each point's address and host because the copies are still separate digital objects.
-#. Following `bro:hasInternalReference` takes us back to the original point and its physical sensor.
+#. We keep each point's address and host because the copies are still separate digital objects. Following `bro:hasInternalReference` takes us back to the original point and its physical sensor.
+
 #. It feels a little awkward that we need to include both `hasInternalReference` and `providesValueFor`, but we can infer the `providesValueFor` edge by following the internal reference.
 
     bro:InferPointReferenceShape a sh:NodeShape ;
