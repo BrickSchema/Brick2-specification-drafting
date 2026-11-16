@@ -4,9 +4,7 @@
 
 #.  Companion to [ontology.ttl.md](ontology.ttl.md), §10, Properties/Points.
 
-#.  Property-first design based on [Klaus's sketch](../../sketches/properties-points.ttl), the design discussion, and our [point-attribute notes](../../point-attributes/point-attributes.md).
-
-#.  [Room temperature example](room-temperature.ttl.md) contains one property with two points and correspondingly multiple access paths.
+#.  Property-first design based on [this sketch](../../sketches/properties-points.ttl), the design discussion, and our [point-attribute notes](../../point-attributes/point-attributes.md).
 
 #.  Examples share prefixes and identifiers. Turtle blocks form one example graph.
 
