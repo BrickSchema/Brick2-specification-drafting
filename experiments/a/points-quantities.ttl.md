@@ -23,7 +23,7 @@
 
 ##  2. Properties, Points, and Values
 
-#.  A `Property` identifies an *intrinsic* attribute of an entity. The sound made by a tree falling in the forest. Inherits the rich/large "point" classifications from Brick's point class. Can have quantity kind, medium, constituent, mode, modifier, phenomenon, and enum kind. Can have a last-known value.
+#.  A `Property` identifies an *intrinsic* attribute of an entity. The sound made by a tree falling in the forest. Inherits the rich/large "point" classifications from Brick's point class. Can have quantity kind, medium, constituent, mode, modifier, and phenomenon. Can have a last-known value. Enum kinds describe the value records (§3.4).
 
 #.  A `Point` combines the source/channel identity and its access information, following `ontology.ttl.md`. It provides values for a `Property` and can be hosted by a controller. No subclasses yet.
 
@@ -122,7 +122,7 @@
         a bro:PhysicalEquipment ;
         bro:hostsPoint ex:temperatureA .
 
-#.  Resolution's value, minimum, and maximum are shown in §5.2; both source points are shown in §5.5.
+#.  Resolution's value, minimum, and maximum are shown in §5.2; both source points are shown in §5.4.
 
 ##  3. Associating Values with Properties
 
@@ -131,6 +131,10 @@
 #. Simple values use `qudt:value` on the property instance.
 
     bro:ManufacturerNameProperty
+        a owl:Class ;
+        rdfs:subClassOf bro:Property .
+
+    bro:SerialNumberProperty
         a owl:Class ;
         rdfs:subClassOf bro:Property .
 
@@ -276,14 +280,17 @@
 
 ### 3.4 Enumerated Value
 
-#. We use the enumeration pattern from 223. Each enum kind is a class; each named value is a class and an instance of itself.
-#. A property with an enumerated value domain uses `bro:hasEnum` to identify the enum kind.
-#. An enumeration covers both the 'quantity kind' and the 'unit' of a property's values.
+#. We use the enumeration pattern from 223. Each enum kind is a class; each named value is a class and "punned" as an instance of itself.
+#. Each value record uses `bro:hasEnumKind` to identify its enumeration. This takes the place of the unit; not clear what the 'quantity kind' would be.
+#. Different points/observers can use different enumerations for the same property, so each value has its own enum kind.
 
 
     bro:EnumerationKind a owl:Class .
     bro:EnumerationKind-Operating_Mode a owl:Class ; rdfs:subClassOf bro:EnumerationKind .
     bro:EnumerationKind-Occupancy a owl:Class ; rdfs:subClassOf bro:EnumerationKind .
+
+    bro:hasEnumKind a owl:ObjectProperty ;
+        rdfs:domain qudt:QuantityValue ; rdfs:range owl:Class .
 
     bro:Occupancy-Occupied
         a owl:Class, bro:Occupancy-Occupied ;
@@ -302,7 +309,11 @@
 
     ex:controllerDefaultMode
         a bro:DefaultOperatingModeProperty ;
-        bro:hasEnum bro:EnumerationKind-Operating_Mode ;
+        qudt:quantityValue ex:controllerDefaultModeValue .
+
+    ex:controllerDefaultModeValue
+        a qudt:QuantityValue ;
+        bro:hasEnumKind bro:EnumerationKind-Operating_Mode ;
         qudt:value bro:Occupancy-Occupied .
 
 ### 3.5 Enumerated Value with a Timestamp
@@ -313,21 +324,16 @@
 
     ex:roomOccupancy
         a bro:Occupancy_Sensor ;
-        bro:hasEnum bro:EnumerationKind-Occupancy ;
+        qudt:quantityValue ex:roomOccupancyReading1200 ;
         bro:lastKnownValue ex:roomOccupancyReading1200 .
 
     ex:roomOccupancyReading1200
+        a qudt:QuantityValue ;
+        bro:hasEnumKind bro:EnumerationKind-Occupancy ;
         qudt:value bro:Occupancy-Occupied ;
         bro:timestamp "2026-11-13T12:00:00Z"^^xsd:dateTime .
 
-### 3.6 Property without a Value
-
-    ex:pump2
-        a bro:PhysicalEquipment ;
-        bro:hasProperty ex:pump2ManufacturerName .
-
-    ex:pump2ManufacturerName a bro:ManufacturerNameProperty .
-### 3.7 Getting Additional Values through a Point
+### 3.6 Connecting a Property to a Point
 
     ex:room102
         a bro:Space ;
@@ -362,21 +368,19 @@
         qudt:hasUnit unit:DEG_C ;
         bro:timestamp "2026-11-05T12:00:00Z"^^xsd:dateTime .
 
-#.  💢 *Open Issue:* Define how a property's last-known-value record identifies its supplying point when several points provide values. Do not silently choose one source's reading as authoritative.
+#.  TODO: If several points provide values for the same property, how do we know which point a last-known value came from?
 
-#.  💢 *Open Issue:* Identify which access system supplied a reading when a point has multiple access paths, and distinguish capture time from reading time.
+#.  TODO: If we can read a point through multiple external references (e.g., BACnet or a historian), how do we say where a value came from?
 
 ##  4. Property Semantics
 
-#.  For Phenomenon as a supertype of Substance, see [§4.5 below](#phenomenon).
+#.  The attributes associated with Points in Brick 1.x are now going on the Property. The Point carries the access information and its own attributes (§5.2).
 
-#.  Keep Brick's familiar types, then state details such as Air, Occupied, and Average explicitly on the property.
+#.  Some examples: Temperature goes in `qudt:hasQuantityKind`; Air goes in `bro:ofMedium`. We use `bro:ofConstituent` for ammonia in air, `bro:inMode` for Occupied, `bro:measurementModifier` for Average, and `bro:hasPhenomenon` for Solar. The enum kind goes on the value record (§3.4).
+#.  We also propose Phenomenon as a supertype of Substance; see [§4.5 below](#phenomenon).
 
-#.  Use `qudt:hasQuantityKind` for quantity kind, `bro:ofMedium` and `bro:ofConstituent` for material context, `bro:inMode` for applicability, `bro:measurementModifier` for selection/aggregation, `bro:hasPhenomenon` for the subject, and `bro:hasEnum` for a categorical value domain.
-
-#.  `inMode` and `hasEnum` follow the [local CSV](../../point-attributes/points.csv) and [enumeration draft](../../point-attributes/issue-drafting/enumeration-kinds.md). `measurementModifier` and `hasPhenomenon` are proposed predicates for dimensions in [the attribute notes](../../point-attributes/point-attributes.md).
-
-#.  Enum kinds form a class hierarchy. Following the 223 construction, each named enum value is also a class and an instance of itself. Occupied and Unoccupied are enum kinds under both Operating_Mode and Occupancy. Names include the enum kind, such as `Occupancy-Unoccupied`, `Measurement_Modifier-Average`, and `Phenomenon-Solar`. Vocabulary comes from our notes and Brick; wire encodings are separate.
+#.  We use the enum pattern from §3.4: each named value is a class and an instance of itself. Occupied and Unoccupied sit under both Operating_Mode and Occupancy. Names include their parent kind, e.g., `Occupancy-Unoccupied`.
+#. TODO: how do we provide the mapping between the enums and the actual data values? For example, Occupancy-Unoccupied might be 0 in one system and 1 in another. Borrow from KNX?
 
     bro:EnumerationKind-Measurement_Modifier a owl:Class ; rdfs:subClassOf bro:EnumerationKind .
     bro:EnumerationKind-Phenomenon a owl:Class ; rdfs:subClassOf bro:EnumerationKind .
@@ -389,14 +393,12 @@
         rdfs:domain bro:Property ; rdfs:range bro:EnumerationKind-Measurement_Modifier .
     bro:hasPhenomenon a owl:ObjectProperty ;
         rdfs:domain bro:Property ; rdfs:range bro:EnumerationKind-Phenomenon .
-    bro:hasEnum a owl:ObjectProperty ;
-        rdfs:domain bro:EnumerableProperty ; rdfs:range owl:Class .
 
-#.  `inMode`, `measurementModifier`, and `hasPhenomenon` identify specific enum kinds, using their self-typed values. `hasEnum` identifies the broader kind defining the property's value domain. Enum membership follows the subclass hierarchy; semantic annotations are not automatically copied from property classes.
+#.  The property can say Occupied, Average, or Solar. Its value record says which enum it uses. 
 
 ### 4.1 Quantity Kind and Medium
 
-#.  Move the semantic attributes from the point-attribute notes onto property instances. `qudt:hasQuantityKind` identifies the kind of numeric value; `bro:ofMedium` identifies the medium whose property is described.
+#.  This is the room's air temperature. Temperature is the quantity kind; Air is the medium. Both go on the property.
 
     ex:room101
         a bro:Space ;
@@ -410,7 +412,7 @@
 
 ### 4.2 Constituent and Medium
 
-#.  Follow the [Open223 constituent model](https://docs.open223.info/medium-mixtures/): `bro:ofConstituent` identifies the constituent being quantified; `bro:ofMedium` identifies the medium containing it. Use a quantity kind matching the reported concentration basis.
+#.  Here we're measuring ammonia in air. Ammonia is the constituent; Air is the medium. We use the [223 constituent/medium pattern](https://docs.open223.info/medium-mixtures/).
 
     ex:room101 bro:hasProperty ex:ammoniaFraction .
 
@@ -421,16 +423,17 @@
         bro:ofMedium bro:Air ;
         bro:description "Ammonia mole fraction in air."@en .
 
-#.  This example reports ammonia mole fraction. Mass concentration and volume fraction require different quantity kinds; constituent and medium retain their separate roles.
+#.  This value is a mole fraction. If we report mass per volume or a volume fraction instead, we need a different quantity kind. It's still ammonia in air.
 
 ### 4.3 Operating Mode
-
 
     bro:Operating_Mode-LoadShed
         a owl:Class, bro:Operating_Mode-LoadShed ;
         rdfs:subClassOf bro:EnumerationKind-Operating_Mode .
 
-#.  The notes name Occupied, Unoccupied, and LoadShed. These qualify which property applies; they do not assert the current operating mode.
+#.  `inMode` says when a setpoint applies. An occupied cooling setpoint applies in Occupied mode; that doesn't mean the room is currently occupied.
+#. Importantly, if you use the same enum values for the setpoint's mode and the reported mode, then you can compare them directly to see which setpoints apply at a point in time.
+
 
     ex:room101 bro:hasProperty ex:occupiedCoolingSetpoint,
         ex:unoccupiedCoolingSetpoint, ex:loadShedCoolingSetpoint, ex:roomOperatingMode .
@@ -455,19 +458,19 @@
 
     ex:roomOperatingMode
         a bro:Operating_Mode_Status ;
-        bro:hasEnum bro:EnumerationKind-Operating_Mode ;
         bro:lastKnownValue [
+            a qudt:QuantityValue ;
+            bro:hasEnumKind bro:EnumerationKind-Operating_Mode ;
             qudt:value bro:Occupancy-Occupied ;
             bro:timestamp "2026-11-13T12:00:00Z"^^xsd:dateTime
         ] .
 
-#.  `roomOperatingMode` reports a timestamped state; `occupiedCoolingSetpoint` describes a setpoint applicable in that mode.
-
-#.  Occupancy and load shedding may be independent axes. Grouping these values follows the notes; mode combinations, precedence, and schedules remain open.
+#.  TODO: Can Occupied and LoadShed apply at the same time? How do we combine modes or pick which setpoint applies?
+#.  I think it's important to not try to model all of the fallback logic redundantly inside the knowledge graph. But what is a useful thing for us to model instead? 
 
 ### 4.4 Measurement Modifier
 
-#.  Use the modifiers in the notes. Average, Maximum, Minimum, and Peak need a time window or population; Coldest and Warmest need the candidate locations or values.
+#.  TODO: Average over what time period? Maximum or minimum of which readings? We need to say what we're comparing. Consider having properties for the aggregation parameters.
 
     bro:Measurement_Modifier-Average
         a owl:Class, bro:Measurement_Modifier-Average ;
@@ -511,13 +514,12 @@
         bro:measurementModifier bro:Measurement_Modifier-Minimum ;
         bro:description "Minimum room air temperature over the preceding 15-minute interval."@en .
 
-#.  A source for a derived property provides values for that property, rather than for the instantaneous temperature property. The modifier identifies the operation; the description specifies the calculation and scope. Formal window and operand relationships remain open.
-
 ### 4.5 Phenomenon <a id="phenomenon"></a>
 
-#.  Phenomenon is proposed as a supertype of Substance.
+#.  We propose Phenomenon as a supertype of Substance.
 
-#.  The notes list Solar, Hail, Frost, Noise, Contact, and People. A phenomenon may have a numeric result or an enumerated result. It does not determine the output unit or datatype.
+#.  Solar, Hail, Frost, Contact, and People come from our notes. Solar azimuth has a numeric value; door contact has an enum value. Saying what we're observing doesn't tell us the value's unit or datatype.
+#. This phenomenon stuff is similar to what Haystack does.
 
     bro:Phenomenon-Solar
         a owl:Class, bro:Phenomenon-Solar ;
@@ -527,9 +529,6 @@
         rdfs:subClassOf bro:EnumerationKind-Phenomenon .
     bro:Phenomenon-Frost
         a owl:Class, bro:Phenomenon-Frost ;
-        rdfs:subClassOf bro:EnumerationKind-Phenomenon .
-    bro:Phenomenon-Noise
-        a owl:Class, bro:Phenomenon-Noise ;
         rdfs:subClassOf bro:EnumerationKind-Phenomenon .
     bro:Phenomenon-Contact
         a owl:Class, bro:Phenomenon-Contact ;
@@ -570,8 +569,9 @@
     ex:doorContact
         a bro:Contact_Sensor ;
         bro:hasPhenomenon bro:Phenomenon-Contact ;
-        bro:hasEnum bro:EnumerationKind-Open_Close ;
         bro:lastKnownValue [
+            a qudt:QuantityValue ;
+            bro:hasEnumKind bro:EnumerationKind-Open_Close ;
             qudt:value bro:Open_Close-Closed ;
             bro:timestamp "2026-11-13T12:00:00Z"^^xsd:dateTime
         ] .
@@ -581,18 +581,14 @@
     ex:roomOccupancy
         a bro:Occupancy_Sensor ;
         bro:hasPhenomenon bro:Phenomenon-People ;
-        bro:hasEnum bro:EnumerationKind-Occupancy ;
+        qudt:quantityValue ex:roomOccupancyReading1200 ;
         bro:lastKnownValue ex:roomOccupancyReading1200 .
-
-#.  Occupancy detected in a room and its scheduled operating mode are distinct properties, even when both use the words Occupied and Unoccupied.
-
-#.  Noise remains a vocabulary member until the property specifies what is measured, such as sound pressure or sound level. No quantity kind is guessed from the word Noise.
 
 ### 4.6 Differences
 
-#.  Distinguish a difference from an absolute reading; identify its operands and sign convention.
+#. TODO: Do we need to go as deep as 223, which has the measurement positions A and B? 
 
-    ex:filter1 a bro:PhysicalEquipment ; bro:hasProperty ex:airPressureDifference .
+    ex:filter1 a bro:Filter ; bro:hasProperty ex:airPressureDifference .
 
     ex:airPressureDifference
         a bro:Air_Differential_Pressure_Sensor ;
@@ -601,13 +597,17 @@
         qudt:isDeltaQuantity true ;
         bro:description "Upstream air pressure minus downstream air pressure across filter 1."@en .
 
-#.  [QUDT's `isDeltaQuantity`](https://qudt.org/schema/qudt/isDeltaQuantity) identifies a quantity representing a change or interval. Apply it to the intrinsic property here; it is independent of the point's reporting unit. The description identifies the operands and sign convention.
+#.  We use [QUDT's `isDeltaQuantity`](https://qudt.org/schema/qudt/isDeltaQuantity) because this is a pressure difference. That goes on the property, whichever unit the point reports.
 
 ##  5. Points and Access
 
 ### 5.1 External Access through a Point
 
-#.  A point carries its access information directly. §3.7 shows how it supplies values; the sections below cover addresses, point attributes, and multiple sources.
+#. A `Point` represents the digital object that exposes a property's value. It can be hosted by a controller; it can have a network address, a historian ID, or other access information.
+#. It can have its own attributes, such as resolution or accuracy. A point can be associated with a physical sensor or actuator, but it is not the sensor itself (that is `bro:SensorEquipment` or `bro:ActuatorEquipment`).
+#. A point can be associated with a property, but it is not the property itself (that is `bro:Property`).
+#. There are no subclasse of `Point` yet.
+#. TODO: what would we reserve subclasses for? By protocol, e.g. BACnet point?
 
     ex:room102
         a bro:Space ;
@@ -628,9 +628,8 @@
 
 ### 5.2 Properties of a Point
 
-#.  Reuse `bro:hasProperty` for attributes of the point. `bro:providesValueFor` identifies the building property it exposes; `bro:hasProperty` identifies the point's own attributes.
-
-#.  These proposed property classes describe the point's exposed range and resolution. Numeric values below are illustrative, not supplied by Klaus.
+#. A `Point` can have its own properties, such as minimum, maximum, and resolution. We use `bro:hasProperty` for these, just as we do for properties of equipment or spaces.
+#. The point provides a value for the room's temperature property (`bro:providesValueFor`).
 
     bro:MinimumValueProperty
         a owl:Class ;
@@ -682,34 +681,31 @@
             qudt:hasUnit unit:DEG_C
         ] .
 
-#.  Minimum and maximum describe the values exposed by this point. Resolution describes the smallest increment, so it is a delta quantity. These do not describe room operating limits or physical sensor accuracy.
+#. The minimum and maximum describe the range of values the point exposes; they are not the room's operating limits. Resolution describes the smallest increment the point can report (0.1 °C here), not the physical sensor's accuracy. It is a difference, so we use `qudt:isDeltaQuantity`.
+#. A property's value can be given directly, be unknown, or come from another point. For example, if we can read the resolution from the controller, we can describe that access with another point that provides a value for the resolution property.
 
-#.  Each metadata property can have an inline value, an unknown value, or its own supplying point through `bro:providesValueFor`. A separate point is needed only when describing external access to that metadata value.
+### 5.3 Multiple Access Systems and Readers
 
-### 5.3 Sensor Equipment and Hosting
-
-#.  In the complete example in §5.5, `bro:hasPoint` associates sensor equipment with its point; `bro:hostsPoint` identifies the controller exposing it. These describe different relationships.
-
-#.  Equipment serial numbers use the same static-property pattern as manufacturer names (§3.1).
-
-    bro:SerialNumberProperty
-        a owl:Class ;
-        rdfs:subClassOf bro:Property .
-
-### 5.4 Multiple Access Systems and Readers
-
-#.  One source/channel may be available through BACnet and a historian. Put both sets of access fields on the point; here the historian stores the same samples in Celsius.
+#. What if a Point is available through BACnet, but we have the data stored in a historian, too? Because the Point is the digital object that exposes the value, we can have multiple access paths to it. Each access path can have its own address or ID.
 
     ex:temperatureA
+        a bro:Point ;
+        bro:pointName "R101_TEMP_A" ;
+        bro:providesValueFor ex:room101AirTemperature ;
+        bro:providesValueOfType xsd:decimal ;
+        bro:hasUnit unit:DEG_C ;
+        # here's the BACnet access path
         bro:hasAddress "bacnet://123/analog-input,3/present-value" ;
+        # here's the historian access path
         bro:storedAt ex:historian ;
         bro:hasTimeseriesId "room101-temperature-a" .
 
-#.  Multiple applications reading the same point do not imply additional points. Independently measured or calculated values need their own source identity.
+#.  TODO: It feels a little awkward to have the two access paths on the same point. Should the two access paths be separate points?
 
-### 5.5 Independent Points for One Property
+### 5.4 Independent Points for One Property
 
-#.  Two independent sources can provide values for the same identified property. Each point declares its own unit; their units need not match. Repeat the shared property and both access paths here.
+#.  Two independent sources (like 2 different sensors) can provide values for the same identified property.
+#.  Each point declares its own unit and datatype, which may be different. The property declares the quantity kind, which is the same for both points.
 
     ex:room101
         a bro:Space ;
@@ -744,7 +740,7 @@
         a bro:SensorEquipment ;
         bro:hasProperty ex:sensorEquipmentASerialNumber ;
         bro:hasLocation ex:room101 ;
-        bro:hasPoint ex:temperatureA .
+        bro:hostsPoint ex:temperatureA .
 
     ex:sensorEquipmentASerialNumber
         a bro:SerialNumberProperty ;
@@ -754,53 +750,85 @@
         a bro:SensorEquipment ;
         bro:hasProperty ex:sensorEquipmentBSerialNumber ;
         bro:hasLocation ex:room101 ;
-        bro:hasPoint ex:temperatureB .
+        bro:hostsPoint ex:temperatureB .
 
     ex:sensorEquipmentBSerialNumber
         a bro:SerialNumberProperty ;
         qudt:value "PROBE-B-884" .
 
-#.  The shared target is an explicit modeling assertion. Same room and quantity kind alone do not establish the same property.
+### 5.5 Internal References
 
-##  6. Enumerated Values and Alarms
+#. A common modeling problem we had before was a single outside air temperature sensor which was re-exposed virtually at many places in a BACnet network.
+#. We have one sensor, but three points with different addresses. They all provide values for the same outside-air-temperature property. How do we say that two of the points are copies of the first?
+#. We propose `bro:hasInternalReference` to point from a virtual point to the point it copies. The network address goes on each point, as before.
 
-#.  Communication statuses and alarms can share one enum kind. The alarm additionally identifies which states are abnormal.
+    bro:hasInternalReference
+        a owl:ObjectProperty ;
+        rdfs:domain bro:Point ;
+        rdfs:range bro:Point .
 
-    ex:controller7 bro:hasProperty ex:communicationAlarm .
+    ex:site1
+        a bro:Site ;
+        bro:hasProperty ex:outsideAirTemperature .
 
-    bro:Communication_Status-Lost
-        a owl:Class, bro:Communication_Status-Lost ;
-        rdfs:subClassOf bro:EnumerationKind-Communication_Status .
-    bro:Communication_Status-Established
-        a owl:Class, bro:Communication_Status-Established ;
-        rdfs:subClassOf bro:EnumerationKind-Communication_Status .
-
-    ex:communicationAlarm
-        a bro:Communication_Loss_Alarm ;
-        bro:hasEnum bro:EnumerationKind-Communication_Status ;
-        bro:lastKnownValue [
-            qudt:value bro:Communication_Status-Established ;
-            bro:timestamp "2026-11-13T12:00:00Z"^^xsd:dateTime
-        ] ;
-        bro:description "Lost is the alarm condition; established is normal."@en .
-
-    ex:communicationPoint
-        a bro:Point ;
-        bro:providesValueFor ex:communicationAlarm ;
-        bro:providesValueOfType xsd:string .
-
-#.  A temperature alarm concerns temperature while returning a state. `qudt:hasQuantityKind` describes what it concerns; it does not declare a numeric output datatype.
-
-    ex:room101 bro:hasProperty ex:airTemperatureAlarm .
-
-    ex:airTemperatureAlarm
-        a bro:Air_Temperature_Alarm ;
+    ex:outsideAirTemperature
+        a bro:Outside_Air_Temperature_Sensor ;
         qudt:hasQuantityKind qk:Temperature ;
-        bro:ofMedium bro:Air ;
-        bro:description "Air temperature alarm: normal or high."@en .
+        bro:ofMedium bro:Air .
 
-#.  💢 *Open Issue:* Define validation that a property's reported value belongs to its `bro:hasEnum` kind.
+    ex:outsideAirSensor
+        a bro:SensorEquipment ;
+        bro:hasLocation ex:site1 ;
+        bro:hostsPoint ex:outsideAirTemperaturePoint .
 
-#.  💢 *Open Issue:* Define how to annotate which enum values are normal or abnormal for an alarm.
+    ex:outsideAirTemperaturePoint
+        a bro:Point ;
+        bro:providesValueFor ex:outsideAirTemperature ;
+        bro:providesValueOfType xsd:decimal ;
+        bro:hasUnit unit:DEG_C ;
+        bro:hasAddress "bacnet://101/analog-input,1/present-value" .
 
-#.  💢 *Open Issue:* Define mappings from protocol encodings to semantic enum values. Do not infer protocol integers from enum member names.
+    ex:virtualOutsideAirTemperatureA
+        a bro:Point ;
+        bro:providesValueFor ex:outsideAirTemperature ;
+        bro:providesValueOfType xsd:decimal ;
+        bro:hasUnit unit:DEG_C ;
+        bro:hasAddress "bacnet://201/analog-value,10/present-value" ;
+        bro:hasInternalReference ex:outsideAirTemperaturePoint .
+
+    ex:virtualOutsideAirTemperatureB
+        a bro:Point ;
+        # this providesValuesFor could be inferred from the internal reference (see below)
+        bro:providesValueFor ex:outsideAirTemperature ;
+        bro:providesValueOfType xsd:decimal ;
+        bro:hasUnit unit:DEG_C ;
+        bro:hasAddress "bacnet://202/analog-value,15/present-value" ;
+        bro:hasInternalReference ex:outsideAirTemperaturePoint .
+
+    ex:sourceController
+        a bro:PhysicalEquipment ;
+        bro:hostsPoint ex:outsideAirTemperaturePoint .
+
+    ex:virtualControllerA
+        a bro:PhysicalEquipment ;
+        bro:hostsPoint ex:virtualOutsideAirTemperatureA .
+
+    ex:virtualControllerB
+        a bro:PhysicalEquipment ;
+        bro:hostsPoint ex:virtualOutsideAirTemperatureB .
+
+#. We keep each point's address and host because the copies are still separate digital objects.
+#. Following `bro:hasInternalReference` takes us back to the original point and its physical sensor.
+#. It feels a little awkward that we need to include both `hasInternalReference` and `providesValueFor`, but we can infer the `providesValueFor` edge by following the internal reference.
+
+    bro:InferPointReferenceShape a sh:NodeShape ;
+        sh:targetClass bro:Point ;
+        sh:targetSubjectsOf bro:hasInternalReference ;
+        sh:rule [
+            a sh:TripleRule ;
+            sh:subject sh:this ;
+            sh:predicate bro:providesValueFor ;
+            sh:object [
+                sh:path ( bro:hasInternalReference bro:providesValueFor )
+            ]
+        ] .
